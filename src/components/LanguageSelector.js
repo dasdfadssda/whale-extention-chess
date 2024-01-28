@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { LanguageContext } from "../Context/LanguageContext";
-import { languages } from "../Locales/localesData";
+import { languages } from "../Data/Locales/localesData";
 
 function LanguageSelector() {
   const { setLanguageIndex } = useContext(LanguageContext);

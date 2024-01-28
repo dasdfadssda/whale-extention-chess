@@ -7,7 +7,7 @@ function App() {
   return (
     <Div>
       <LanguageProvider>
-      <h1>우하하하 해냈다</h1>
+      <h1>언어를 선택해주세요.</h1>
       <LanguageSelector/>
       <LanguageComponent/>
       </LanguageProvider>
