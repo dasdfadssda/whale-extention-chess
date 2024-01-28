@@ -1,13 +1,18 @@
 import styled from "styled-components";
+import React, { useContext } from "react";
 import LanguageComponent from "../Components/LanguageComponent";
 import LanguageSelector from "../Components/LanguageSelector";
+import { LanguageContext } from "../Context/LanguageContext";
+import { ChooseLanguaage } from "../Data/Locales/localesData";
 
 function HomePage() {
+  const { languageIndex } = useContext(LanguageContext);
+
   return (
     <Div>
-        <h1>언어를 선택해주세요.</h1>
-        <LanguageSelector />
-        <LanguageComponent />
+      <h1>{ChooseLanguaage[languageIndex]}</h1>
+      <LanguageSelector />
+      <LanguageComponent />
     </Div>
   );
 }
