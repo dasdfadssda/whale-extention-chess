@@ -6,13 +6,13 @@ import ScrollToTop from "./ScrollToTop";
 function App() {
   return (
     <LanguageProvider>
-    <Router>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
+      <Router>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
       </Router>
-      </LanguageProvider>
+    </LanguageProvider>
   );
 }
 
