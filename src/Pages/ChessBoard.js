@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
+import { isCheckMate } from "../Service/chessPieceMove/isCheckMate";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -32,8 +33,9 @@ function ChessBoard() {
     ],
   ]);
 
+  const [whiteKingPosition, setWhiteKingPosition] = useState([7, 4]);
+  const [blackKingPosition, setBlackKingPosition] = useState([0, 4]);
   const [selectedPiece, setSelectedPiece] = useState(null);
-
   const [possibleMoves, setPossibleMoves] = useState([]);
 
   const handleButtonClick = (i, j) => {
@@ -68,19 +70,35 @@ function ChessBoard() {
     const newBoard = [...board];
     const [fromX, fromY] = from;
     const [toX, toY] = to;
-  
+
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
-  
+
     // 폰이 끝에 도달하여 퀸으로 바뀌는 경우
-    if (newBoard[toX][toY].type === '폰' && (toX === 0 || toX === 7)) {
-      newBoard[toX][toY].type = '퀸';
+    if (newBoard[toX][toY].type === "폰" && (toX === 0 || toX === 7)) {
+      newBoard[toX][toY].type = "퀸";
     }
-  
+
+    // 왕의 위치 업데이트
+    if (newBoard[toX][toY].type === "킹") {
+      if (newBoard[toX][toY].color === "white") {
+        setWhiteKingPosition([toX, toY]);
+      } else {
+        setBlackKingPosition([toX, toY]);
+      }
+    }
+
     setBoard(newBoard);
+
+    // 체크메이트 상황 확인
+    if (isCheckMate(whiteKingPosition, "white")) {
+      alert("Black team wins!");
+    } else if (isCheckMate(blackKingPosition, "black")) {
+      alert("White team wins!");
+    }
   };
-  
+
   return (
     <div>
       {board.map((row, i) => (
