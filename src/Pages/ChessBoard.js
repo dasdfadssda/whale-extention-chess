@@ -33,11 +33,15 @@ function ChessBoard() {
     ],
   ]);
 
+  // 왕의 위치를 관리하는 상태
   const [whiteKingPosition, setWhiteKingPosition] = useState([7, 4]);
   const [blackKingPosition, setBlackKingPosition] = useState([0, 4]);
+  // 사용자가 선택한 체스말
   const [selectedPiece, setSelectedPiece] = useState(null);
+  // 선택된 체스말이 움직일 수 있는 위치
   const [possibleMoves, setPossibleMoves] = useState([]);
 
+  // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
     if (selectedPiece) {
       if (i === selectedPiece[0] && j === selectedPiece[1]) {
@@ -66,6 +70,7 @@ function ChessBoard() {
     }
   };
 
+  // 체스말을 움직이는 함수
   const movePiece = (from, to) => {
     const newBoard = [...board];
     const [fromX, fromY] = from;
@@ -99,6 +104,7 @@ function ChessBoard() {
     }
   };
 
+  // 체스 보드판을 렌더링
   return (
     <div>
       {board.map((row, i) => (
