@@ -68,14 +68,19 @@ function ChessBoard() {
     const newBoard = [...board];
     const [fromX, fromY] = from;
     const [toX, toY] = to;
-
+  
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
-
+  
+    // 폰이 끝에 도달하여 퀸으로 바뀌는 경우
+    if (newBoard[toX][toY].type === '폰' && (toX === 0 || toX === 7)) {
+      newBoard[toX][toY].type = '퀸';
+    }
+  
     setBoard(newBoard);
   };
-
+  
   return (
     <div>
       {board.map((row, i) => (
