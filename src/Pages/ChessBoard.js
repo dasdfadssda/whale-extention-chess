@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -50,7 +51,7 @@ function ChessBoard() {
         const selectedPieceType = board[i][j].type;
         setSelectedPiece([i, j]);
         setPossibleMoves(
-          getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j])
+          getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board) // 이 부분을 수정
         );
       }
     } else if (board[i][j]) {
@@ -58,74 +59,9 @@ function ChessBoard() {
       const selectedPieceType = board[i][j].type;
       setSelectedPiece([i, j]);
       setPossibleMoves(
-        getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j])
+        getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board) // 이 부분을 수정
       );
     }
-  };
-
-  const getPossibleMoves = (type, color, [x, y]) => {
-    let direction = color === "black" ? 1 : -1;
-    let moves = [];
-    switch (type) {
-      case "폰":
-        moves.push([x + direction, y]);
-        break;
-      case "룩":
-        for (let i = 0; i < 8; i++) {
-          moves.push([x, i]);
-          moves.push([i, y]);
-        }
-        break;
-      case "나이트":
-        moves = [
-          [x - 2, y - 1],
-          [x - 2, y + 1],
-          [x - 1, y - 2],
-          [x - 1, y + 2],
-          [x + 1, y - 2],
-          [x + 1, y + 2],
-          [x + 2, y - 1],
-          [x + 2, y + 1],
-        ];
-        break;
-      case "비숍":
-        for (let i = -7; i < 8; i++) {
-          moves.push([x + i, y + i]);
-          moves.push([x + i, y - i]);
-        }
-        break;
-      case "퀸":
-        for (let i = 0; i < 8; i++) {
-          moves.push([x, i]);
-          moves.push([i, y]);
-          moves.push([x + i, y + i]);
-          moves.push([x + i, y - i]);
-        }
-        break;
-      case "킹":
-        moves = [
-          [x - 1, y - 1],
-          [x - 1, y],
-          [x - 1, y + 1],
-          [x, y - 1],
-          [x, y + 1],
-          [x + 1, y - 1],
-          [x + 1, y],
-          [x + 1, y + 1],
-        ];
-        break;
-      default:
-        break;
-    }
-    return moves.filter(([x, y]) => {
-      return (
-        x >= 0 &&
-        x < 8 &&
-        y >= 0 &&
-        y < 8 &&
-        (!board[x][y] || board[x][y].color !== color)
-      );
-    });
   };
 
   const movePiece = (from, to) => {
