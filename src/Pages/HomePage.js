@@ -16,7 +16,7 @@ function HomePage() {
       <LanguageSelector />
       <LanguageComponent />
       <Link to="/chess">
-        <button>체스 게임으로 이동</button>
+        체스 게임으로 이동
       </Link>
     </Div>
   );
