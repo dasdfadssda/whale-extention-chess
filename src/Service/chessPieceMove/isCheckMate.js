@@ -4,8 +4,7 @@ import { getPossibleMoves } from "./ChessPieceController";
 export const isCheckMate = (kingPosition, color, board) => {
   const opponentColor = color === "white" ? "black" : "white";
 
-  // 모든 말들이 움직일 수 있는 곳을 확인
-  for (let i = 0; i < 8; i++) {
+  outer: for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       if (board[i][j] && board[i][j].color === color) {
         const possibleMoves = getPossibleMoves(
@@ -15,15 +14,13 @@ export const isCheckMate = (kingPosition, color, board) => {
           board
         );
 
-        // 그 말이 움직일 수 있는 곳 중에 왕이 안전한 곳이 있는지 확인
         for (let [moveX, moveY] of possibleMoves) {
-          let hypotheticalBoard = JSON.parse(JSON.stringify(board)); // 가상의 보드 생성
-          hypotheticalBoard[moveX][moveY] = hypotheticalBoard[i][j]; // 가상의 보드에서 말을 움직임
+          let hypotheticalBoard = JSON.parse(JSON.stringify(board));
+          hypotheticalBoard[moveX][moveY] = hypotheticalBoard[i][j];
           hypotheticalBoard[i][j] = null;
 
           let isKingSafe = true;
 
-          // 상대편의 모든 말이 움직일 수 있는 곳을 찾아 왕이 안전한지 확인
           for (let a = 0; a < 8; a++) {
             for (let b = 0; b < 8; b++) {
               if (
@@ -49,13 +46,11 @@ export const isCheckMate = (kingPosition, color, board) => {
             if (!isKingSafe) break;
           }
 
-          // 왕이 안전한 곳이 하나라도 있다면, 체크메이트가 아닌 상황으로 반환
           if (isKingSafe) return false;
+          else continue outer; // 왕이 안전하지 않다면 다음 위치로 이동
         }
       }
     }
   }
-
-  // 모든 말들이 움직일 수 있는 곳 중에 왕이 안전한 곳이 없다면, 체크메이트 상황으로 반환
-  return true;
+  return true; // 모든 위치에서 왕이 안전하지 않다면 체크메이트
 };
