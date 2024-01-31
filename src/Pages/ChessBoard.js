@@ -40,9 +40,15 @@ function ChessBoard() {
   const [selectedPiece, setSelectedPiece] = useState(null);
   // 선택된 체스말이 움직일 수 있는 위치
   const [possibleMoves, setPossibleMoves] = useState([]);
+  // 현재 차례인 팀을 나타내는 상태
+  const [currentTurn, setCurrentTurn] = useState("white");
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
+    // 현재 차례 팀 구분
+    if (board[i][j] && board[i][j].color !== currentTurn) {
+      return;
+    }
     if (selectedPiece) {
       if (i === selectedPiece[0] && j === selectedPiece[1]) {
         // 같은 버튼을 다시 눌렀을 때 무표호
@@ -102,6 +108,8 @@ function ChessBoard() {
     } else if (isCheckMate(blackKingPosition, "black", board)) {
       alert("White team wins!");
     }
+    // 순서 교체
+    setCurrentTurn(currentTurn === "white" ? "black" : "white");
   };
 
   // 체스 보드판을 렌더링
