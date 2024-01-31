@@ -97,9 +97,9 @@ function ChessBoard() {
     setBoard(newBoard);
 
     // 체크메이트 상황 확인
-    if (isCheckMate(whiteKingPosition, "white")) {
+    if (isCheckMate(whiteKingPosition, "white", board)) {
       alert("Black team wins!");
-    } else if (isCheckMate(blackKingPosition, "black")) {
+    } else if (isCheckMate(blackKingPosition, "black", board)) {
       alert("White team wins!");
     }
   };
@@ -109,20 +109,25 @@ function ChessBoard() {
     <div>
       {board.map((row, i) => (
         <Row key={i}>
-          {row.map((piece, j) => (
-            <Button
-              key={j}
-              row={i}
-              column={j}
-              piece={piece}
-              isPossibleMove={possibleMoves.some(
-                ([x, y]) => x === i && y === j
-              )}
-              onClick={() => handleButtonClick(i, j)}
-            >
-              {piece ? piece.type : ""}
-            </Button>
-          ))}
+          {row.map((piece, j) => {
+            // 선택한 체스말이 움직일 수 있는 위치인지 확인
+            const isPossibleMove = possibleMoves.some(
+              ([x, y]) => x === i && y === j
+            );
+
+            return (
+              <Button
+                key={j}
+                row={i}
+                column={j}
+                piece={piece}
+                isPossibleMove={isPossibleMove}
+                onClick={() => handleButtonClick(i, j)}
+              >
+                {piece ? piece.type : ""}
+              </Button>
+            );
+          })}
           <br />
         </Row>
       ))}
