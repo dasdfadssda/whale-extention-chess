@@ -4,6 +4,8 @@ import LanguageComponent from "../Components/LanguageComponent";
 import LanguageSelector from "../Components/LanguageSelector";
 import { LanguageContext } from "../Context/LanguageContext";
 import { ChooseLanguaage } from "../Data/Locales/localesData";
+import { Link } from 'react-router-dom';
+
 
 function HomePage() {
   const { languageIndex } = useContext(LanguageContext);
@@ -13,6 +15,9 @@ function HomePage() {
       <h1>{ChooseLanguaage[languageIndex]}</h1>
       <LanguageSelector />
       <LanguageComponent />
+      <Link to="/chess">
+        <button>체스 게임으로 이동</button>
+      </Link>
     </Div>
   );
 }
