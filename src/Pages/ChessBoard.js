@@ -45,36 +45,33 @@ function ChessBoard() {
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
-    // 현재 차례 팀 구분
-    if (board[i][j] && board[i][j].color !== currentTurn) {
-      return;
-    }
     if (selectedPiece) {
       if (i === selectedPiece[0] && j === selectedPiece[1]) {
-        // 같은 버튼을 다시 눌렀을 때 무표호
-        return;
+        setSelectedPiece(null);
+        setPossibleMoves([]);
       } else if (possibleMoves.some(([x, y]) => x === i && y === j)) {
         movePiece(selectedPiece, [i, j]);
         setSelectedPiece(null);
         setPossibleMoves([]);
-      } else if (board[i][j]) {
-        // 다른 체스말을 선택했을 때, 그 체스말의 상태로 변경
+      } else if (board[i][j] && board[i][j].color === currentTurn) {
         const selectedPieceColor = board[i][j].color;
         const selectedPieceType = board[i][j].type;
         setSelectedPiece([i, j]);
         setPossibleMoves(
-          getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board) // 이 부분을 수정
+          getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board)
         );
       }
-    } else if (board[i][j]) {
+    } else if (board[i][j] && board[i][j].color === currentTurn) {
       const selectedPieceColor = board[i][j].color;
       const selectedPieceType = board[i][j].type;
       setSelectedPiece([i, j]);
       setPossibleMoves(
-        getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board) // 이 부분을 수정
+        getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board)
       );
     }
   };
+  
+  
 
   // 체스말을 움직이는 함수
   const movePiece = (from, to) => {
