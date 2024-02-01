@@ -2,55 +2,60 @@
 import { getPossibleMoves } from "./ChessPieceController";
 
 export const isCheckMate = (kingPosition, color, board) => {
-  const opponentColor = color === "white" ? "black" : "white";
+  const [kingX, kingY] = kingPosition;
+  const opponentColor = color === 'white' ? 'black' : 'white';
 
-  outer: for (let i = 0; i < 8; i++) {
+  // 왕이 공격받는 상황인지 확인
+  let isUnderAttack = false;
+  for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
-      if (board[i][j] && board[i][j].color === color) {
-        const possibleMoves = getPossibleMoves(
-          board[i][j].type,
-          board[i][j].color,
-          [i, j],
-          board
-        );
-
-        for (let [moveX, moveY] of possibleMoves) {
-          let hypotheticalBoard = JSON.parse(JSON.stringify(board));
-          hypotheticalBoard[moveX][moveY] = hypotheticalBoard[i][j];
-          hypotheticalBoard[i][j] = null;
-
-          let isKingSafe = true;
-
-          for (let a = 0; a < 8; a++) {
-            for (let b = 0; b < 8; b++) {
-              if (
-                hypotheticalBoard[a][b] &&
-                hypotheticalBoard[a][b].color === opponentColor
-              ) {
-                const opponentMoves = getPossibleMoves(
-                  hypotheticalBoard[a][b].type,
-                  hypotheticalBoard[a][b].color,
-                  [a, b],
-                  hypotheticalBoard
-                );
-                if (
-                  opponentMoves.some(
-                    ([x, y]) => x === kingPosition[0] && y === kingPosition[1]
-                  )
-                ) {
-                  isKingSafe = false;
-                  break;
-                }
-              }
-            }
-            if (!isKingSafe) break;
-          }
-
-          if (isKingSafe) return false;
-          else continue outer; // 왕이 안전하지 않다면 다음 위치로 이동
+      if (board[i][j] && board[i][j].color === opponentColor) {
+        const possibleMoves = getPossibleMoves(board[i][j].type, board[i][j].color, [i, j], board);
+        if (possibleMoves.some(([x, y]) => x === kingX && y === kingY)) {
+          isUnderAttack = true;
+          break;
         }
       }
     }
+    if (isUnderAttack) {
+      break;
+    }
   }
-  return true; // 모든 위치에서 왕이 안전하지 않다면 체크메이트
+
+  // 왕이 공격받지 않는 상황이면 체크메이트 상황이 아님
+  if (!isUnderAttack) {
+    return false;
+  }
+
+  // 왕이 움직일 수 있는 모든 위치를 가져옴
+  const kingMoves = getPossibleMoves('킹', color, [kingX, kingY], board);
+
+  for (let [x, y] of kingMoves) {
+    let isSafe = true;
+
+    // 각 위치에서 상대편이 공격할 수 있는지 확인
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (board[i][j] && board[i][j].color === opponentColor) {
+          const possibleMoves = getPossibleMoves(board[i][j].type, board[i][j].color, [i, j], board);
+          if (possibleMoves.some(([moveX, moveY]) => moveX === x && moveY === y)) {
+            isSafe = false;
+            break;
+          }
+        }
+      }
+
+      if (!isSafe) {
+        break;
+      }
+    }
+
+    // 왕이 움직일 수 있는 안전한 위치가 있으면 체크메이트 상황이 아님
+    if (isSafe) {
+ return false;
+    }
+  }
+
+  // 왕이 움직일 수 있는 안전한 위치가 없으면 체크메이트
+  return true;
 };
