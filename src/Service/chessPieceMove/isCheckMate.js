@@ -1,7 +1,25 @@
-// checkMate.js
 import { getPossibleMoves } from "./ChessPieceController";
 
-export const isCheckMate = (kingPosition, color, board) => {
+export const checkMateStatus = (whiteKingPosition, blackKingPosition, board) => {
+  const isWhiteCheckMate = isCheckMate(whiteKingPosition, 'white', board);
+  const isBlackCheckMate = isCheckMate(blackKingPosition, 'black', board);
+
+  if (isWhiteCheckMate && isBlackCheckMate) {
+    console.log("draw")
+    return 'draw';
+  } else if (isWhiteCheckMate) {
+    console.log("black")
+    return 'black';
+  } else if (isBlackCheckMate) {
+    console.log("white")
+    return 'white';
+  } else {
+    console.log("none")
+    return 'none';
+  }
+};
+
+const isCheckMate = (kingPosition, color, board) => {
   const [kingX, kingY] = kingPosition;
   const opponentColor = color === 'white' ? 'black' : 'white';
 
@@ -52,7 +70,7 @@ export const isCheckMate = (kingPosition, color, board) => {
 
     // 왕이 움직일 수 있는 안전한 위치가 있으면 체크메이트 상황이 아님
     if (isSafe) {
- return false;
+      return false;
     }
   }
 

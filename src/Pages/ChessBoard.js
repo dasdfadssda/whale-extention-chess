@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
-import { isCheckMate } from "../Service/chessPieceMove/isCheckMate";
+import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -100,11 +100,16 @@ function ChessBoard() {
     setBoard(newBoard);
 
     // 체크메이트 상황 확인
-    if (isCheckMate(whiteKingPosition, "white", board)) {
+    const result = checkMateStatus(whiteKingPosition, blackKingPosition, board);
+
+    if (result === "black") {
       alert("Black team wins!");
-    } else if (isCheckMate(blackKingPosition, "black", board)) {
+    } else if (result === "white") {
       alert("White team wins!");
+    } else if (result === "draw") {
+      alert("It's a draw!");
     }
+    
     // 순서 교체
     setCurrentTurn(currentTurn === "white" ? "black" : "white");
   };
