@@ -46,7 +46,7 @@ const isCheckMate = (kingPosition, color, board) => {
   }
 
   // 왕이 움직일 수 있는 모든 위치를 가져옴
-  const kingMoves = getPossibleMoves('킹', color, [kingX, kingY], board);
+  const kingMoves = getPossibleMoves('king', color, [kingX, kingY], board);
 
   for (let [x, y] of kingMoves) {
     let isSafe = true;

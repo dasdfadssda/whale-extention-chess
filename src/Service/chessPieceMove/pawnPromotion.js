@@ -5,20 +5,20 @@ export const handlePawnPromotion = (newBoard, toX, toY) => {
     );
    switch (pieceType) {
       case "0":
-        newBoard[toX][toY].type = "퀸";
+        newBoard[toX][toY].type = "queen";
         break;
       case "1":
-        newBoard[toX][toY].type = "룩";
+        newBoard[toX][toY].type = "rook";
         break;
       case "2":
-        newBoard[toX][toY].type = "비숍";
+        newBoard[toX][toY].type = "bishop";
         break;
       case "3":
-        newBoard[toX][toY].type = "나이트";
+        newBoard[toX][toY].type = "knight";
         break;
       default:
         alert("Invalid input! Setting to Queen by default.");
-        newBoard[toX][toY].type = "퀸";
+        newBoard[toX][toY].type = "queen";
         break;
     }
     return newBoard;

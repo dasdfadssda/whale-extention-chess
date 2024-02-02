@@ -3,36 +3,38 @@ import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
 import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
 import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
+import PIECES_IMAGE from "../Static/Constants/ChessImg";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
     [
-      { type: "룩", color: "black" },
-      { type: "나이트", color: "black" },
-      { type: "비숍", color: "black" },
-      { type: "퀸", color: "black" },
-      { type: "킹", color: "black" },
-      { type: "비숍", color: "black" },
-      { type: "나이트", color: "black" },
-      { type: "룩", color: "black" },
+      { type: "rook", color: "black" },
+      { type: "knight", color: "black" },
+      { type: "bishop", color: "black" },
+      { type: "queen", color: "black" },
+      { type: "king", color: "black" },
+      { type: "bishop", color: "black" },
+      { type: "knight", color: "black" },
+      { type: "rook", color: "black" },
     ],
-    Array(8).fill({ type: "폰", color: "black" }),
+    Array(8).fill({ type: "pawn", color: "black" }),
     Array(8).fill(null),
     Array(8).fill(null),
     Array(8).fill(null),
     Array(8).fill(null),
-    Array(8).fill({ type: "폰", color: "white" }),
+    Array(8).fill({ type: "pawn", color: "white" }),
     [
-      { type: "룩", color: "white" },
-      { type: "나이트", color: "white" },
-      { type: "비숍", color: "white" },
-      { type: "퀸", color: "white" },
-      { type: "킹", color: "white" },
-      { type: "비숍", color: "white" },
-      { type: "나이트", color: "white" },
-      { type: "룩", color: "white" },
+      { type: "rook", color: "white" },
+      { type: "knight", color: "white" },
+      { type: "bishop", color: "white" },
+      { type: "queen", color: "white" },
+      { type: "king", color: "white" },
+      { type: "bishop", color: "white" },
+      { type: "knight", color: "white" },
+      { type: "rook", color: "white" },
     ],
   ]);
+  
 
   // 왕의 위치를 관리하는 상태
   const [whiteKingPosition, setWhiteKingPosition] = useState([7, 4]);
@@ -71,8 +73,6 @@ function ChessBoard() {
       );
     }
   };
-  
-  
 
   // 체스말을 움직이는 함수
   const movePiece = (from, to) => {
@@ -85,12 +85,12 @@ function ChessBoard() {
     newBoard[fromX][fromY] = null;
 
     // 폰이 끝에 도달한 경우
-    if (newBoard[toX][toY].type === "폰" && (toX === 0 || toX === 7)) {
+    if (newBoard[toX][toY].type === "pawn" && (toX === 0 || toX === 7)) {
       handlePawnPromotion(newBoard, toX, toY);
     }
 
     // 왕의 위치 업데이트
-    if (newBoard[toX][toY].type === "킹") {
+    if (newBoard[toX][toY].type === "king") {
       if (newBoard[toX][toY].color === "white") {
         setWhiteKingPosition([toX, toY]);
       } else {
@@ -110,7 +110,7 @@ function ChessBoard() {
     } else if (result === "draw") {
       alert("It's a draw!");
     }
-    
+
     // 순서 교체
     setCurrentTurn(currentTurn === "white" ? "black" : "white");
   };
@@ -120,25 +120,27 @@ function ChessBoard() {
     <div>
       {board.map((row, i) => (
         <Row key={i}>
-          {row.map((piece, j) => {
-            // 선택한 체스말이 움직일 수 있는 위치인지 확인
-            const isPossibleMove = possibleMoves.some(
-              ([x, y]) => x === i && y === j
-            );
-
-            return (
-              <Button
-                key={j}
-                row={i}
-                column={j}
-                piece={piece}
-                isPossibleMove={isPossibleMove}
-                onClick={() => handleButtonClick(i, j)}
-              >
-                {piece ? piece.type : ""}
-              </Button>
-            );
-          })}
+          {row.map((piece, j) => (
+            <Button
+              key={j}
+              row={i}
+              column={j}
+              piece={piece}
+              isPossibleMove={possibleMoves.some(
+                ([x, y]) => x === i && y === j
+              )}
+              onClick={() => handleButtonClick(i, j)}
+            >
+              {piece ? (
+                <img
+                  src={require(`../Static${PIECES_IMAGE[piece.type.toLowerCase()][piece.color]}`)}
+                  alt={piece.type}
+                />
+              ) : (
+                ""
+              )}
+            </Button>
+          ))}
           <br />
         </Row>
       ))}

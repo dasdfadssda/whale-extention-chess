@@ -8,17 +8,17 @@ import { getPawnMoves } from './pawn.js';
 
 export const getPossibleMoves = (type, color, position, board) => {
   switch (type) {
-    case '킹':
+    case 'king':
       return getKingMoves(...position, board, color);
-    case '퀸':
+    case 'queen':
       return getQueenMoves(...position, board, color);
-    case '룩':
+    case 'rook':
       return getRookMoves(...position, board, color);
-    case '비숍':
+    case 'bishop':
       return getBishopMoves(...position, board, color);
-    case '나이트':
+    case 'knight':
       return getKnightMoves(...position, board, color);
-    case '폰':
+    case 'pawn':
       return getPawnMoves(...position, board, color);
     default:
       return [];
