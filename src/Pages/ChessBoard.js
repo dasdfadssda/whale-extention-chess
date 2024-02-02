@@ -165,6 +165,10 @@ const Button = styled.button`
   color: ${(props) =>
     props.piece && props.piece.color === "white" ? "white" : "black"};
 
+  &:active {
+    filter: brightness(70%);
+  }
+
   img {
     max-width: 80%;
     max-height: 80%;
