@@ -7,12 +7,12 @@ export const PIECES_IMAGE = {
     queen: {
       white:
         "/Assets/queen_white.png",
-      black: "/Assets/queen_white.png"
+      black: "/Assets/queen_black.png"
     },
     rook: {
       white:
         "/Assets/rook_white.png",
-      black: "/Assets/rook_white.png"
+      black: "/Assets/rook_black.png"
     },
     bishop: {
       white:

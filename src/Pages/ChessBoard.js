@@ -162,6 +162,11 @@ const Button = styled.button`
   }};
   color: ${(props) =>
     props.piece && props.piece.color === "white" ? "white" : "black"};
+
+img {
+    max-width: 80%;
+    max-height: 80%;
+  }
 `;
 
 const Row = styled.div`
