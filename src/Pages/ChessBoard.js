@@ -34,7 +34,6 @@ function ChessBoard() {
       { type: "rook", color: "white" },
     ],
   ]);
-  
 
   // 왕의 위치를 관리하는 상태
   const [whiteKingPosition, setWhiteKingPosition] = useState([7, 4]);
@@ -133,7 +132,9 @@ function ChessBoard() {
             >
               {piece ? (
                 <img
-                  src={require(`../Static${PIECES_IMAGE[piece.type.toLowerCase()][piece.color]}`)}
+                  src={require(`../Static${
+                    PIECES_IMAGE[piece.type.toLowerCase()][piece.color]
+                  }`)}
                   alt={piece.type}
                 />
               ) : (
@@ -151,8 +152,8 @@ function ChessBoard() {
 export default ChessBoard;
 
 const Button = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 6vw;
+  height: 6vw;
   font-size: 12px;
   border: solid 0.5px white;
   background-color: ${(props) => {
@@ -164,7 +165,7 @@ const Button = styled.button`
   color: ${(props) =>
     props.piece && props.piece.color === "white" ? "white" : "black"};
 
-img {
+  img {
     max-width: 80%;
     max-height: 80%;
   }
