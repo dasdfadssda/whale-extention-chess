@@ -154,7 +154,7 @@ const Button = styled.button`
   width: 50px;
   height: 50px;
   font-size: 12px;
-  border: none;
+  border: solid 0.5px white;
   background-color: ${(props) => {
     if (props.isPossibleMove) {
       return "yellow";
