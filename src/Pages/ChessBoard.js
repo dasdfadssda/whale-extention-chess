@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
 import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
+import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -83,9 +84,9 @@ function ChessBoard() {
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
 
-    // 폰이 끝에 도달하여 퀸으로 바뀌는 경우
+    // 폰이 끝에 도달한 경우
     if (newBoard[toX][toY].type === "폰" && (toX === 0 || toX === 7)) {
-      newBoard[toX][toY].type = "퀸";
+      handlePawnPromotion(newBoard, toX, toY);
     }
 
     // 왕의 위치 업데이트
