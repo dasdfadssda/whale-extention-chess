@@ -5,6 +5,7 @@ import LanguageSelector from "../Components/LanguageSelector";
 import { LanguageContext } from "../Context/LanguageContext";
 import { ChooseLanguaage } from "../Data/Locales/localesData";
 import { Link } from 'react-router-dom';
+import ROUTES from "../Static/Constants/route";
 
 
 function HomePage() {
@@ -15,7 +16,7 @@ function HomePage() {
       <h1>{ChooseLanguaage[languageIndex]}</h1>
       <LanguageSelector />
       <LanguageComponent />
-      <Link to="/chess">
+      <Link to={ROUTES.CHESS}>
         체스 게임으로 이동
       </Link>
     </Div>

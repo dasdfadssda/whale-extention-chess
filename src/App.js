@@ -3,6 +3,7 @@ import { LanguageProvider } from "./Context/LanguageContext";
 import HomePage from "./Pages/HomePage";
 import ScrollToTop from "./ScrollToTop";
 import ChessBoard from "./Pages/ChessBoard";
+import ROUTES from "./Static/Constants/route";
 
 function App() {
   return (
@@ -10,8 +11,8 @@ function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/Chess" element={<ChessBoard />} />
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.CHESS} element={<ChessBoard />} />
         </Routes>
       </Router>
     </LanguageProvider>

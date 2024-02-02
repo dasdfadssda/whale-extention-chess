@@ -154,11 +154,12 @@ const Button = styled.button`
   width: 50px;
   height: 50px;
   font-size: 12px;
+  border: none;
   background-color: ${(props) => {
     if (props.isPossibleMove) {
       return "yellow";
     }
-    return props.row % 2 === props.column % 2 ? "skyblue" : "green";
+    return props.row % 2 === props.column % 2 ? "#18B4FE" : "#213140";
   }};
   color: ${(props) =>
     props.piece && props.piece.color === "white" ? "white" : "black"};
