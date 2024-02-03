@@ -4,6 +4,7 @@ import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController
 import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
 import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
 import PIECES_IMAGE from "../Static/Constants/ChessImg";
+import { useNavigate } from "react-router-dom";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -22,7 +23,7 @@ function ChessBoard() {
     Array(8).fill(null),
     Array(8).fill(null),
     Array(8).fill(null),
-    Array(8).fill({ type: "pawn", color: "white" }),
+    Array(8).fill({ type: "queen", color: "white" }),
     [
       { type: "rook", color: "white" },
       { type: "knight", color: "white" },
@@ -44,6 +45,8 @@ function ChessBoard() {
   const [possibleMoves, setPossibleMoves] = useState([]);
   // 현재 차례인 팀을 나타내는 상태
   const [currentTurn, setCurrentTurn] = useState("white");
+  // useNavigate 선언
+  const navigate = useNavigate();
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
@@ -98,20 +101,32 @@ function ChessBoard() {
     }
 
     setBoard(newBoard);
-
-    // 체크메이트 상황 확인
-    const result = checkMateStatus(whiteKingPosition, blackKingPosition, board);
-
-    if (result === "black") {
-      alert("Black team wins!");
-    } else if (result === "white") {
-      alert("White team wins!");
-    } else if (result === "draw") {
-      alert("It's a draw!");
-    }
-
     // 순서 교체
     setCurrentTurn(currentTurn === "white" ? "black" : "white");
+
+    // 체크메이트 상황 확인
+    const result = checkMateStatus(
+      whiteKingPosition,
+      blackKingPosition,
+      board,
+      currentTurn
+    );
+
+    if (result.status === "checkmate") {
+      alert(`${result.winner} has won the game!`);
+
+      const userResponse = prompt(
+        "Enter 0 to restart the game or 1 to return to the homepage."
+      );
+
+      if (userResponse === "0") {
+        // 게임을 다시 시작하는 로직 추가 예정
+      } else if (userResponse === "1") {
+        // 루트 페이지로 이동
+        navigate("/");
+      }
+    }
+    console.log(result);
   };
 
   // 체스 보드판을 렌더링

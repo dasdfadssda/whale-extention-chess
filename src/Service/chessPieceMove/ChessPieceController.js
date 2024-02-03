@@ -28,17 +28,31 @@ export const getPossibleMoves = (type, color, position, board) => {
 
 // 특정 색깔의 모든 체스 말에 대해 가능한 모든 움직임을 반환
 export function getPossibleMovesForColor(board, color) {
-  let moves = [];
+  let moves = {};
 
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length; j++) {
       const piece = board[i][j];
       if (piece && piece.color === color) {
         const pieceMoves = getPossibleMoves(piece.type, color, [i, j], board);
-        moves = moves.concat(pieceMoves);
+
+        for (const move of pieceMoves) {
+          const moveKey = move.join(',');
+          if (!moves[moveKey]) {
+            moves[moveKey] = {
+              position: move,
+              piece: { type: piece.type, color: piece.color, position: [i, j] }
+            };
+          }
+        }
       }
     }
   }
 
-  return moves;
+  const movesArray = Object.values(moves);
+
+  console.log(color, '상대 공격 가능 자리', movesArray);
+
+  return movesArray;
 }
+
