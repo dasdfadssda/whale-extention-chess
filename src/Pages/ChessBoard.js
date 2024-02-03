@@ -171,12 +171,13 @@ const Button = styled.button`
   width: 13vw;
   height: 13vw;
   font-size: 12px;
-  border: solid 0.5px white;
+  border: none;
+  border-radius: 6px;
   background-color: ${(props) => {
     if (props.isPossibleMove) {
       return "blue";
     }
-    return props.row % 2 === props.column % 2 ? "#18B4FE" : "#213140";
+    return props.row % 2 === props.column % 2 ? "#E38C56" : "#D66602";
   }};
   color: ${(props) =>
     props.piece && props.piece.color === "white" ? "white" : "black"};
