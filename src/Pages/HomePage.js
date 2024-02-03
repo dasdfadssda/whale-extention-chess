@@ -30,7 +30,7 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={31.2821}>
-        <Button style={{width: "33%"}}>
+        <Button style={{ width: "33%" }}>
           <div style={{ fontSize: "4.1026vw", color: "black" }}>EASY</div>
           <div
             style={{
@@ -43,7 +43,7 @@ function HomePage() {
             E
           </div>
         </Button>
-        <Button style={{width: "33%"}}>
+        <Button style={{ width: "33%" }}>
           <div style={{ fontSize: "4.1026vw", color: "black" }}>NORMAL</div>
           <div
             style={{
@@ -56,7 +56,7 @@ function HomePage() {
             N
           </div>
         </Button>
-        <Button style={{width: "33%"}}>
+        <Button style={{ width: "33%" }}>
           <div style={{ fontSize: "4.1026vw", color: "black" }}>HARD</div>
           <div
             style={{
@@ -71,7 +71,7 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={25.641}>
-        <Button style={{fontSize: "17.9487vw"}}>PLAY</Button>
+        <Button style={{ fontSize: "17.9487vw" }}>PLAY</Button>
       </Row>
     </>
   );
@@ -136,6 +136,10 @@ const Button = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &:active {
+    filter: brightness(70%);
+  }
 `;
 
 const SettingImage = styled.img`
