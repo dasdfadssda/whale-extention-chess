@@ -1,8 +1,15 @@
 import styled from "styled-components";
 import React from "react";
-// import ROUTES from "../Static/Constants/route";
+import { useNavigate } from "react-router-dom";
+import ROUTES from "../Static/Constants/route";
 
 function HomePage() {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate(ROUTES.CHESS);
+  };
+
   return (
     <>
       <Column>
@@ -71,7 +78,9 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={25.641}>
-        <Button style={{ fontSize: "17.9487vw" }}>PLAY</Button>
+        <Button style={{ fontSize: "17.9487vw" }} onClick={handleButtonClick}>
+          PLAY
+        </Button>
       </Row>
     </>
   );

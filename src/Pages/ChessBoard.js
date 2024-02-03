@@ -5,6 +5,7 @@ import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
 import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
 import PIECES_IMAGE from "../Static/Constants/ChessImg";
 import { useNavigate } from "react-router-dom";
+import ROUTES from "../Static/Constants/route";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -123,7 +124,7 @@ function ChessBoard() {
         // 게임을 다시 시작하는 로직 추가 예정
       } else if (userResponse === "1") {
         // 루트 페이지로 이동
-        navigate("/");
+        navigate(ROUTES.HOME);
       }
     }
     console.log(result);
@@ -167,8 +168,8 @@ function ChessBoard() {
 export default ChessBoard;
 
 const Button = styled.button`
-  width: 6vw;
-  height: 6vw;
+  width: 13vw;
+  height: 13vw;
   font-size: 12px;
   border: solid 0.5px white;
   background-color: ${(props) => {
