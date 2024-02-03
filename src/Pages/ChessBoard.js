@@ -24,7 +24,7 @@ function ChessBoard() {
     Array(8).fill(null),
     Array(8).fill(null),
     Array(8).fill(null),
-    Array(8).fill({ type: "queen", color: "white" }),
+    Array(8).fill({ type: "pawn", color: "white" }),
     [
       { type: "rook", color: "white" },
       { type: "knight", color: "white" },
