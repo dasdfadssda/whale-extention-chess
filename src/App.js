@@ -5,12 +5,14 @@ import ScrollToTop from "./ScrollToTop";
 import ChessBoard from "./Pages/ChessBoard";
 import ROUTES from "./Static/Constants/route";
 import { ThemeProvider } from "styled-components";
-import { theme } from "./Styles/theme";
+import { theme } from "./Styles/Theme";
+import GlobalStyle from "./Styles/GlobalStyle";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <LanguageProvider>
+        <GlobalStyle />
         <Router>
           <ScrollToTop />
           <Routes>
