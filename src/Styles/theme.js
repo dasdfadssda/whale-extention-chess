@@ -1,4 +1,5 @@
 // Rammetto One 폰트
-export const fontStyle = {
+export const theme = {
     font: "'Rammetto One', cursive",
   };
+  

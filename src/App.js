@@ -9,8 +9,8 @@ import { theme } from "./Styles/theme";
 
 function App() {
   return (
-    <LanguageProvider>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <LanguageProvider>
         <Router>
           <ScrollToTop />
           <Routes>
@@ -18,8 +18,8 @@ function App() {
             <Route path={ROUTES.CHESS} element={<ChessBoard />} />
           </Routes>
         </Router>
-      </ThemeProvider>
-    </LanguageProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 
