@@ -1,8 +1,8 @@
 export const PIECES_IMAGE = {
     king: {
       white:
-        "/Assets/pawn_white.png",
-      black: "/Assets/pawn_black.png"
+        "/Assets/king_white.png",
+      black: "/Assets/king_black.png"
     },
     queen: {
       white:
