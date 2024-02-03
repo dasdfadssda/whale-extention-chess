@@ -1,21 +1,13 @@
 import styled from "styled-components";
-import React, { useContext } from "react";
-import LanguageComponent from "../Components/LanguageComponent";
-import LanguageSelector from "../Components/LanguageSelector";
-import { LanguageContext } from "../Context/LanguageContext";
-import { ChooseLanguaage } from "../Data/Locales/localesData";
+import React from "react";
 import { Link } from 'react-router-dom';
 import ROUTES from "../Static/Constants/route";
 
 
 function HomePage() {
-  const { languageIndex } = useContext(LanguageContext);
 
   return (
     <Div>
-      <h1>{ChooseLanguaage[languageIndex]}</h1>
-      <LanguageSelector />
-      <LanguageComponent />
       <Link to={ROUTES.CHESS}>
         체스 게임으로 이동
       </Link>
