@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { LanguageProvider } from "./Context/LanguageContext";
+import { DifficultyProvider } from "./Context/DifficultyContext";
 import HomePage from "./Pages/HomePage";
 import ScrollToTop from "./ScrollToTop";
 import ChessBoard from "./Pages/ChessBoard";
@@ -11,7 +11,7 @@ import GlobalStyle from "./Styles/GlobalStyle";
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <LanguageProvider>
+      <DifficultyProvider>
         <GlobalStyle />
         <Router>
           <ScrollToTop />
@@ -20,7 +20,7 @@ function App() {
             <Route path={ROUTES.CHESS} element={<ChessBoard />} />
           </Routes>
         </Router>
-      </LanguageProvider>
+      </DifficultyProvider>
     </ThemeProvider>
   );
 }
