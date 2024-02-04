@@ -48,9 +48,14 @@ function ChessBoard() {
   const [currentTurn, setCurrentTurn] = useState("white");
   // useNavigate 선언
   const navigate = useNavigate();
+  // 클릭된 버튼 변수 관리
+  const [selectedButton, setSelectedButton] = useState(null);
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
+    // 선택된 좌표 선언
+    setSelectedButton([i, j]);
+
     if (selectedPiece) {
       if (i === selectedPiece[0] && j === selectedPiece[1]) {
         setSelectedPiece(null);
@@ -128,11 +133,14 @@ function ChessBoard() {
       }
     }
     console.log(result);
+
+    // 선택된 좌표 해제
+    setSelectedButton(null);
   };
 
   // 체스 보드판을 렌더링
   return (
-    <div>
+    <Div>
       {board.map((row, i) => (
         <Row key={i}>
           {row.map((piece, j) => (
@@ -141,6 +149,11 @@ function ChessBoard() {
               row={i}
               column={j}
               piece={piece}
+              isSelected={
+                selectedButton &&
+                selectedButton[0] === i &&
+                selectedButton[1] === j
+              }
               isPossibleMove={possibleMoves.some(
                 ([x, y]) => x === i && y === j
               )}
@@ -161,19 +174,22 @@ function ChessBoard() {
           <br />
         </Row>
       ))}
-    </div>
+    </Div>
   );
 }
 
 export default ChessBoard;
 
 const Button = styled.button`
-  width: 13vw;
-  height: 13vw;
+  width: 12vw;
+  height: 11.5vw;
   font-size: 12px;
   border: none;
   border-radius: 6px;
   background-color: ${(props) => {
+    if (props.isSelected) {
+      return "yellow";
+    }
     if (props.isPossibleMove) {
       return "yellow";
     }
@@ -194,4 +210,15 @@ const Button = styled.button`
 
 const Row = styled.div`
   display: flex;
+`;
+
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
 `;
