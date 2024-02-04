@@ -6,6 +6,7 @@ import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
 import PIECES_IMAGE from "../Static/Constants/ChessImg";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
+import Timer from "../Components/Timer";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -140,41 +141,44 @@ function ChessBoard() {
 
   // 체스 보드판을 렌더링
   return (
-    <Div>
-      {board.map((row, i) => (
-        <Row key={i}>
-          {row.map((piece, j) => (
-            <Button
-              key={j}
-              row={i}
-              column={j}
-              piece={piece}
-              isSelected={
-                selectedButton &&
-                selectedButton[0] === i &&
-                selectedButton[1] === j
-              }
-              isPossibleMove={possibleMoves.some(
-                ([x, y]) => x === i && y === j
-              )}
-              onClick={() => handleButtonClick(i, j)}
-            >
-              {piece ? (
-                <img
-                  src={require(`../Static${
-                    PIECES_IMAGE[piece.type.toLowerCase()][piece.color]
-                  }`)}
-                  alt={piece.type}
-                />
-              ) : (
-                ""
-              )}
-            </Button>
-          ))}
-          <br />
-        </Row>
-      ))}
-    </Div>
+    <>
+      <Div>
+        {board.map((row, i) => (
+          <Row key={i}>
+            {row.map((piece, j) => (
+              <Button
+                key={j}
+                row={i}
+                column={j}
+                piece={piece}
+                isSelected={
+                  selectedButton &&
+                  selectedButton[0] === i &&
+                  selectedButton[1] === j
+                }
+                isPossibleMove={possibleMoves.some(
+                  ([x, y]) => x === i && y === j
+                )}
+                onClick={() => handleButtonClick(i, j)}
+              >
+                {piece ? (
+                  <img
+                    src={require(`../Static${
+                      PIECES_IMAGE[piece.type.toLowerCase()][piece.color]
+                    }`)}
+                    alt={piece.type}
+                  />
+                ) : (
+                  ""
+                )}
+              </Button>
+            ))}
+            <br />
+          </Row>
+        ))}
+              <Timer />
+      </Div>
+    </>
   );
 }
 
@@ -217,8 +221,9 @@ const Div = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding-left: 10px;
-  padding-right: 10px;
+  height: 90vh;
+  /* padding-left: 10px;
+  padding-right: 10px; */
   overflow: hidden;
+  margin-top: 7vw;
 `;
