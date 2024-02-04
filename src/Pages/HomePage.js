@@ -1,10 +1,23 @@
 import styled from "styled-components";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
+import React, { useContext } from "react";
+import { DifficultyContext } from "../Context/DifficultyContext";
 
 function HomePage() {
   const navigate = useNavigate();
+
+  // ContextAPI - 난이도 변수
+  const { difficulty, setDifficulty } = useContext(DifficultyContext);
+
+  // 난이도 버튼 핸들러
+  const handleDifficultyClick = (newDifficulty) => {
+    if (newDifficulty === difficulty) {
+      setDifficulty("");
+    } else {
+      setDifficulty(newDifficulty);
+    }
+  };
 
   const handleButtonClick = () => {
     navigate(ROUTES.CHESS);
@@ -37,12 +50,25 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={31.2821}>
-        <Button style={{ width: "33%" }}>
-          <div style={{ fontSize: "4.1026vw", color: "black" }}>EASY</div>
+        <Button
+          style={{
+            width: "33%",
+            backgroundColor: difficulty === "Easy" ? "#ddd" : "#fff",
+          }}
+          onClick={() => handleDifficultyClick("Easy")}
+        >
+          <div
+            style={{
+              fontSize: "4.1026vw",
+              color: difficulty === "Easy" ? "#D66602" : "black",
+            }}
+          >
+            EASY
+          </div>
           <div
             style={{
               fontSize: "17.9487vw",
-              color: "black",
+              color: difficulty === "Easy" ? "#D66602" : "black",
               marginTop: "-30px",
               marginBottom: "-30px",
             }}
@@ -50,12 +76,25 @@ function HomePage() {
             E
           </div>
         </Button>
-        <Button style={{ width: "33%" }}>
-          <div style={{ fontSize: "4.1026vw", color: "black" }}>NORMAL</div>
+        <Button
+          style={{
+            width: "33%",
+            backgroundColor: difficulty === "Normal" ? "#ddd" : "#fff",
+          }}
+          onClick={() => handleDifficultyClick("Normal")}
+        >
+          <div
+            style={{
+              fontSize: "4.1026vw",
+              color: difficulty === "Normal" ? "#D66602" : "black",
+            }}
+          >
+            NORMAL
+          </div>
           <div
             style={{
               fontSize: "17.9487vw",
-              color: "black",
+              color: difficulty === "Normal" ? "#D66602" : "black",
               marginTop: "-30px",
               marginBottom: "-30px",
             }}
@@ -63,12 +102,25 @@ function HomePage() {
             N
           </div>
         </Button>
-        <Button style={{ width: "33%" }}>
-          <div style={{ fontSize: "4.1026vw", color: "black" }}>HARD</div>
+        <Button
+          style={{
+            width: "33%",
+            backgroundColor: difficulty === "Hard" ? "#ddd" : "#fff",
+          }}
+          onClick={() => handleDifficultyClick("Hard")}
+        >
+          <div
+            style={{
+              fontSize: "4.1026vw",
+              color: difficulty === "Hard" ? "#D66602" : "black",
+            }}
+          >
+            HARD
+          </div>
           <div
             style={{
               fontSize: "17.9487vw",
-              color: "black",
+              color: difficulty === "Hard" ? "#D66602" : "black",
               marginTop: "-30px",
               marginBottom: "-30px",
             }}
@@ -78,7 +130,11 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={25.641}>
-        <Button style={{ fontSize: "17.9487vw" }} onClick={handleButtonClick}>
+        <Button
+          style={{ fontSize: "17.9487vw" }}
+          onClick={handleButtonClick}
+          disabled={!difficulty}
+        >
           PLAY
         </Button>
       </Row>
@@ -114,11 +170,11 @@ const RowDiv = styled.div`
 `;
 
 const TitleText = styled.div`
-  font-size: 20.5128vw;
+  font-size: 18vw;
   font-family: ${({ theme }) => theme.font};
   color: #000;
   background-color: #f2f2f2;
-  line-height: 1.2;
+  line-height: 1;
   text-align: center;
   padding-top: 2.5641vw;
 `;
