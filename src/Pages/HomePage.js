@@ -205,6 +205,8 @@ const Button = styled.button`
   &:active {
     filter: brightness(70%);
   }
+  cursor: pointer;
+
 `;
 
 const SettingImage = styled.img`
