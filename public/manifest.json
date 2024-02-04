@@ -9,7 +9,8 @@
     "default_icon": {
       "16": "./logo512.png",
       "48": "./logo192.png"
-    }
+    },
+    "use_navigation_bar": false
   },
   "background": {
     "service_worker": "background.js"
@@ -17,5 +18,12 @@
   "content_scripts": [{
     "matches": ["<all_urls>"],
     "js": ["contentScript.js"]
-  }]
+  }],
+  "web_accessible_resources": [
+    {
+      "resources": ["index.html", "about.html"],
+      "matches": ["<all_urls>"],
+      "use_dynamic_url": false
+    }
+  ]
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Switch, Route, Routes } from "react-router-dom";
 import { DifficultyProvider } from "./Context/DifficultyContext";
 import HomePage from "./Pages/HomePage";
 import ScrollToTop from "./ScrollToTop";
@@ -13,13 +13,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <DifficultyProvider>
         <GlobalStyle />
-        <Router>
+        <Switch>
           <ScrollToTop />
           <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.CHESS} element={<ChessBoard />} />
           </Routes>
-        </Router>
+        </Switch>
       </DifficultyProvider>
     </ThemeProvider>
   );
