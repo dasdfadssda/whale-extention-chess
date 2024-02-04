@@ -175,7 +175,7 @@ const Button = styled.button`
   border-radius: 6px;
   background-color: ${(props) => {
     if (props.isPossibleMove) {
-      return "blue";
+      return "yellow";
     }
     return props.row % 2 === props.column % 2 ? "#E38C56" : "#D66602";
   }};
