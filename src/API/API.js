@@ -36,7 +36,7 @@ function boardToFen(board) {
         }
       }
       if (fenRow.length !== 8 && fenRow !== "8") {
-        fenRow += emptySquareCount;
+        if(emptySquareCount!==0) fenRow += emptySquareCount;
       }
       fenString += fenRow + '/';
     }
@@ -68,7 +68,7 @@ export default function useBestMove(board) {
                         mode: 'bestmove'
                     }
                 });
-                setBestMove(response.data);
+                if(response.data!==null) setBestMove(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -77,6 +77,5 @@ export default function useBestMove(board) {
         fetchBestMove();
     }, [board]); 
   
-    console.log("결과", bestMove);
     return bestMove;
   }
