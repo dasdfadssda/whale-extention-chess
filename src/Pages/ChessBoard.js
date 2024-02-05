@@ -58,10 +58,18 @@ function ChessBoard() {
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
-
       console.log("검정턴",bestMoveResponse.data);
+
+      
+      const moveInfo = bestMove.split(" ")[1]; 
+      const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97]; 
+      const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97]; 
+
+      // 이동 실행
+      movePiece(from, to);
     }
-  }, [currentTurn]);
+  }, [currentTurn, bestMoveResponse]);
+
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
