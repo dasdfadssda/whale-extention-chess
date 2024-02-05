@@ -10,6 +10,8 @@ import Timer from "../Components/Timer";
 import useBestMove from "../Api/API";
 
 function ChessBoard() {
+
+  // 체스 초기 상태 state
   const [board, setBoard] = useState([
     [
       { type: "rook", color: "black" },
@@ -55,24 +57,28 @@ function ChessBoard() {
   // AI 변수 선언
   const bestMoveResponse = useBestMove(board);
 
+  // AI 연결
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
-      console.log("검정턴",bestMoveResponse.data);
+      console.log("검정턴", bestMoveResponse.data);
 
-      
-      const moveInfo = bestMove.split(" ")[1]; 
-      const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97]; 
-      const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97]; 
+      // return 값 커스텀
+      const moveInfo = bestMove.split(" ")[1];
+      const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
+      const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
 
-      // 이동 실행
+      // return 값에 따라 이동 실행
       movePiece(from, to);
     }
   }, [currentTurn, bestMoveResponse]);
 
-
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
+    // 현재 턴과 선택한 말 색 구분
+    if (board[i][j] && board[i][j].color !== currentTurn) {
+      return;
+    }
     // 선택된 좌표 선언
     setSelectedButton([i, j]);
 
