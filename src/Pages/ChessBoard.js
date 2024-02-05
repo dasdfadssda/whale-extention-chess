@@ -10,7 +10,6 @@ import Timer from "../Components/Timer";
 import useBestMove from "../Api/API";
 
 function ChessBoard() {
-
   // 체스 초기 상태 state
   const [board, setBoard] = useState([
     [
@@ -77,6 +76,12 @@ function ChessBoard() {
   const handleButtonClick = (i, j) => {
     // 현재 턴과 선택한 말 색 구분
     if (board[i][j] && board[i][j].color !== currentTurn) {
+      if (possibleMoves.some(([x, y]) => x === i && y === j)) {
+        // 적의 말이 있는 위치를 클릭하면 말을 잡습니다.
+        movePiece(selectedPiece, [i, j]);
+        setSelectedPiece(null);
+        setPossibleMoves([]);
+      }
       return;
     }
     // 선택된 좌표 선언
