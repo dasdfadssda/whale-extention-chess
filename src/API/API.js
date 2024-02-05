@@ -77,5 +77,6 @@ export default function useBestMove(board) {
         fetchBestMove();
     }, [board]); 
   
+    console.log("결과", bestMove);
     return bestMove;
   }

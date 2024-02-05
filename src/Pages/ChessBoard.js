@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
 import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
@@ -7,7 +7,7 @@ import PIECES_IMAGE from "../Static/Constants/ChessImg";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import Timer from "../Components/Timer";
-import bestMove from "../Api/API";
+import useBestMove from "../Api/API";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -52,6 +52,16 @@ function ChessBoard() {
   const navigate = useNavigate();
   // 클릭된 버튼 변수 관리
   const [selectedButton, setSelectedButton] = useState(null);
+  // AI 변수 선언
+  const bestMoveResponse = useBestMove(board);
+
+  useEffect(() => {
+    if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
+      const bestMove = bestMoveResponse.data;
+
+      console.log("검정턴",bestMoveResponse.data);
+    }
+  }, [currentTurn]);
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
@@ -138,8 +148,6 @@ function ChessBoard() {
 
     // 선택된 좌표 해제
     setSelectedButton(null);
-    bestMove(board); // 여기서 불러오는중
-    
   };
 
   // 체스 보드판을 렌더링
@@ -179,7 +187,7 @@ function ChessBoard() {
             <br />
           </Row>
         ))}
-              <Timer />
+        <Timer />
       </Div>
     </>
   );
@@ -224,9 +232,9 @@ const Div = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-  /* padding-left: 10px;
-  padding-right: 10px; */
+  height: vh;
+  padding-left: 10px;
+  padding-right: 10px;
   overflow: hidden;
   margin-top: 7vw;
 `;
