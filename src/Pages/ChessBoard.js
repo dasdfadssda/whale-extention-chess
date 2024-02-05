@@ -7,6 +7,7 @@ import PIECES_IMAGE from "../Static/Constants/ChessImg";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import Timer from "../Components/Timer";
+import bestMove from "../Api/API";
 
 function ChessBoard() {
   const [board, setBoard] = useState([
@@ -137,6 +138,8 @@ function ChessBoard() {
 
     // 선택된 좌표 해제
     setSelectedButton(null);
+    bestMove(board); // 여기서 불러오는중
+    
   };
 
   // 체스 보드판을 렌더링

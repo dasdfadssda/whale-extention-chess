@@ -51,39 +51,31 @@ function fenAPI(board, computer, turn) {
     return fen; // 수정: 문자열을 반환하도록 수정
 }
 
-function bestMove({ board }) {
-  const [bestMove, setBestMove] = useState();
-  console.log(bestMove);
-  console.log(board);
-
-  useEffect(() => {
-      const apiUrl = 'https://stockfish.online/api/stockfish.php';
-      const fen = fenAPI(board, "b", 1);
-      console.log(fen);
-      let depth = 5;
-      // if (difficulty === "Hard") depth = 14;
-      // if (difficulty === "Normal") depth = 9;
-      console.log(depth);
-
-      // 비동기 작업을 수행하는 함수를 정의합니다.
-      const fetchBestMove = async () => {
-          try {
-              const response = await axios.get(apiUrl, {
-                  params: {
-                      fen: fen,
-                      depth: depth,
-                      mode: 'bestmove'
-                  }
-              });
-              setBestMove(response.data);
-          } catch (error) {
-              console.error('Error fetching data:', error);
-          }
-      };
-
-      // 비동기 작업을 수행합니다.
-      fetchBestMove();
-  }, [board]); 
-
-  return bestMove;
-}
+export default function useBestMove(board) {
+    const [bestMove, setBestMove] = useState();
+  
+    useEffect(() => {
+        const apiUrl = 'https://stockfish.online/api/stockfish.php';
+        const fen = fenAPI(board, "b", 1);
+        let depth = 5;
+  
+        const fetchBestMove = async () => {
+            try {
+                const response = await axios.get(apiUrl, {
+                    params: {
+                        fen: fen,
+                        depth: depth,
+                        mode: 'bestmove'
+                    }
+                });
+                setBestMove(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+  
+        fetchBestMove();
+    }, [board]); 
+  
+    return bestMove;
+  }
