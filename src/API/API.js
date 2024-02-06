@@ -68,7 +68,7 @@ export default function useBestMove(board) {
                         mode: 'bestmove'
                     }
                 });
-                if(response.data!==null) setBestMove(response.data);
+                if(response.data!==undefined && response.data!==null) setBestMove(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
