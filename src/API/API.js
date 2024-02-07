@@ -51,31 +51,41 @@ function fenAPI(board, computer, turn) {
     return fen; // 수정: 문자열을 반환하도록 수정
 }
 
-export default function useBestMove(board) {
-    const [bestMove, setBestMove] = useState();
-  
-    useEffect(() => {
-        const apiUrl = 'https://stockfish.online/api/stockfish.php';
-        const fen = fenAPI(board, "b", 1);
-        let depth = 5;
-  
-        const fetchBestMove = async () => {
-            try {
-                const response = await axios.get(apiUrl, {
-                    params: {
-                        fen: fen,
-                        depth: depth,
-                        mode: 'bestmove'
-                    }
-                });
-                if(response.data!==undefined && response.data!==null) setBestMove(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
+export default function useBestMove(board, currentTurn) {
+  const [bestMove, setBestMove] = useState(null); 
+  const [count, setCount] = useState(1); 
+
+  useEffect(() => {
+    if (currentTurn === 'black') {
+      const apiUrl = 'https://stockfish.online/api/stockfish.php';
+      const fen = fenAPI(board, "b", 1);
+      let depth = 5;
+
+      const fetchBestMove = async () => {
+        try {
+          const response = await axios.get(apiUrl, {
+            params: {
+              fen: fen,
+              depth: depth,
+              mode: 'bestmove'
             }
-        };
-  
-        fetchBestMove();
-    }, [board]); 
-  
-    return bestMove;
-  }
+          });
+          if (response.data !== undefined && response.data !== null) {
+            setBestMove(response.data);  
+            setCount(count+1);
+            console.log(`검정 ${count}번쨰 값`,response.data);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchBestMove();
+    } else {
+      console.log("흰색턴");
+    }
+  }, [board, currentTurn]);
+
+  return bestMove;
+}
+

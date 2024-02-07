@@ -54,23 +54,24 @@ function ChessBoard() {
   // 클릭된 버튼 변수 관리
   const [selectedButton, setSelectedButton] = useState(null);
   // AI 변수 선언
-  const bestMoveResponse = useBestMove(board);
+  const bestMoveResponse = useBestMove(board, currentTurn);
 
   // AI 연결
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
-      console.log("검정턴", bestMoveResponse.data);
-
+  
       // return 값 커스텀
       const moveInfo = bestMove.split(" ")[1];
       const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
       const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
-
+  
       // return 값에 따라 이동 실행
       movePiece(from, to);
-    }
+      console.log("뤼턴값 :", bestMove);
+    } 
   }, [currentTurn, bestMoveResponse]);
+  
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
