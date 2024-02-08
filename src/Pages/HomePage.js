@@ -53,14 +53,14 @@ function HomePage() {
         <Button
           style={{
             width: "33%",
-            backgroundColor: difficulty === "Easy" ? "#ddd" : "#fff",
+            backgroundColor: difficulty === "Easy" ? "#D66602" : "#fff",
           }}
           onClick={() => handleDifficultyClick("Easy")}
         >
           <div
             style={{
               fontSize: "4.1026vw",
-              color: difficulty === "Easy" ? "#D66602" : "black",
+              color: difficulty === "Easy" ? "#FFFFFF" : "black",
             }}
           >
             EASY
@@ -68,7 +68,7 @@ function HomePage() {
           <div
             style={{
               fontSize: "17.9487vw",
-              color: difficulty === "Easy" ? "#D66602" : "black",
+              color: difficulty === "Easy" ? "#FFFFFF" : "black",
               marginTop: "-30px",
               marginBottom: "-30px",
             }}
@@ -79,14 +79,14 @@ function HomePage() {
         <Button
           style={{
             width: "33%",
-            backgroundColor: difficulty === "Normal" ? "#ddd" : "#fff",
+            backgroundColor: difficulty === "Normal" ? "#D66602" : "#fff",
           }}
           onClick={() => handleDifficultyClick("Normal")}
         >
           <div
             style={{
               fontSize: "4.1026vw",
-              color: difficulty === "Normal" ? "#D66602" : "black",
+              color: difficulty === "Normal" ? "#FFFFFF" : "black",
             }}
           >
             NORMAL
@@ -94,7 +94,7 @@ function HomePage() {
           <div
             style={{
               fontSize: "17.9487vw",
-              color: difficulty === "Normal" ? "#D66602" : "black",
+              color: difficulty === "Normal" ? "#FFFFFF" : "black",
               marginTop: "-30px",
               marginBottom: "-30px",
             }}
@@ -105,14 +105,14 @@ function HomePage() {
         <Button
           style={{
             width: "33%",
-            backgroundColor: difficulty === "Hard" ? "#ddd" : "#fff",
+            backgroundColor: difficulty === "Hard" ? "#D66602" : "#fff",
           }}
           onClick={() => handleDifficultyClick("Hard")}
         >
           <div
             style={{
               fontSize: "4.1026vw",
-              color: difficulty === "Hard" ? "#D66602" : "black",
+              color: difficulty === "Hard" ? "#FFFFFF" : "black",
             }}
           >
             HARD
@@ -120,7 +120,7 @@ function HomePage() {
           <div
             style={{
               fontSize: "17.9487vw",
-              color: difficulty === "Hard" ? "#D66602" : "black",
+              color: difficulty === "Hard" ? "#FFFFFF" : "black",
               marginTop: "-30px",
               marginBottom: "-30px",
             }}
@@ -130,13 +130,13 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={25.641}>
-        <Button
-          style={{ fontSize: "17.9487vw" }}
+        <PlayButton
+          style={{ fontSize: "17.9487vw"}}
           onClick={handleButtonClick}
           disabled={!difficulty}
         >
           PLAY
-        </Button>
+        </PlayButton>
       </Row>
     </>
   );
@@ -213,4 +213,26 @@ const SettingImage = styled.img`
   height: auto;
   width: 90%;
   padding: 0 30px;
+`;
+
+const PlayButton = styled.button`
+  flex-grow: 1;
+  margin: 0 5px;
+  padding: 10px;
+  font-family: ${({ theme }) => theme.font};
+  background-color: ${({ color }) => color || "#F2F2F2"};
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${props => props.disabled ? '#fff' : '#D66602'};
+  color: ${props => props.disabled ? '#DEDEDE' : 'white'};
+
+  &:active {
+    filter: brightness(70%);
+  }
+  cursor: pointer;
+
 `;
