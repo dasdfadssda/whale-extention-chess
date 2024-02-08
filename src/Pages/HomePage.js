@@ -19,9 +19,10 @@ function HomePage() {
     }
   };
 
-  const handleButtonClick = () => {
-    navigate(ROUTES.CHESS);
+  const handleButtonClick = (route) => {
+    navigate(route);
   };
+  
 
   return (
     <>
@@ -45,7 +46,7 @@ function HomePage() {
             <div style={{ fontSize: "10.5vw", color: "white" }}>10:45</div>
           </Column>
         </Button>
-        <Button>
+        <Button onClick={() => handleButtonClick(ROUTES.SETTING)}> 
           <SettingImage src={require("../Static/Assets/SettingImg.png")} />
         </Button>
       </Row>
@@ -132,7 +133,7 @@ function HomePage() {
       <Row height={25.641}>
         <PlayButton
           style={{ fontSize: "17.9487vw"}}
-          onClick={handleButtonClick}
+          onClick={() => handleButtonClick(ROUTES.CHESS)}
           disabled={!difficulty}
         >
           PLAY
@@ -228,7 +229,7 @@ const PlayButton = styled.button`
   justify-content: center;
   align-items: center;
   background-color: ${props => props.disabled ? '#fff' : '#D66602'};
-  color: ${props => props.disabled ? '#DEDEDE' : 'white'};
+  color: ${props => props.disabled ? '#E5E5E5' : 'white'};
 
   &:active {
     filter: brightness(70%);
