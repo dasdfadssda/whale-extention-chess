@@ -1,4 +1,5 @@
 export const handlePawnPromotion = (newBoard, toX, toY) => {
+  
     const pieceType = prompt(
       "Pawn reached the end! Please enter a number for the piece type you want: 0 for Queen, 1 for Rook, 2 for Bishop, 3 for Knight",
       "0"
