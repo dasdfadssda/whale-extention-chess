@@ -7,7 +7,7 @@ import PIECES_IMAGE from "../Static/Constants/ChessImg";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import Timer from "../Components/Timer";
-import useBestMove from "../Api/API";
+import useBestMove from "../Api/ChessMoveApi";
 
 function ChessBoard() {
   // 체스 초기 상태 state
