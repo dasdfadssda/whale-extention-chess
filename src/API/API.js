@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'; // useContext 제거
+import { useContext, useEffect, useState } from 'react'; // useContext 제거
 import { DifficultyContext } from '../Context/DifficultyContext'; 
 
 function boardToFen(board) {
@@ -52,8 +52,12 @@ function fenAPI(board, computer, turn) {
 }
 
 export default function useBestMove(board, currentTurn) {
+
+  // ContextAPI - 난이도 변수
+  const { difficulty } = useContext(DifficultyContext);
+  console.log("API page에서 읽는 난이도 :",difficulty);
+
   const [bestMove, setBestMove] = useState(null); 
-  const [count, setCount] = useState(1); 
 
   useEffect(() => {
     if (currentTurn === 'black') {
@@ -72,17 +76,13 @@ export default function useBestMove(board, currentTurn) {
           });
           if (response.data !== undefined && response.data !== null) {
             setBestMove(response.data);  
-            setCount(count+1);
-            console.log(`검정 ${count}번쨰 값`,response.data);
           }
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       };
       fetchBestMove();
-    } else {
-      console.log("흰색턴");
-    }
+    } 
   }, [board, currentTurn]);
 
   return bestMove
