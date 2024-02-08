@@ -7,6 +7,8 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./Styles/Theme";
 import GlobalStyle from "./Styles/GlobalStyle";
 import ChessSettings from "./Pages/SettingPage";
+import RankingPage from "./Pages/RankingPage";
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.CHESS} element={<ChessBoard />} />
             <Route path={ROUTES.SETTING} element={<ChessSettings />} />
+            <Route path={ROUTES.RANKING} element={<RankingPage/>} />
           </Routes>
         </Switch>
       </DifficultyProvider>
