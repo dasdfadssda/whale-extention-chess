@@ -79,13 +79,12 @@ export default function useBestMove(board, currentTurn) {
           console.error('Error fetching data:', error);
         }
       };
-
       fetchBestMove();
     } else {
       console.log("흰색턴");
     }
   }, [board, currentTurn]);
 
-  return bestMove;
+  return bestMove
 }
 

@@ -60,18 +60,18 @@ function ChessBoard() {
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
-  
+
       // return 값 커스텀
       const moveInfo = bestMove.split(" ")[1];
       const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
       const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
-  
+
       // return 값에 따라 이동 실행
-      movePiece(from, to);
       console.log("뤼턴값 :", bestMove);
-    } 
+      console.log("이동 값 :", from, to);
+      movePiece(from, to);
+    }
   }, [currentTurn, bestMoveResponse]);
-  
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
@@ -116,10 +116,17 @@ function ChessBoard() {
 
   // 체스말을 움직이는 함수
   const movePiece = (from, to) => {
-    const newBoard = [...board];
+    console.log("체스 움직임에서 : ", from, to);
+    // const newBoard = [...board];
+    const newBoard = JSON.parse(JSON.stringify(board));
     const [fromX, fromY] = from;
     const [toX, toY] = to;
 
+    // `from` 위치에 체스말이 있는지 확인
+    if (!newBoard[fromX][fromY]) {
+      console.error(`No piece at position: ${from}`);
+      return;
+    }
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
