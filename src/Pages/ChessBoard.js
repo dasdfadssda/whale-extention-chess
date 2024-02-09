@@ -213,8 +213,8 @@ const Button = styled.button`
   }
 
   img {
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 85%;
+    max-height: 85%;
   }
 `;
 
