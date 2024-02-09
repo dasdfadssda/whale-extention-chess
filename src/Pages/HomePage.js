@@ -1,14 +1,18 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
 
 function HomePage() {
-  const navigate = useNavigate();
-
   // ContextAPI - 난이도 변수
   const { difficulty, setDifficulty } = useContext(DifficultyContext);
+  // 사용자의 최단 기록 state
+  const [shortestRecord, setShortestRecord] = useState("00:00");
+  // 게임 진행 수 state
+  const [currentGameCount, setCurrentGameCount] = useState(0);
+  // 전속자 수 state
+  const [currentVisitorCount, setCurrentVisitorCount] = useState(0);
 
   // 난이도 버튼 핸들러
   const handleDifficultyClick = (newDifficulty) => {
@@ -19,10 +23,11 @@ function HomePage() {
     }
   };
 
+  // 페이지 이동 핸들러
+  const navigate = useNavigate();
   const handleButtonClick = (route) => {
     navigate(route);
   };
-  
 
   return (
     <>
@@ -31,22 +36,27 @@ function HomePage() {
         <RowDiv>
           <Column>
             <SmallText>Games Today</SmallText>
-            <MidleText>607</MidleText>
+            <MidleText>{currentGameCount}</MidleText>
           </Column>
           <Column>
             <SmallText>Playing now</SmallText>
-            <MidleText>76</MidleText>
+            <MidleText>{currentVisitorCount}</MidleText>
           </Column>
         </RowDiv>
       </Column>
       <Row height={31.2821}>
-        <Button color={"#D66602"} onClick={() => handleButtonClick(ROUTES.RANKING)}>
+        <Button
+          color={"#D66602"}
+          onClick={() => handleButtonClick(ROUTES.RANKING)}
+        >
           <Column color={"Tradn"} content="flex-end">
-            <SmallText color={"#FFFFFF"}>Best Record</SmallText>
-            <div style={{ fontSize: "10.5vw", color: "white" }}>10:45</div>
+            <SmallText color={"#FFFFFF"} style={{marginTop:"2vw"}}>Best Record</SmallText>
+            <div style={{ fontSize: "10.5vw", color: "white", minWidth:"35vw", marginTop:"2vw"}}>
+              {shortestRecord}
+            </div>
           </Column>
         </Button>
-        <Button onClick={() => handleButtonClick(ROUTES.SETTING)}> 
+        <Button onClick={() => handleButtonClick(ROUTES.SETTING)}>
           <SettingImage src={require("../Static/Assets/SettingImg.png")} />
         </Button>
       </Row>
@@ -132,7 +142,7 @@ function HomePage() {
       </Row>
       <Row height={25.641}>
         <PlayButton
-          style={{ fontSize: "17.9487vw"}}
+          style={{ fontSize: "17.9487vw" }}
           onClick={() => handleButtonClick(ROUTES.CHESS)}
           disabled={!difficulty}
         >
@@ -207,7 +217,6 @@ const Button = styled.button`
     filter: brightness(70%);
   }
   cursor: pointer;
-
 `;
 
 const SettingImage = styled.img`
@@ -228,12 +237,11 @@ const PlayButton = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${props => props.disabled ? '#fff' : '#D66602'};
-  color: ${props => props.disabled ? '#E5E5E5' : 'white'};
+  background-color: ${(props) => (props.disabled ? "#fff" : "#D66602")};
+  color: ${(props) => (props.disabled ? "#E5E5E5" : "white")};
 
   &:active {
     filter: brightness(70%);
   }
   cursor: pointer;
-
 `;
