@@ -126,7 +126,7 @@ const Dialog = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 80vh;
+  height: 90vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
