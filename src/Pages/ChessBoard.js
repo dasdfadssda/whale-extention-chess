@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
-import { checkMateStatus } from "../Service/chessPieceMove/isCheckMate";
 import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
 import PIECES_IMAGE from "../Static/Constants/ChessImg";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import Timer from "../Components/Timer";
 import useBestMove from "../Api/ChessMoveApi";
+import { Chess } from "chess.js";
+import { boardToFen } from "../Service/FenFormat/boardToFen";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -40,9 +41,6 @@ function ChessBoard() {
     ],
   ]);
 
-  // 왕의 위치를 관리하는 상태
-  const [whiteKingPosition, setWhiteKingPosition] = useState([7, 4]);
-  const [blackKingPosition, setBlackKingPosition] = useState([0, 4]);
   // 사용자가 선택한 체스말
   const [selectedPiece, setSelectedPiece] = useState(null);
   // 선택된 체스말이 움직일 수 있는 위치
@@ -131,42 +129,17 @@ function ChessBoard() {
       handlePawnPromotion(newBoard, toX, toY);
     }
 
-    // 왕의 위치 업데이트
-    if (newBoard[toX][toY].type === "king") {
-      if (newBoard[toX][toY].color === "white") {
-        setWhiteKingPosition([toX, toY]);
-      } else {
-        setBlackKingPosition([toX, toY]);
-      }
-    }
-
     setBoard(newBoard);
     // 순서 교체
     setCurrentTurn(currentTurn === "white" ? "black" : "white");
 
     // 체크메이트 상황 확인
-    const result = checkMateStatus(
-      whiteKingPosition,
-      blackKingPosition,
-      board,
-      currentTurn
-    );
-
-    if (result.status === "checkmate") {
-      alert(`${result.winner} has won the game!`);
-
-      const userResponse = prompt(
-        "Enter 0 to restart the game or 1 to return to the homepage."
-      );
-
-      if (userResponse === "0") {
-        // 게임을 다시 시작하는 로직 추가 예정
-      } else if (userResponse === "1") {
-        // 루트 페이지로 이동
-        navigate(ROUTES.HOME);
-      }
+    const chess = new Chess();
+    chess.load(boardToFen(board, currentTurn));
+    if (chess.isCheckmate()) {
+      alert(`${currentTurn === "white" ? "Black" : "White"} has won the game!`);
+      navigate(ROUTES.HOME);
     }
-    console.log(result);
 
     // 선택된 좌표 해제
     setSelectedButton(null);
@@ -176,7 +149,7 @@ function ChessBoard() {
   return (
     <>
       <Div>
-      <Timer />
+        <Timer />
         {board.map((row, i) => (
           <Row key={i}>
             {row.map((piece, j) => (
