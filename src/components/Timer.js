@@ -117,7 +117,7 @@ const StopButton = styled.button`
 
 const PauseImage = styled.img`
   height: auto;
-  width: 90%;
+  width: 100%;
   padding: 0 30px;
 `;
 
