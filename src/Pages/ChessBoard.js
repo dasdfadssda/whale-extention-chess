@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { getPossibleMoves } from "../Service/chessPieceMove/ChessPieceController";
 import { handlePawnPromotion } from "../Service/chessPieceMove/pawnPromotion";
@@ -9,6 +9,7 @@ import Timer from "../Components/Timer";
 import useBestMove from "../Api/ChessMoveApi";
 import { Chess } from "chess.js";
 import { boardToFen } from "../Service/FenFormat/boardToFen";
+import { TimerContext } from "../Context/TimerContext";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -49,6 +50,12 @@ function ChessBoard() {
   const [currentTurn, setCurrentTurn] = useState("white");
   // useNavigate 선언
   const navigate = useNavigate();
+  // Context api 선언 - Timer 변수
+  const { timeState } = useContext(TimerContext);
+  console.log("ChessBoard page에서 읽는 시간 :", timeState);
+  // 시간초 초/분 단위 변환 포맷
+  const formattedSeconds = String(Math.floor(timeState % 60)).padStart(2, "0");
+  const formattedMinutes = String(Math.floor(timeState / 60)).padStart(2, "0");
   // 클릭된 버튼 변수 관리
   const [selectedButton, setSelectedButton] = useState(null);
   // AI 변수 선언
@@ -137,7 +144,11 @@ function ChessBoard() {
     const chess = new Chess();
     chess.load(boardToFen(board, currentTurn));
     if (chess.isCheckmate()) {
-      alert(`${currentTurn === "white" ? "Black" : "White"} has won the game!`);
+      alert(
+        `${
+          currentTurn === "white" ? "Black" : "White"
+        } has won the game! ${formattedMinutes}:${formattedSeconds}`
+      );
       navigate(ROUTES.HOME);
     }
 
@@ -227,7 +238,6 @@ const Div = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* height: 90vh; */
   padding-left: 10px;
   padding-right: 10px;
   overflow: hidden;

@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import styled from "styled-components";
+import { TimerContext } from "../Context/TimerContext";
 
 function Timer() {
   // 시간초 state
   const [seconds, setSeconds] = useState(0);
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
-  // navigate
+  // navigate hook 선언
   const navigate = useNavigate();
+  // ContextAPI 선언 - Timer 변수
+  const { setTimeState } = useContext(TimerContext);
 
   // 타이머 ID를 저장할 ref
   const timer = useRef(null);
@@ -18,8 +21,8 @@ function Timer() {
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((seconds) => seconds + 1);
+      setTimeState((seconds) => seconds + 1);
     }, 1000);
-
     return () => clearInterval(interval);
   }, []);
 

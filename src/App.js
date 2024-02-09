@@ -8,21 +8,23 @@ import { theme } from "./Styles/Theme";
 import GlobalStyle from "./Styles/GlobalStyle";
 import ChessSettings from "./Pages/SettingPage";
 import RankingPage from "./Pages/RankingPage";
-
+import { TimerProvider } from "./Context/TimerContext";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <DifficultyProvider>
-        <GlobalStyle />
-        <Switch>
-          <Routes>
-            <Route path={ROUTES.HOME} element={<HomePage />} />
-            <Route path={ROUTES.CHESS} element={<ChessBoard />} />
-            <Route path={ROUTES.SETTING} element={<ChessSettings />} />
-            <Route path={ROUTES.RANKING} element={<RankingPage/>} />
-          </Routes>
-        </Switch>
+        <TimerProvider>
+          <GlobalStyle />
+          <Switch>
+            <Routes>
+              <Route path={ROUTES.HOME} element={<HomePage />} />
+              <Route path={ROUTES.CHESS} element={<ChessBoard />} />
+              <Route path={ROUTES.SETTING} element={<ChessSettings />} />
+              <Route path={ROUTES.RANKING} element={<RankingPage />} />
+            </Routes>
+          </Switch>
+        </TimerProvider>
       </DifficultyProvider>
     </ThemeProvider>
   );
