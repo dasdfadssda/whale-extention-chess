@@ -40,7 +40,7 @@ function HomePage() {
         </RowDiv>
       </Column>
       <Row height={31.2821}>
-        <Button color={"#D66602"}>
+        <Button color={"#D66602"} onClick={() => handleButtonClick(ROUTES.RANKING)}>
           <Column color={"Tradn"} content="flex-end">
             <SmallText color={"#FFFFFF"}>Best Record</SmallText>
             <div style={{ fontSize: "10.5vw", color: "white" }}>10:45</div>
