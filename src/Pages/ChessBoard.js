@@ -50,18 +50,17 @@ function ChessBoard() {
   const [currentTurn, setCurrentTurn] = useState("white");
   // useNavigate 선언
   const navigate = useNavigate();
-  // Context api 선언 - Timer 변수
-  const { timeState } = useContext(TimerContext);
-  console.log("ChessBoard page에서 읽는 시간 :", timeState);
-  // 시간초 초/분 단위 변환 포맷
-  const formattedSeconds = String(Math.floor(timeState % 60)).padStart(2, "0");
-  const formattedMinutes = String(Math.floor(timeState / 60)).padStart(2, "0");
   // 클릭된 버튼 변수 관리
   const [selectedButton, setSelectedButton] = useState(null);
   // AI 변수 선언
   const bestMoveResponse = useBestMove(board, currentTurn);
+  // Context api 선언 - Timer 변수
+  const { timeState } = useContext(TimerContext);
+  // 시간초 초/분 단위 변환 포맷
+  const formattedSeconds = String(Math.floor(timeState % 60)).padStart(2, "0");
+  const formattedMinutes = String(Math.floor(timeState / 60)).padStart(2, "0");
 
-  // AI 연결
+  // 검정말 이동 API
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
