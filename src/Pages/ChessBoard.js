@@ -8,8 +8,9 @@ import ROUTES from "../Static/Constants/route";
 import Timer from "../Components/Timer";
 import useBestMove from "../Api/ChessMoveApi";
 import { Chess } from "chess.js";
-import { boardToFen } from "../Service/FenFormat/boardToFen";
+import { boardToFen } from "../Service/Format/boardToFen";
 import { TimerContext } from "../Context/TimerContext";
+import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -56,11 +57,7 @@ function ChessBoard() {
   const bestMoveResponse = useBestMove(board, currentTurn);
   // Context api 선언 - Timer 변수
   const { timeState } = useContext(TimerContext);
-  // 시간초 초/분 단위 변환 포맷
-  const formattedSeconds = String(Math.floor(timeState % 60)).padStart(2, "0");
-  const formattedMinutes = String(Math.floor(timeState / 60)).padStart(2, "0");
-
-  // 검정말 이동 API
+  // 검정말 이동 AI API
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
@@ -143,10 +140,16 @@ function ChessBoard() {
     const chess = new Chess();
     chess.load(boardToFen(board, currentTurn));
     if (chess.isCheckmate()) {
+      const winner = currentTurn === "white" ? "Black" : "White";
+      const currentTime = timeState;
+      // 'shortestTime' key의 값 가져오기
+      const shortestTime = localStorage.getItem("shortestTime");
+      // 'shortestTime' key의 값이 없거나 현재 게임의 시간이 더 짧을 경우 현재 게임의 시간을 저장
+      if (!shortestTime || currentTime < shortestTime) {
+        localStorage.setItem("shortestTime", currentTime);
+      }
       alert(
-        `${
-          currentTurn === "white" ? "Black" : "White"
-        } has won the game! ${formattedMinutes}:${formattedSeconds}`
+        `${winner} has won the game! ${formatMinutesAndSeconds(timeState)}`
       );
       navigate(ROUTES.HOME);
     }

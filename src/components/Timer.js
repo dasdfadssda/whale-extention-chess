@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import styled from "styled-components";
 import { TimerContext } from "../Context/TimerContext";
+import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 
 function Timer() {
   // 시간초 state
@@ -26,10 +27,6 @@ function Timer() {
     return () => clearInterval(interval);
   }, []);
 
-  // 시간초 초/분 단위 변환 포멧
-  const formattedSeconds = String(Math.floor(seconds % 60)).padStart(2, "0");
-  const formattedMinutes = String(Math.floor(seconds / 60)).padStart(2, "0");
-
   // 타이머 중지 핸들러
   const handleStopClick = () => {
     clearInterval(timer.current);
@@ -40,7 +37,7 @@ function Timer() {
     <Div>
       <TimeChecker>
         <ClockIcon src={require("../Static/Assets/ClockIcon.png")} />
-        {formattedMinutes}:{formattedSeconds}
+        {formatMinutesAndSeconds(seconds)}
       </TimeChecker>
       <StopButton onClick={handleStopClick}>
         <PauseImage src={require("../Static/Assets/StopIcon.png")} />

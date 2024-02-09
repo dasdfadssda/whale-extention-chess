@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
+import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -28,6 +29,15 @@ function HomePage() {
   const handleButtonClick = (route) => {
     navigate(route);
   };
+
+  // 최단 기록 불러오기
+  useEffect(() => {
+    const shortestTime = localStorage.getItem('shortestTime');
+    if (shortestTime) {
+      const time = Number(shortestTime);
+      setShortestRecord(formatMinutesAndSeconds(time));
+    }
+  }, []);
 
   return (
     <>
