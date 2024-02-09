@@ -176,6 +176,7 @@ function ChessBoard() {
   return (
     <>
       <Div>
+      <Timer />
         {board.map((row, i) => (
           <Row key={i}>
             {row.map((piece, j) => (
@@ -209,7 +210,6 @@ function ChessBoard() {
             <br />
           </Row>
         ))}
-        <Timer />
       </Div>
     </>
   );
@@ -254,7 +254,7 @@ const Div = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: vh;
+  /* height: 90vh; */
   padding-left: 10px;
   padding-right: 10px;
   overflow: hidden;
