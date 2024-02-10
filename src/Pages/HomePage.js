@@ -4,6 +4,7 @@ import ROUTES from "../Static/Constants/route";
 import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
+import NaverLoginButton from "../Components/NaverLoginButton";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -158,6 +159,7 @@ function HomePage() {
         >
           PLAY
         </PlayButton>
+        <NaverLoginButton/>
       </Row>
     </>
   );

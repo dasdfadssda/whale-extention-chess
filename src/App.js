@@ -1,4 +1,4 @@
-import { HashRouter as Switch, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { DifficultyProvider } from "./Context/DifficultyContext";
 import HomePage from "./Pages/HomePage";
 import ChessBoard from "./Pages/ChessBoard";
@@ -9,24 +9,26 @@ import GlobalStyle from "./Styles/GlobalStyle";
 import ChessSettings from "./Pages/SettingPage";
 import RankingPage from "./Pages/RankingPage";
 import { TimerProvider } from "./Context/TimerContext";
+import CallbackPage from "./Pages/CallbackPage";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <DifficultyProvider>
-        <TimerProvider>
-          <GlobalStyle />
-          <Switch>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <DifficultyProvider>
+          <TimerProvider>
+            <GlobalStyle />
             <Routes>
               <Route path={ROUTES.HOME} element={<HomePage />} />
               <Route path={ROUTES.CHESS} element={<ChessBoard />} />
               <Route path={ROUTES.SETTING} element={<ChessSettings />} />
               <Route path={ROUTES.RANKING} element={<RankingPage />} />
+              <Route path={ROUTES.CALLBACK} element={<CallbackPage />} />
             </Routes>
-          </Switch>
-        </TimerProvider>
-      </DifficultyProvider>
-    </ThemeProvider>
+          </TimerProvider>
+        </DifficultyProvider>
+      </ThemeProvider>
+    </Router>
   );
 }
 
