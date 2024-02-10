@@ -138,7 +138,7 @@ function HomePage() {
           <img
             src={require(`../Static/Assets/Lock${name}Icon.png`)}
             alt="lock icon"
-            style={{ margin: "0 5px" }}
+            style={{ margin: "0 5px",  flexGrow:"1" }}
           />
         );
       }
