@@ -54,6 +54,9 @@ function ChessBoard() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [result, setResult] = useState("you win!");
   const [outMessage, setOutMessage] = useState("play again");
+  // 죽은말 state
+  const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
+
 
   // useNavigate 선언
   const navigate = useNavigate();
@@ -128,6 +131,17 @@ function ChessBoard() {
       console.error(`No piece at position: ${from}`);
       return;
     }
+
+    // 죽은 말 관리 
+    if (newBoard[toX][toY]) {
+      setDeadPieces(prev => ({ 
+        ...prev, 
+        [newBoard[toX][toY].color]: [...prev[newBoard[toX][toY].color], newBoard[toX][toY]] 
+      }));
+    }
+    console.log('White dead pieces:', deadPieces.white);
+    console.log('Black dead pieces:', deadPieces.black);
+    
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
@@ -145,7 +159,7 @@ function ChessBoard() {
     const chess = new Chess();
     chess.load(boardToFen(board, currentTurn));
     if (chess.isCheckmate()) {
-      console.log("현재 상황 :",chess.isCheck);
+      console.log("현재 상황 :", chess.isCheck);
       const winner = currentTurn === "white" ? "Black" : "White";
       // 게임 종료시 시간 저장
       const currentTime = timeState;
