@@ -10,7 +10,7 @@ import useBestMove from "../Api/ChessMoveApi";
 import { Chess } from "chess.js";
 import { boardToFen } from "../Service/Format/boardToFen";
 import { TimerContext } from "../Context/TimerContext";
-import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
+import ConfirmationDialog from "../Components/Dialog";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -42,22 +42,27 @@ function ChessBoard() {
       { type: "rook", color: "white" },
     ],
   ]);
-
-  // 사용자가 선택한 체스말
+  // 사용자가 선택한 체스말 state
   const [selectedPiece, setSelectedPiece] = useState(null);
-  // 선택된 체스말이 움직일 수 있는 위치
+  // 선택된 체스말이 움직일 수 있는 위치 state
   const [possibleMoves, setPossibleMoves] = useState([]);
-  // 현재 차례인 팀을 나타내는 상태
+  // 현재 차례인 팀을 나타내는 state
   const [currentTurn, setCurrentTurn] = useState("white");
+  // 클릭된 버튼 state
+  const [selectedButton, setSelectedButton] = useState(null);
+  // dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [result, setResult] = useState("you win!");
+  const [outMessage, setOutMessage] = useState("play again");
+
   // useNavigate 선언
   const navigate = useNavigate();
-  // 클릭된 버튼 변수 관리
-  const [selectedButton, setSelectedButton] = useState(null);
-  // AI 변수 선언
-  const bestMoveResponse = useBestMove(board, currentTurn);
   // Context api 선언 - Timer 변수
   const { timeState } = useContext(TimerContext);
-  // 검정말 이동 AI API
+  // AI 변수 선언
+  const bestMoveResponse = useBestMove(board, currentTurn);
+
+  // AI 검정말 포맷
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
@@ -140,18 +145,25 @@ function ChessBoard() {
     const chess = new Chess();
     chess.load(boardToFen(board, currentTurn));
     if (chess.isCheckmate()) {
+      console.log("현재 상황 :",chess.isCheck);
       const winner = currentTurn === "white" ? "Black" : "White";
+      // 게임 종료시 시간 저장
       const currentTime = timeState;
+      // dialog를 위한 result와 outMessage 설정
+      if (winner === "Black") {
+        setResult("You lose");
+        setOutMessage("Try again");
+      } else {
+        setResult("You win");
+        setOutMessage("Play again");
+      }
       // 'shortestTime' key의 값 가져오기
       const shortestTime = localStorage.getItem("shortestTime");
       // 'shortestTime' key의 값이 없거나 현재 게임의 시간이 더 짧을 경우 현재 게임의 시간을 저장
       if (!shortestTime || currentTime < shortestTime) {
         localStorage.setItem("shortestTime", currentTime);
+        // TODO 순위 페이지로 이동 로직 추가
       }
-      alert(
-        `${winner} has won the game! ${formatMinutesAndSeconds(timeState)}`
-      );
-      navigate(ROUTES.HOME);
     }
 
     // 선택된 좌표 해제
@@ -196,6 +208,15 @@ function ChessBoard() {
             <br />
           </Row>
         ))}
+        <ConfirmationDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+          noNavigate={() => navigate(ROUTES.HOME)}
+          yesNavigate={() => navigate(ROUTES.CHESS)}
+          message={result}
+          yesText={outMessage}
+          noText="HOME"
+        />
       </Div>
     </>
   );

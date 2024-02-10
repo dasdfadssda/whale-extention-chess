@@ -25,6 +25,7 @@ function ConfirmationDialog({dialogOpen, setDialogOpen, yesNavigate, noNavigate,
               borderColor="white"
               onClick={() => {
                 yesNavigate && yesNavigate();
+                setDialogOpen(false);
               }}
             >
               {yesText}
@@ -59,9 +60,9 @@ const DialogContent = styled.div`
   justify-content: center;
   align-items: center;
   background-color: black;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 80vw;
-  padding: 1rem 0rem;
+  padding: 1rem 1rem;
   text-align: center;
   margin-bottom: 30px;
 `;
@@ -75,14 +76,14 @@ const RowDiv = styled.div`
 `;
 
 const DialogButton = styled.div`
-  width: 25vw;
+  width: 30vw;
   border-radius: 4vw;
   border: ${(props) => `3px solid ${props.borderColor}`};
   background-color: ${(props) => props.backGrounColor};
-  font-size: 6vw;
+  font-size: 4vw;
   color: ${(props) => props.color};
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1px 10px;
+  padding: 2vw 10px;
 `;
