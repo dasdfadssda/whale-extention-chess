@@ -16,6 +16,17 @@ function HomePage() {
   const [currentGameCount, setCurrentGameCount] = useState(0);
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
+  // 난이도 관리 State
+  const [isHardAccess, setIsHardAccess] = useState(false);
+  const [isNormalAccess, setIsNormalAccess] = useState(false);
+
+  // 난이도 버튼 변수 
+  const difficulties = [
+    { name: "Easy", access: true, key: "E" },
+    { name: "Normal", access: isNormalAccess, key: "N" }, 
+    { name: "Hard", access: isHardAccess, key: "H" },
+  ];
+  
 
   // 난이도 버튼 핸들러
   const handleDifficultyClick = (newDifficulty) => {
@@ -92,84 +103,46 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={31.2821}>
-        <Button
-          style={{
-            width: "33%",
-            backgroundColor: difficulty === "Easy" ? "#D66602" : "#fff",
-          }}
-          onClick={() => handleDifficultyClick("Easy")}
-        >
-          <div
+      {difficulties.map(({ name, access, key }) => {
+      if (access) {
+        return (
+          <Button
             style={{
-              fontSize: "4.1026vw",
-              color: difficulty === "Easy" ? "#FFFFFF" : "black",
+              width: "33%",
+              backgroundColor: difficulty === name ? "#D66602" : "#fff",
             }}
+            onClick={() => handleDifficultyClick(name)}
           >
-            EASY
-          </div>
-          <div
-            style={{
-              fontSize: "17.9487vw",
-              color: difficulty === "Easy" ? "#FFFFFF" : "black",
-              marginTop: "-30px",
-              marginBottom: "-30px",
-            }}
-          >
-            E
-          </div>
-        </Button>
-        <Button
-          style={{
-            width: "33%",
-            backgroundColor: difficulty === "Normal" ? "#D66602" : "#fff",
-          }}
-          onClick={() => handleDifficultyClick("Normal")}
-        >
-          <div
-            style={{
-              fontSize: "4.1026vw",
-              color: difficulty === "Normal" ? "#FFFFFF" : "black",
-            }}
-          >
-            NORMAL
-          </div>
-          <div
-            style={{
-              fontSize: "17.9487vw",
-              color: difficulty === "Normal" ? "#FFFFFF" : "black",
-              marginTop: "-30px",
-              marginBottom: "-30px",
-            }}
-          >
-            N
-          </div>
-        </Button>
-        <Button
-          style={{
-            width: "33%",
-            backgroundColor: difficulty === "Hard" ? "#D66602" : "#fff",
-          }}
-          onClick={() => handleDifficultyClick("Hard")}
-        >
-          <div
-            style={{
-              fontSize: "4.1026vw",
-              color: difficulty === "Hard" ? "#FFFFFF" : "black",
-            }}
-          >
-            HARD
-          </div>
-          <div
-            style={{
-              fontSize: "17.9487vw",
-              color: difficulty === "Hard" ? "#FFFFFF" : "black",
-              marginTop: "-30px",
-              marginBottom: "-30px",
-            }}
-          >
-            H
-          </div>
-        </Button>
+            <div
+              style={{
+                fontSize: "4.1026vw",
+                color: difficulty === name ? "#FFFFFF" : "black",
+              }}
+            >
+              {name.toUpperCase()}
+            </div>
+            <div
+              style={{
+                fontSize: "17.9487vw",
+                color: difficulty === name ? "#FFFFFF" : "black",
+                marginTop: "-30px",
+                marginBottom: "-30px",
+              }}
+            >
+              {key}
+            </div>
+          </Button>
+        );
+      } else {
+        return (
+          <img
+            src={require(`../Static/Assets/Lock${name}Icon.png`)}
+            alt="lock icon"
+            style={{ margin: "0 5px" }}
+          />
+        );
+      }
+    })}
       </Row>
       <Row height={25.641}>
         <PlayButton
@@ -186,12 +159,11 @@ function HomePage() {
         message={
           <>
             Please select
-            <br />
-            a difficulty to play
+            <br />a difficulty to play
           </>
         }
       />
-      <NaverLoginButton/>
+      <NaverLoginButton />
     </>
   );
 }
