@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import ROUTES from "../Static/Constants/route";
 import styled from "styled-components";
 import { TimerContext } from "../Context/TimerContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
+import ConfirmationDialog from "./Dialog";
+import ROUTES from "../Static/Constants/route";
 
 function Timer() {
   // 시간초 state
@@ -42,30 +43,14 @@ function Timer() {
       <StopButton onClick={handleStopClick}>
         <PauseImage src={require("../Static/Assets/StopIcon.png")} />
       </StopButton>
-      {dialogOpen && (
-        <Dialog>
-          <DialogContent>
-            Do you want to leave?
-            <RowDiv>
-              <DialogButton
-                color="#000000"
-                borderColor="#E8E6E5"
-                backGrounColor="#E8E6E5"
-                onClick={() => setDialogOpen(false)}
-              >
-                No
-              </DialogButton>
-              <DialogButton
-                color="white"
-                borderColor="white"
-                onClick={() => navigate(ROUTES.HOME)}
-              >
-                Yes
-              </DialogButton>
-            </RowDiv>
-          </DialogContent>
-        </Dialog>
-      )}
+      <ConfirmationDialog
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        yesNavigate={() => navigate(ROUTES.HOME)}
+        message="Do you want to leave?"
+        yesText="Yes"
+        noText="No"
+      />
     </Div>
   );
 }
@@ -119,53 +104,4 @@ const PauseImage = styled.img`
   height: auto;
   width: 100%;
   padding: 0 30px;
-`;
-
-const Dialog = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 90vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const DialogContent = styled.div`
-  font-family: ${({ theme }) => theme.font};
-  font-size: 4.6154vw;
-  display: flex;
-  flex-direction: column;
-  color: white;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  border-radius: 8px;
-  width: 80vw;
-  padding: 1rem 0rem;
-  text-align: center;
-  margin-bottom: 30px;
-`;
-
-const RowDiv = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  margin-top: 7.6923vw;
-  justify-content: space-around;
-`;
-
-const DialogButton = styled.div`
-  width: 25vw;
-  border-radius: 4vw;
-  border: ${(props) => `3px solid ${props.borderColor}`};
-  background-color: ${(props) => props.backGrounColor};
-  font-size: 6vw;
-  color: ${(props) => props.color};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1px 10px;
 `;
