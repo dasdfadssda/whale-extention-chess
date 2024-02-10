@@ -5,6 +5,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import ConfirmationDialog from "../Components/Dialog";
+import NaverLoginButton from "../Components/NaverLoginButton";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -190,6 +191,7 @@ function HomePage() {
           </>
         }
       />
+      <NaverLoginButton/>
     </>
   );
 }
