@@ -2,39 +2,73 @@ import React from "react";
 import styled from "styled-components";
 
 // Dialog Components
-function ConfirmationDialog({dialogOpen, setDialogOpen, yesNavigate, noNavigate, message, yesText, noText}) {
-  return (
-    dialogOpen && (
-      <Dialog>
-        <DialogContent>
-          {message}
-          <RowDiv>
-            <DialogButton
-              color="#000000"
-              borderColor="#E8E6E5"
-              backGrounColor="#E8E6E5"
-              onClick={() => {
-                setDialogOpen(false);
-                noNavigate && noNavigate();
+function ConfirmationDialog({
+  dialogOpen,
+  setDialogOpen,
+  yesNavigate,
+  noNavigate,
+  message,
+  yesText,
+  noText,
+}) {
+  if (yesText && noText) {
+    return (
+      dialogOpen && (
+        <Dialog>
+          <DialogContent>
+            {message}
+            <RowDiv>
+              <DialogButton
+                color="#000000"
+                borderColor="#E8E6E5"
+                backGrounColor="#E8E6E5"
+                onClick={() => {
+                  setDialogOpen(false);
+                  noNavigate && noNavigate();
+                }}
+              >
+                {noText}
+              </DialogButton>
+              <DialogButton
+                color="white"
+                borderColor="white"
+                onClick={() => {
+                  yesNavigate && yesNavigate();
+                  setDialogOpen(false);
+                }}
+              >
+                {yesText}
+              </DialogButton>
+            </RowDiv>
+          </DialogContent>
+        </Dialog>
+      )
+    );
+  } else {
+    // message만 입력받은 경우의 UI
+    return (
+      dialogOpen && (
+        <Dialog>
+          <MessageContent>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "-30px",
+                marginBottom: "15px",
               }}
             >
-              {noText}
-            </DialogButton>
-            <DialogButton
-              color="white"
-              borderColor="white"
-              onClick={() => {
-                yesNavigate && yesNavigate();
-                setDialogOpen(false);
-              }}
-            >
-              {yesText}
-            </DialogButton>
-          </RowDiv>
-        </DialogContent>
-      </Dialog>
-    )
-  )
+              <CloseButton onClick={() => setDialogOpen(false)}>
+                <img src={require("../Static/Assets/CancleIcon.png")} />
+              </CloseButton>
+            </div>
+            {message}
+          </MessageContent>
+        </Dialog>
+      )
+    );
+  }
 }
 
 export default ConfirmationDialog;
@@ -44,7 +78,7 @@ const Dialog = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -86,4 +120,29 @@ const DialogButton = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2vw 10px;
+`;
+
+const MessageContent = styled(DialogContent)`
+  min-height: 30vw;
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  font-size: 4.6154vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CloseButton = styled.button`
+  width: 5vw;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 5vw;
+    height: auto;
+  }
 `;

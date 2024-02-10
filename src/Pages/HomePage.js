@@ -4,6 +4,7 @@ import ROUTES from "../Static/Constants/route";
 import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
+import ConfirmationDialog from "../Components/Dialog";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -12,8 +13,8 @@ function HomePage() {
   const [shortestRecord, setShortestRecord] = useState("00:00");
   // 게임 진행 수 state
   const [currentGameCount, setCurrentGameCount] = useState(0);
-  // 전속자 수 state
-  const [currentVisitorCount, setCurrentVisitorCount] = useState(0);
+  // dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // 난이도 버튼 핸들러
   const handleDifficultyClick = (newDifficulty) => {
@@ -27,15 +28,18 @@ function HomePage() {
   // 페이지 이동 핸들러
   const navigate = useNavigate();
   const handleButtonClick = (route) => {
-    navigate(route);
-    setDifficulty("");
-    setCurrentGameCount(1);
-    setCurrentVisitorCount(1);
+    if (!difficulty) {
+      setDialogOpen(true);
+    } else {
+      navigate(route);
+      setDifficulty("");
+      setCurrentGameCount(1);
+    }
   };
 
   // 최단 기록 불러오기
   useEffect(() => {
-    const shortestTime = localStorage.getItem('shortestTime');
+    const shortestTime = localStorage.getItem("shortestTime");
     if (shortestTime) {
       const time = Number(shortestTime);
       setShortestRecord(formatMinutesAndSeconds(time));
@@ -170,11 +174,22 @@ function HomePage() {
         <PlayButton
           style={{ fontSize: "17.9487vw" }}
           onClick={() => handleButtonClick(ROUTES.CHESS)}
-          disabled={!difficulty}
+          disabledState={!difficulty}
         >
           PLAY
         </PlayButton>
       </Row>
+      <ConfirmationDialog
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        message={
+          <>
+            Please select
+            <br />
+            a difficulty to play
+          </>
+        }
+      />
     </>
   );
 }
@@ -206,10 +221,9 @@ const TitleText = styled.div`
   background-color: #f2f2f2;
   line-height: 1;
   text-align: center;
-  padding : 8vw 0vw;
+  padding: 8vw 0vw;
   border-radius: 8px;
 `;
-
 
 const SmallText = styled.div`
   font-size: 3.5897vw;
@@ -247,8 +261,8 @@ const PlayButton = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${(props) => (props.disabled ? "#fff" : "#D66602")};
-  color: ${(props) => (props.disabled ? "#E5E5E5" : "white")};
+  background-color: ${(props) => (props.disabledState ? "#fff" : "#D66602")};
+  color: ${(props) => (props.disabledState ? "#E5E5E5" : "white")};
 
   &:active {
     filter: brightness(70%);
