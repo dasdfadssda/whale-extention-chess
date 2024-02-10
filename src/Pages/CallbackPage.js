@@ -2,21 +2,15 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken, getUserInfo } from "../Api/NaverAuth";
 
+// 네이버 로그인 CallBack 페이지
 function CallbackPage() {
   const navigate = useNavigate();
   useEffect(() => {
-    const naverCode = new URLSearchParams(document.location.hash).get("code");
-    const naverState = new URLSearchParams(document.location.hash).get("state");
-
+    const urlHash = window.location.hash;
+    const urlParams = new URLSearchParams(urlHash.substring(urlHash.indexOf('?')));
+    const naverCode = urlParams.get('code');
+    const naverState = urlParams.get('state');
     const savedState = window.localStorage.getItem("naver_state");
-    console.log("저장한 naver_state :", savedState);
-    console.log("내가 쓸 naver State : ", naverState);
-    console.log("현재 URL:", window.location.hash);
-
-    if (naverState !== savedState) {
-      alert("로그인 과정에 오류가 발생했습니다.");
-      return;
-    }
 
     // 액세스 토큰을 받아오는 로직
     const getAccessTokenAndUserInfo = async () => {
@@ -34,7 +28,7 @@ function CallbackPage() {
     if (naverState === savedState) {
       getAccessTokenAndUserInfo();
     } else {
-      alert("로그인 과정에 오류가 발생했습니다.");
+      alert("로그인 과정에 오류가 발생했습니다.asdf");
     }
   }, []);
 
