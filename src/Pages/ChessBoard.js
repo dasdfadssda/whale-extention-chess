@@ -11,6 +11,7 @@ import { Chess } from "chess.js";
 import { boardToFen } from "../Service/Format/boardToFen";
 import { TimerContext } from "../Context/TimerContext";
 import ConfirmationDialog from "../Components/Dialog";
+import DeadPieces from "../Components/DeadPieces";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -134,11 +135,16 @@ function ChessBoard() {
 
     // 죽은 말 관리 
     if (newBoard[toX][toY]) {
-      setDeadPieces(prev => ({ 
-        ...prev, 
-        [newBoard[toX][toY].color]: [...prev[newBoard[toX][toY].color], newBoard[toX][toY]] 
+      const deadPiece = newBoard[toX][toY];
+      const opponentColor = deadPiece.color === 'white' ? 'black' : 'white';
+    
+      setDeadPieces(prev => ({
+        ...prev,
+        [opponentColor]: [...prev[opponentColor], deadPiece]
       }));
     }
+    
+    
     console.log('White dead pieces:', deadPieces.white);
     console.log('Black dead pieces:', deadPieces.black);
     
@@ -189,6 +195,7 @@ function ChessBoard() {
     <>
       <Div>
         <Timer />
+        {/* <DeadPieces color="white" pieces={deadPieces.white} /> */}
         {board.map((row, i) => (
           <Row key={i}>
             {row.map((piece, j) => (
@@ -222,6 +229,7 @@ function ChessBoard() {
             <br />
           </Row>
         ))}
+        <DeadPieces color="black" pieces={deadPieces.white} />
         <ConfirmationDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
