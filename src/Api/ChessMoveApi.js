@@ -55,7 +55,7 @@ export default function useBestMove(board, currentTurn) {
 
   // ContextAPI - 난이도 변수
   const { difficulty } = useContext(DifficultyContext);
-  console.log("API page에서 읽는 난이도 :",difficulty);
+  // console.log("API page에서 읽는 난이도 :",difficulty);
 
   const [bestMove, setBestMove] = useState(null); 
 
