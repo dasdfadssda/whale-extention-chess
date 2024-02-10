@@ -4,7 +4,6 @@ import ROUTES from "../Static/Constants/route";
 import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
-import NaverLoginButton from "../Components/NaverLoginButton";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -29,6 +28,9 @@ function HomePage() {
   const navigate = useNavigate();
   const handleButtonClick = (route) => {
     navigate(route);
+    setDifficulty("");
+    setCurrentGameCount(1);
+    setCurrentVisitorCount(1);
   };
 
   // 최단 기록 불러오기
@@ -44,16 +46,6 @@ function HomePage() {
     <>
       <Column>
         <TitleText>PLAY CHESS</TitleText>
-        <RowDiv>
-          <Column>
-            <SmallText>Games Today</SmallText>
-            <MidleText>{currentGameCount}</MidleText>
-          </Column>
-          <Column>
-            <SmallText>Playing now</SmallText>
-            <MidleText>{currentVisitorCount}</MidleText>
-          </Column>
-        </RowDiv>
       </Column>
       <Row height={31.2821}>
         <Button
@@ -61,14 +53,37 @@ function HomePage() {
           onClick={() => handleButtonClick(ROUTES.RANKING)}
         >
           <Column color={"Tradn"} content="flex-end">
-            <SmallText color={"#FFFFFF"} style={{marginTop:"2vw"}}>Best Record</SmallText>
-            <div style={{ fontSize: "10.5vw", color: "white", minWidth:"35vw", marginTop:"2vw"}}>
+            <SmallText color={"#FFFFFF"} style={{ marginTop: "2vw" }}>
+              Best Record
+            </SmallText>
+            <div
+              style={{
+                fontSize: "10.5vw",
+                color: "white",
+                minWidth: "35vw",
+                marginTop: "2vw",
+              }}
+            >
               {shortestRecord}
             </div>
           </Column>
         </Button>
-        <Button onClick={() => handleButtonClick(ROUTES.SETTING)}>
-          <SettingImage src={require("../Static/Assets/SettingImg.png")} />
+        <Button>
+          <Column content="center">
+            <SmallText color={"black"} style={{ marginTop: "2vw" }}>
+              Games Today
+            </SmallText>
+            <div
+              style={{
+                fontSize: "10.5vw",
+                color: "black",
+                minWidth: "35vw",
+                marginTop: "2vw",
+              }}
+            >
+              {currentGameCount}
+            </div>
+          </Column>
         </Button>
       </Row>
       <Row height={31.2821}>
@@ -159,7 +174,6 @@ function HomePage() {
         >
           PLAY
         </PlayButton>
-        <NaverLoginButton/>
       </Row>
     </>
   );
@@ -185,26 +199,17 @@ const Column = styled.div`
   border-radius: 8px;
 `;
 
-const RowDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 90%;
-  height: 27vw;
-`;
-
 const TitleText = styled.div`
-  font-size: 18vw;
+  font-size: 20vw;
   font-family: ${({ theme }) => theme.font};
   color: #000;
   background-color: #f2f2f2;
   line-height: 1;
   text-align: center;
-  padding-top: 2.5641vw;
+  padding : 8vw 0vw;
+  border-radius: 8px;
 `;
 
-const MidleText = styled.div`
-  font-size: 12.8205vw;
-`;
 
 const SmallText = styled.div`
   font-size: 3.5897vw;
@@ -230,13 +235,6 @@ const Button = styled.button`
   }
   cursor: pointer;
 `;
-
-const SettingImage = styled.img`
-  height: auto;
-  width: 90%;
-  padding: 0 30px;
-`;
-
 const PlayButton = styled.button`
   flex-grow: 1;
   margin: 0 5px;
