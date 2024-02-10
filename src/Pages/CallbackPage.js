@@ -5,12 +5,14 @@ import axios from 'axios';
 function CallbackPage() {
 const navigate = useNavigate();
   useEffect(() => {
-    const naverCode = new URLSearchParams(window.location.search).get('code');
-    const naverState = new URLSearchParams(window.location.search).get('state');
+    const naverCode = new URLSearchParams(document.location.hash).get('code');
+    const naverState = new URLSearchParams(document.location.hash).get('state');
 
     const savedState = window.localStorage.getItem('naver_state');
     console.log("저장한 naver_state :", savedState);
     console.log("내가 쓸 naver State : ", naverState);
+    console.log("현재 URL:", window.location.hash);
+
 
     if (naverState !== savedState) {
       alert('로그인 과정에 오류가 발생했습니다.');
