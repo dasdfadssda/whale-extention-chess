@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// Dialog Components
 function ConfirmationDialog({
   dialogOpen,
   setDialogOpen,
@@ -11,6 +10,7 @@ function ConfirmationDialog({
   yesText,
   noText,
 }) {
+  // meeage만 입력 받는 경우 검사
   if (yesText && noText) {
     return (
       dialogOpen && (
