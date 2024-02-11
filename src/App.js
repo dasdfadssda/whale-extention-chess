@@ -10,23 +10,26 @@ import ChessSettings from "./Pages/SettingPage";
 import RankingPage from "./Pages/RankingPage";
 import { TimerProvider } from "./Context/TimerContext";
 import CallbackPage from "./Pages/CallbackPage";
+import { UserProvider } from "./Context/UserContext";
 
 function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <DifficultyProvider>
-          <TimerProvider>
-            <GlobalStyle />
-            <Routes>
-              <Route path={ROUTES.HOME} element={<HomePage />} />
-              <Route path={ROUTES.CHESS} element={<ChessBoard />} />
-              <Route path={ROUTES.SETTING} element={<ChessSettings />} />
-              <Route path={ROUTES.RANKING} element={<RankingPage />} />
-              <Route path={ROUTES.CALLBACK} element={<CallbackPage />} />
-            </Routes>
-          </TimerProvider>
-        </DifficultyProvider>
+        <UserProvider>
+          <DifficultyProvider>
+            <TimerProvider>
+              <GlobalStyle />
+              <Routes>
+                <Route path={ROUTES.HOME} element={<HomePage />} />
+                <Route path={ROUTES.CHESS} element={<ChessBoard />} />
+                <Route path={ROUTES.SETTING} element={<ChessSettings />} />
+                <Route path={ROUTES.RANKING} element={<RankingPage />} />
+                <Route path={ROUTES.CALLBACK} element={<CallbackPage />} />
+              </Routes>
+            </TimerProvider>
+          </DifficultyProvider>
+        </UserProvider>
       </ThemeProvider>
     </Router>
   );

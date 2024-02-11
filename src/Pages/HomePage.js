@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
+import { useUser } from '../Context/UserContext'; 
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import ConfirmationDialog from "../Components/Dialog";
 import NaverLoginButton from "../Components/NaverLoginButton";
@@ -10,6 +11,8 @@ import NaverLoginButton from "../Components/NaverLoginButton";
 function HomePage() {
   // ContextAPI - 난이도 변수
   const { difficulty, setDifficulty } = useContext(DifficultyContext);
+  // ContextAPI - 사용자 정보 변수
+  const { user } = useUser(); 
   // 사용자의 최단 기록 state
   const [shortestRecord, setShortestRecord] = useState("00:00");
   // 게임 진행 수 state
@@ -56,6 +59,14 @@ function HomePage() {
       setShortestRecord(formatMinutesAndSeconds(time));
     }
   }, []);
+
+  // 사용자 정보에 따른 난이도 lock 관리
+  useEffect(() => {
+    if (user) {
+      setIsNormalAccess(user.gameInfo.normal.access);
+      setIsHardAccess(user.gameInfo.hard.access);
+    }
+  }, [user]);
 
   return (
     <>
