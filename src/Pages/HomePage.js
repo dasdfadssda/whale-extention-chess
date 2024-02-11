@@ -20,13 +20,12 @@ function HomePage() {
   const [isHardAccess, setIsHardAccess] = useState(false);
   const [isNormalAccess, setIsNormalAccess] = useState(false);
 
-  // 난이도 버튼 변수 
+  // 난이도 버튼 변수
   const difficulties = [
     { name: "Easy", access: true, key: "E" },
-    { name: "Normal", access: isNormalAccess, key: "N" }, 
+    { name: "Normal", access: isNormalAccess, key: "N" },
     { name: "Hard", access: isHardAccess, key: "H" },
   ];
-  
 
   // 난이도 버튼 핸들러
   const handleDifficultyClick = (newDifficulty) => {
@@ -40,7 +39,7 @@ function HomePage() {
   // 페이지 이동 핸들러
   const navigate = useNavigate();
   const handleButtonClick = (route) => {
-    if (!difficulty) {
+    if (route === '/chess' && !difficulty) {
       setDialogOpen(true);
     } else {
       navigate(route);
@@ -103,46 +102,46 @@ function HomePage() {
         </Button>
       </Row>
       <Row height={31.2821}>
-      {difficulties.map(({ name, access, key }) => {
-      if (access) {
-        return (
-          <Button
-            style={{
-              width: "33%",
-              backgroundColor: difficulty === name ? "#D66602" : "#fff",
-            }}
-            onClick={() => handleDifficultyClick(name)}
-          >
-            <div
-              style={{
-                fontSize: "4.1026vw",
-                color: difficulty === name ? "#FFFFFF" : "black",
-              }}
-            >
-              {name.toUpperCase()}
-            </div>
-            <div
-              style={{
-                fontSize: "17.9487vw",
-                color: difficulty === name ? "#FFFFFF" : "black",
-                marginTop: "-30px",
-                marginBottom: "-30px",
-              }}
-            >
-              {key}
-            </div>
-          </Button>
-        );
-      } else {
-        return (
-          <img
-            src={require(`../Static/Assets/Lock${name}Icon.png`)}
-            alt="lock icon"
-            style={{ margin: "0 5px",  flexGrow:"1" }}
-          />
-        );
-      }
-    })}
+        {difficulties.map(({ name, access, key }) => {
+          if (access) {
+            return (
+              <Button
+                style={{
+                  width: "33%",
+                  backgroundColor: difficulty === name ? "#D66602" : "#fff",
+                }}
+                onClick={() => handleDifficultyClick(name)}
+              >
+                <div
+                  style={{
+                    fontSize: "4.1026vw",
+                    color: difficulty === name ? "#FFFFFF" : "black",
+                  }}
+                >
+                  {name.toUpperCase()}
+                </div>
+                <div
+                  style={{
+                    fontSize: "17.9487vw",
+                    color: difficulty === name ? "#FFFFFF" : "black",
+                    marginTop: "-30px",
+                    marginBottom: "-30px",
+                  }}
+                >
+                  {key}
+                </div>
+              </Button>
+            );
+          } else {
+            return (
+              <img
+                src={require(`../Static/Assets/Lock${name}Icon.png`)}
+                alt="lock icon"
+                style={{ margin: "0 5px", flexGrow: "1" }}
+              />
+            );
+          }
+        })}
       </Row>
       <Row height={25.641}>
         <PlayButton
