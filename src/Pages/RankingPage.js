@@ -32,28 +32,22 @@ const RankingPage = () => {
     time: getRandomTime(),
   }));
 
+  // 난이도 버튼 변수들
+  const buttonNames = ["Easy", "Normal", "Hard"];
+
   return (
     <Div>
       <TitleText>Best Records</TitleText>
       <RowDiv>
-        <TextButton
-          onClick={() => handleButtonClick("Easy")}
-          selected={selectedButton === "Easy"}
-        >
-          Easy
-        </TextButton>
-        <TextButton
-          onClick={() => handleButtonClick("Normal")}
-          selected={selectedButton === "Normal"}
-        >
-          Normal
-        </TextButton>
-        <TextButton
-          onClick={() => handleButtonClick("Hard")}
-          selected={selectedButton === "Hard"}
-        >
-          Hard
-        </TextButton>
+        {buttonNames.map((buttonName) => (
+          <TextButton
+            key={buttonName}
+            onClick={() => handleButtonClick(buttonName)}
+            selected={selectedButton === buttonName}
+          >
+            {buttonName}
+          </TextButton>
+        ))}
       </RowDiv>
       <RankList>
         {dummyData
