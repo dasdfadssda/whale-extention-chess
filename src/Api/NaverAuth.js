@@ -28,7 +28,6 @@ export const getUserInfo = async (accessToken) => {
       },
     });
     const userInfo = response.data.user_info;
-    console.log("네이버 로그인 데이터 :",userInfo);
 
     // UserModel에 사용자 정보를 채워넣기
     const userToSave = {
@@ -40,8 +39,6 @@ export const getUserInfo = async (accessToken) => {
       id: userInfo.id,
       nickname: userInfo.nickname,
     };
-
-    console.log("저장할 데이터 :",userToSave);
 
     // saveUserToFirebase 함수 호출
     saveUserToFirebase(userToSave, userInfo.id);
