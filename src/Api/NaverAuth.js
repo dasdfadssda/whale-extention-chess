@@ -1,6 +1,6 @@
 import axios from "axios";
 import { UserModel } from "../Model/UserModel";
-import { saveUserToFirebase } from "../Service/Auth/SetUser";
+import { saveUserToFirebase } from "../Service/Auth/SetUserData";
 
 // 유저 토큰 발급
 export const getAccessToken = async (naverCode, savedState) => {
