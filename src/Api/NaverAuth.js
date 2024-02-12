@@ -4,7 +4,6 @@ import { saveUserToFirebase } from "../Service/Auth/SetUserData";
 
 // 유저 토큰 발급
 export const getAccessToken = async (naverCode, savedState) => {
-  console.log("읽어온 naverCode", naverCode, savedState);
   try {
     const response = await axios.get("http://localhost:8000/naver/token/", {
       params: {
@@ -12,7 +11,6 @@ export const getAccessToken = async (naverCode, savedState) => {
         state: savedState,
       },
     });
-    console.log("읽어온 데이터", response.data);
     return response.data.access_token;
   } catch (error) {
     console.error("액세스 토큰을 가져오는 데 실패했습니다.", error);
@@ -44,7 +42,7 @@ export const getUserInfo = async (accessToken) => {
     saveUserToFirebase(userToSave, userInfo.id);
 
     return userInfo;
-  } catch (error) {
+  } catch (error) {s
     console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
   }
 };
