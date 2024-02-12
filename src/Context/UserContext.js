@@ -12,10 +12,12 @@ export const UserProvider = ({ children }) => {
     // 유저 정보 읽어오기
     const fetchUserData = async () => {
       const userId = localStorage.getItem("id");
+      console.log("로컬 값 :",userId);
       if (userId) {
         const userData = await fetchUserFromFirebase(userId);
         if (userData) {
           setUser(userData);
+          console.log("firebase data :",userData);
         }
       }
     };

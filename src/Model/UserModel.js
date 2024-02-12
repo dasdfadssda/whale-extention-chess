@@ -12,7 +12,7 @@ export const UserModel = {
         time: "", 
       },
       normal: {
-        access: true, 
+        access: false, 
         gameNum: 0, 
         time: "", 
       },
