@@ -1,12 +1,12 @@
 // UserContext.js
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { UserModel } from '../Model/UserModel'; 
 import { fetchUserFromFirebase } from '../Service/Auth/GetUserData';
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(UserModel);
+  const [user, setUser] = React.useState(UserModel);
 
   useEffect(() => {
     // 유저 정보 읽어오기

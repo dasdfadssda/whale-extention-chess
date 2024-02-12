@@ -40,8 +40,10 @@ export const getUserInfo = async (accessToken) => {
 
     // saveUserToFirebase 함수 호출
     saveUserToFirebase(userToSave, userInfo.id);
+    console.log("저장할 데이터 :",userToSave);
 
-    return userInfo;
+
+    return userToSave;
   } catch (error) {
     console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
   }
