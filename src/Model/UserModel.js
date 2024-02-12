@@ -1,6 +1,10 @@
 export const UserModel = {
     name: "임시 이름", 
     email: "", 
+    age:"",
+    gender:"",
+    id:"",
+    nickname:"",
     gameInfo: {
       easy: {
         access: true, 
