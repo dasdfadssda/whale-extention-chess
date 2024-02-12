@@ -1,5 +1,5 @@
 export const UserModel = {
-    name: "임시 이름", 
+    name: "", 
     email: "", 
     age:"",
     gender:"",
