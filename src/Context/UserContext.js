@@ -9,20 +9,23 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = React.useState(UserModel);
 
   useEffect(() => {
-    // 유저 정보 읽어오기
     const fetchUserData = async () => {
       const userId = localStorage.getItem("id");
-      console.log("로컬 값 :",userId);
-      if (userId) {
+      const lastFetch = localStorage.getItem("lastFetch");
+      
+      if (userId && (!lastFetch || Date.now() - lastFetch > 5 * 60 * 1000)) { 
         const userData = await fetchUserFromFirebase(userId);
         if (userData) {
           setUser(userData);
-          console.log("firebase data :",userData);
+          localStorage.setItem("lastFetch", Date.now()); 
         }
+      } else {
+        console.log("아직 5분 안됌");
       }
     };
     fetchUserData();
   }, []);
+  
 
   console.log("user 정보 :", user);
 
