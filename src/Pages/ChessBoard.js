@@ -12,7 +12,6 @@ import { TimerContext } from "../Context/TimerContext";
 import ConfirmationDialog from "../Components/Dialog";
 import DeadPieces from "../Components/DeadPieces";
 import { Chess } from "chess.js";
-import { boardToChessJs } from "../Service/chessPieceMove/isCheckMate";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -113,6 +112,7 @@ function ChessBoard() {
       const winner = currentTurn === "white" ? "Black" : "White";
       // 게임 종료시 시간 저장
       const currentTime = timeState;
+      console.log("저장되는 시간 형태 :", currentTime);
       // dialog를 위한 result와 outMessage 설정
       if (winner === "Black") {
         setResult("You lose");
@@ -128,9 +128,9 @@ function ChessBoard() {
         localStorage.setItem("shortestTime", currentTime);
         // TODO 순위 페이지로 이동 로직 추가
       }
+      // 다이로그 출현
+      setDialogOpen(true);
     }
-    // 다이로그 출현
-    setDialogOpen(true);
   }, [board]);
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
@@ -265,18 +265,6 @@ function ChessBoard() {
       // 그 외의 경우 앙 팡상 타겟 해제
       setEnPassantTarget(null);
     }
-
-    // 체스말 이동 후 보드 상태를 Fen 포맷으로 변환
-    const fen = boardToFen(
-      newBoard,
-      currentTurn,
-      castlingRights,
-      enPassantTarget,
-      halfmoveClock,
-      fullmoveNumber
-    );
-
-    // 체크메이트 상황 확인
 
     // 선택된 좌표 해제
     setSelectedButton(null);
