@@ -55,7 +55,6 @@ export default function useBestMove(board, currentTurn) {
 
   // ContextAPI - 난이도 변수
   const { difficulty } = useContext(DifficultyContext);
-  // console.log("API page에서 읽는 난이도 :",difficulty);
 
   const [bestMove, setBestMove] = useState(null); 
 
@@ -64,7 +63,8 @@ export default function useBestMove(board, currentTurn) {
       const apiUrl = 'https://stockfish.online/api/stockfish.php';
       const fen = fenAPI(board, "b", 1);
       let depth = 5;
-
+      if(difficulty=="Normal") {depth = 8;}
+      else if(difficulty=="Hard") {depth = 11;} 
       const fetchBestMove = async () => {
         try {
           const response = await axios.get(apiUrl, {
