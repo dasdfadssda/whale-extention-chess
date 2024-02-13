@@ -9,17 +9,17 @@ export const UserModel = {
       easy: {
         access: true, 
         gameNum: 0, 
-        time: "", 
+        time: 0, 
       },
       normal: {
         access: false, 
         gameNum: 0, 
-        time: "", 
+        time: 0, 
       },
       hard: {
         access: false, 
         gameNum: 0, 
-        time: "", 
+        time: 0, 
       },
     },
   };
