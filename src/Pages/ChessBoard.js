@@ -95,15 +95,15 @@ function ChessBoard() {
 
   const chess = new Chess();
   // 체크메이트 검사
-  useEffect(() => {
-    const chessBoard = boardToChessJs(board, currentTurn, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber); // React 보드 상태를 Chess.js 보드 상태로 변환
-    chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
-    const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
-    if (isCheckmate) {
-      console.log("Checkmate!"); // 체크메이트 상황인 경우 콘솔에 출력
-      // 필요한 추가 작업을 수행할 수 있습니다.
-    }
-  }, [board, currentTurn, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber]);
+  // useEffect(() => {
+  //   const chessBoard = boardToChessJs(board, currentTurn, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber); // React 보드 상태를 Chess.js 보드 상태로 변환
+  //   chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
+  //   const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
+  //   if (isCheckmate) {
+  //     console.log("Checkmate!"); // 체크메이트 상황인 경우 콘솔에 출력
+  //     // 필요한 추가 작업을 수행할 수 있습니다.
+  //   }
+  // }, [board, currentTurn, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber]);
 
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
