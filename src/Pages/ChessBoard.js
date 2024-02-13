@@ -96,11 +96,18 @@ function ChessBoard() {
   const chess = new Chess();
   // 체크메이트 검사
   useEffect(() => {
-    const chessBoard = boardToFen(board,currentTurn,castlingRights,enPassantTarget,halfmoveClock,fullmoveNumber); // React 보드 상태를 Chess.js 보드 상태로 변환
+    const chessBoard = boardToFen(
+      board,
+      currentTurn,
+      castlingRights,
+      enPassantTarget,
+      halfmoveClock,
+      fullmoveNumber
+    ); // React 보드 상태를 Chess.js 보드 상태로 변환
     chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
     const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
-    console.log("체크 계산 :",chess.isCheck());
-    console.log("체크메이트 계산 :",chess.isCheckmate());
+    console.log("체크 계산 :", chess.isCheck());
+    console.log("체크메이트 계산 :", chess.isCheckmate());
     if (isCheckmate) {
       // 승자 선언
       const winner = currentTurn === "white" ? "Black" : "White";
@@ -125,7 +132,6 @@ function ChessBoard() {
     // 다이로그 출현
     setDialogOpen(true);
   }, [board]);
-
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
