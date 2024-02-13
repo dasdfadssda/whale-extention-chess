@@ -12,6 +12,9 @@ import { TimerContext } from "../Context/TimerContext";
 import ConfirmationDialog from "../Components/Dialog";
 import DeadPieces from "../Components/DeadPieces";
 import { Chess } from "chess.js";
+import { saveScoreToFirestore } from "../Service/Score/SetScore";
+import { DifficultyContext } from "../Context/DifficultyContext";
+import { UserContext } from "../Context/UserContext";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -75,6 +78,9 @@ function ChessBoard() {
   const navigate = useNavigate();
   // Context api 선언 - Timer 변수
   const { timeState } = useContext(TimerContext);
+  // ContextAPI - 난이도 변수
+  const { difficulty } = useContext(DifficultyContext);
+  const { user } = useContext(UserContext);
   // AI 변수 선언
   const bestMoveResponse = useBestMove(board, currentTurn);
 
@@ -92,7 +98,9 @@ function ChessBoard() {
     }
   }, [currentTurn, bestMoveResponse]);
 
+  // Chess.js 선언
   const chess = new Chess();
+
   // 체크메이트 검사
   useEffect(() => {
     const chessBoard = boardToFen(
@@ -127,6 +135,9 @@ function ChessBoard() {
       if (!shortestTime || currentTime < shortestTime) {
         localStorage.setItem("shortestTime", currentTime);
         // TODO 순위 페이지로 이동 로직 추가
+
+        // Firebase-Score에 저장
+        saveScoreToFirestore(difficulty,user.name,currentTime);
       }
       // 다이로그 출현
       setDialogOpen(true);
