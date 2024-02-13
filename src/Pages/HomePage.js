@@ -46,7 +46,6 @@ function HomePage() {
       setDialogOpen(true);
     } else {
       navigate(route);
-      setDifficulty("");
       setCurrentGameCount(1);
     }
   };
