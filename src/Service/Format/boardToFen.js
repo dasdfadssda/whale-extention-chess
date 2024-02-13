@@ -1,4 +1,11 @@
-export const boardToFen = (board, currentTurn) => {
+export const boardToFen = (
+  board,
+  currentTurn,
+  castlingRights,
+  enPassantTarget,
+  halfmoveClock,
+  fullmoveNumber
+) => {
   let fen = "";
   for (let i = 0; i < 8; i++) {
     let emptyCount = 0;
@@ -26,6 +33,39 @@ export const boardToFen = (board, currentTurn) => {
     if (emptyCount !== 0) fen += emptyCount;
     if (i !== 7) fen += "/";
   }
-  fen += ` ${currentTurn === "white" ? "w" : "b"} KQkq - 0 1`;
+
+  // 공백 추가
+  fen += " ";
+
+  fen += currentTurn === "white" ? "w" : "b";
+
+  // 공백 추가
+  fen += " ";
+
+  fen += castlingRights.whiteKingSide ? "K" : "";
+  fen += castlingRights.whiteQueenSide ? "Q" : "";
+  fen += castlingRights.blackKingSide ? "k" : "";
+  fen += castlingRights.blackQueenSide ? "q" : "";
+
+  // 캐슬링이 없는 경우
+  if (fen.slice(-1) === " ") {
+    fen += "-";
+  }
+
+  // 공백 추가
+  fen += " ";
+
+  fen += enPassantTarget || "-";
+
+  // 공백 추가
+  fen += " ";
+
+  fen += halfmoveClock;
+
+  // 공백 추가
+  fen += " ";
+
+  fen += fullmoveNumber;
+
   return fen;
 };
