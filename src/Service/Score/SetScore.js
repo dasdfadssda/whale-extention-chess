@@ -4,6 +4,7 @@ import { dbService } from "../../fbase";
 // Firestore에 점수 정보를 저장하는 함수
 export const saveScoreToFirestore = async (difficulty, name, time) => {
   const userId = localStorage.getItem("id");
+  console.log("저장되는 정보 : ",difficulty,name,time);
 
   if (!userId) {
     console.error("로그인 정보가 없습니다.");

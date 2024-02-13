@@ -120,7 +120,6 @@ function ChessBoard() {
       const winner = currentTurn === "white" ? "Black" : "White";
       // 게임 종료시 시간 저장
       const currentTime = timeState;
-      console.log("저장되는 시간 형태 :", currentTime);
       // dialog를 위한 result와 outMessage 설정
       if (winner === "Black") {
         setResult("You lose");
@@ -137,7 +136,7 @@ function ChessBoard() {
         // TODO 순위 페이지로 이동 로직 추가
 
         // Firebase-Score에 저장
-        saveScoreToFirestore(difficulty,user.name,currentTime);
+        saveScoreToFirestore(difficulty, user.name, currentTime);
       }
       // 다이로그 출현
       setDialogOpen(true);
