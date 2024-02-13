@@ -95,15 +95,36 @@ function ChessBoard() {
 
   const chess = new Chess();
   // 체크메이트 검사
-  // useEffect(() => {
-  //   const chessBoard = boardToChessJs(board, currentTurn, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber); // React 보드 상태를 Chess.js 보드 상태로 변환
-  //   chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
-  //   const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
-  //   if (isCheckmate) {
-  //     console.log("Checkmate!"); // 체크메이트 상황인 경우 콘솔에 출력
-  //     // 필요한 추가 작업을 수행할 수 있습니다.
-  //   }
-  // }, [board, currentTurn, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber]);
+  useEffect(() => {
+    const chessBoard = boardToFen(board,currentTurn,castlingRights,enPassantTarget,halfmoveClock,fullmoveNumber); // React 보드 상태를 Chess.js 보드 상태로 변환
+    chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
+    const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
+    console.log("체크 계산 :",chess.isCheck());
+    console.log("체크메이트 계산 :",chess.isCheckmate());
+    if (isCheckmate) {
+      // 승자 선언
+      const winner = currentTurn === "white" ? "Black" : "White";
+      // 게임 종료시 시간 저장
+      const currentTime = timeState;
+      // dialog를 위한 result와 outMessage 설정
+      if (winner === "Black") {
+        setResult("You lose");
+        setOutMessage("Try again");
+      } else {
+        setResult("You win");
+        setOutMessage("Play again");
+      }
+      // 'shortestTime' key의 값 가져오기
+      const shortestTime = localStorage.getItem("shortestTime");
+      // 'shortestTime' key의 값이 없거나 현재 게임의 시간이 더 짧을 경우 현재 게임의 시간을 저장
+      if (!shortestTime || currentTime < shortestTime) {
+        localStorage.setItem("shortestTime", currentTime);
+        // TODO 순위 페이지로 이동 로직 추가
+      }
+    }
+    // 다이로그 출현
+    setDialogOpen(true);
+  }, [board]);
 
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
