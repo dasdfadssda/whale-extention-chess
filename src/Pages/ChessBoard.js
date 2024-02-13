@@ -57,7 +57,19 @@ function ChessBoard() {
   const [outMessage, setOutMessage] = useState("play again");
   // 죽은말 state
   const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
-
+  // 캐슬링 권한 상태
+  const [castlingRights, setCastlingRights] = useState({
+    whiteKingSide: true,
+    whiteQueenSide: true,
+    blackKingSide: true,
+    blackQueenSide: true,
+  });
+  // 앙 팡상 타겟 상태
+  const [enPassantTarget, setEnPassantTarget] = useState(null);
+  // 이동 가능한 반 수
+  const [halfmoveClock, setHalfmoveClock] = useState(0);
+  // 게임이 시작된 후의 반 수
+  const [fullmoveNumber, setFullmoveNumber] = useState(1);
 
   // useNavigate 선언
   const navigate = useNavigate();
@@ -108,7 +120,7 @@ function ChessBoard() {
         const selectedPieceType = board[i][j].type;
         setSelectedPiece([i, j]);
         setPossibleMoves(
-          getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board)
+          getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board,enPassantTarget,castlingRights)
         );
       }
     } else if (board[i][j] && board[i][j].color === currentTurn) {
@@ -116,7 +128,7 @@ function ChessBoard() {
       const selectedPieceType = board[i][j].type;
       setSelectedPiece([i, j]);
       setPossibleMoves(
-        getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j], board)
+        getPossibleMoves(selectedPieceType, selectedPieceColor, [i, j],  board,enPassantTarget,castlingRights)
       );
     }
   };
@@ -132,22 +144,27 @@ function ChessBoard() {
       console.error(`No piece at position: ${from}`);
       return;
     }
+    // 이동 가능한 반 수 증가
+    setHalfmoveClock((prev) => prev + 1);
+    // 흑색 턴이 완료될 때마다 게임이 시작된 후의 반 수 증가
+    if (currentTurn === "black") {
+      setFullmoveNumber((prev) => prev + 1);
+    }
 
-    // 죽은 말 관리 
+    // 죽은 말 관리
     if (newBoard[toX][toY]) {
       const deadPiece = newBoard[toX][toY];
-      const opponentColor = deadPiece.color === 'white' ? 'black' : 'white';
-    
-      setDeadPieces(prev => ({
+      const opponentColor = deadPiece.color === "white" ? "black" : "white";
+
+      setDeadPieces((prev) => ({
         ...prev,
-        [opponentColor]: [...prev[opponentColor], deadPiece]
+        [opponentColor]: [...prev[opponentColor], deadPiece],
       }));
     }
-    
-    
-    console.log('White dead pieces:', deadPieces.white);
-    console.log('Black dead pieces:', deadPieces.black);
-    
+
+    console.log("White dead pieces:", deadPieces.white);
+    console.log("Black dead pieces:", deadPieces.black);
+
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
@@ -160,10 +177,53 @@ function ChessBoard() {
     setBoard(newBoard);
     // 순서 교체
     setCurrentTurn(currentTurn === "white" ? "black" : "white");
+    // 캐슬링 권한 업데이트
+    if (board[fromX][fromY].type === "king") {
+      // 킹이 움직였을 때 모든 캐슬링 권한 해제
+      setCastlingRights({
+        whiteKingSide: false,
+        whiteQueenSide: false,
+        blackKingSide: false,
+        blackQueenSide: false,
+      });
+    } else if (board[fromX][fromY].type === "rook") {
+      // 룩이 움직였을 때 해당 캐슬링 권한 해제
+      // 예: 흰색 킹 사이드 룩이 움직였을 경우
+      setCastlingRights((prev) => ({
+        ...prev,
+        whiteKingSide: fromX !== 7 || fromY !== 7,
+        whiteQueenSide: fromX !== 7 || fromY !== 0,
+        // 이하 블랙 쪽도 업데이트
+      }));
+    }
+
+    // 앙 팡상 타겟 업데이트
+    if (
+      newBoard[fromX][fromY] &&
+      newBoard[fromX][fromY].type === "pawn" &&
+      Math.abs(fromX - toX) === 2
+    ) {
+      // 폰이 두 칸 이동한 경우 앙 팡상 타겟 설정
+      const enPassantX = (fromX + toX) / 2; // 중간 위치
+      setEnPassantTarget([enPassantX, fromY]); // 중간 위치와 원래 Y 위치
+    } else {
+      // 그 외의 경우 앙 팡상 타겟 해제
+      setEnPassantTarget(null);
+    }
+
+    // 체스말 이동 후 보드 상태를 Fen 포맷으로 변환
+    const fen = boardToFen(
+      newBoard,
+      currentTurn,
+      castlingRights,
+      enPassantTarget,
+      halfmoveClock,
+      fullmoveNumber
+    );
 
     // 체크메이트 상황 확인
     const chess = new Chess();
-    chess.load(boardToFen(board, currentTurn));
+    chess.load(fen);
     if (chess.isCheckmate()) {
       console.log("현재 상황 :", chess.isCheck);
       const winner = currentTurn === "white" ? "Black" : "White";
