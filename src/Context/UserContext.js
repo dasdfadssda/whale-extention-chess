@@ -11,16 +11,11 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       const userId = localStorage.getItem("id");
-      const lastFetch = localStorage.getItem("lastFetch");
-      
-      if (userId && (!lastFetch || Date.now() - lastFetch > 5 * 60 * 1000)) { 
-        const userData = await fetchUserFromFirebase(userId);
-        if (userData) {
-          setUser(userData);
-          localStorage.setItem("lastFetch", Date.now()); 
-        }
-      } else {
-        console.log("아직 5분 안됌");
+
+    
+     const userData = await fetchUserFromFirebase(userId);
+      if (userData) {
+        setUser(userData);
       }
     };
     fetchUserData();
