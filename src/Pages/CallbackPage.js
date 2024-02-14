@@ -27,7 +27,6 @@ function CallbackPage() {
         setUser(userInfo);
         //유저 정보 사용 후 처리 후, navigation 처리
         navigate("/");
-        window.location.reload();
         console.log("읽어온 유저 정보 :", userInfo);
       } catch (error) {
         console.error(error.message);
