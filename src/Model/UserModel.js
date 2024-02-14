@@ -6,17 +6,17 @@ export const UserModel = {
     id:"",
     nickname:"",
     gameInfo: {
-      easy: {
+      Easy: {
         access: true, 
         gameNum: 0, 
         time: 0, 
       },
-      normal: {
+      Normal: {
         access: false, 
         gameNum: 0, 
         time: 0, 
       },
-      hard: {
+      Hard: {
         access: false, 
         gameNum: 0, 
         time: 0, 
