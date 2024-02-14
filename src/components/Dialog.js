@@ -5,6 +5,7 @@ import { TimerContext } from "../Context/TimerContext";
 function ConfirmationDialog({
   dialogOpen,
   setDialogOpen,
+  onButtonClick,
   yesNavigate,
   noNavigate,
   message,
@@ -40,6 +41,7 @@ function ConfirmationDialog({
                   yesNavigate && yesNavigate();
                   setDialogOpen(false);
                   setTimeState(0);
+                  onButtonClick();
                 }}
               >
                 {yesText}
@@ -51,6 +53,7 @@ function ConfirmationDialog({
     );
   } else {
     // message만 입력받은 경우의 UI
+
     return (
       dialogOpen && (
         <Dialog>

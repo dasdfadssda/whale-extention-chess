@@ -15,37 +15,11 @@ import { Chess } from "chess.js";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { UserContext } from "../Context/UserContext";
 import { saveScoreToFirestore } from "../Service/Score/SetOneScore";
+import { initialBoardState } from '../Model/InitialBoardStateModal';
 
 function ChessBoard() {
   // 체스 초기 상태 state
-  const [board, setBoard] = useState([
-    [
-      { type: "rook", color: "black" },
-      { type: "knight", color: "black" },
-      { type: "bishop", color: "black" },
-      { type: "queen", color: "black" },
-      { type: "king", color: "black" },
-      { type: "bishop", color: "black" },
-      { type: "knight", color: "black" },
-      { type: "rook", color: "black" },
-    ],
-    Array(8).fill({ type: "pawn", color: "black" }),
-    Array(8).fill(null),
-    Array(8).fill(null),
-    Array(8).fill(null),
-    Array(8).fill(null),
-    Array(8).fill({ type: "pawn", color: "white" }),
-    [
-      { type: "rook", color: "white" },
-      { type: "knight", color: "white" },
-      { type: "bishop", color: "white" },
-      { type: "queen", color: "white" },
-      { type: "king", color: "white" },
-      { type: "bishop", color: "white" },
-      { type: "knight", color: "white" },
-      { type: "rook", color: "white" },
-    ],
-  ]);
+  const [board, setBoard] = useState(initialBoardState); 
   // 사용자가 선택한 체스말 state
   const [selectedPiece, setSelectedPiece] = useState(null);
   // 선택된 체스말이 움직일 수 있는 위치 state
@@ -56,8 +30,13 @@ function ChessBoard() {
   const [selectedButton, setSelectedButton] = useState(null);
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
+  // dialog Message
   const [result, setResult] = useState("you win!");
   const [outMessage, setOutMessage] = useState("play again");
+  // diaglogButton 핸들러
+  const handleDialogButtonClick = () => {
+      setBoard(initialBoardState);
+  };
   // 죽은말 state
   const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
   // 캐슬링 권한 상태
@@ -322,6 +301,7 @@ function ChessBoard() {
         <ConfirmationDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
+          onButtonClick={handleDialogButtonClick}
           noNavigate={() => navigate(ROUTES.HOME)}
           yesNavigate={() => navigate(ROUTES.CHESS)}
           message={result}
