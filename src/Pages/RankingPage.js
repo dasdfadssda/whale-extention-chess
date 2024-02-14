@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import fetchScoreData from "../Service/Score/GetSocreData";
+import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 
 const RankingPage = () => {
   // 선택된 버튼 state
@@ -56,9 +57,11 @@ const RankingPage = () => {
       <RankList>
         {scores.map((data, index) => (
           <RankItem key={index} index={index}>
-            <RankingNumber>{index + 1}</RankingNumber>
-            <div>{data.name}</div>
-            <div>{data.time}</div>
+            <div style={{ display: "flex" }}>
+              <RankingNumber>{index + 1}</RankingNumber>
+              <NameDiv>{data.name}</NameDiv>
+            </div>
+            <div>{formatMinutesAndSeconds(data.time)}</div>
           </RankItem>
         ))}
       </RankList>
@@ -146,4 +149,11 @@ const RankingNumber = styled.div`
   width: 7vw;
   height: 6.5vw;
   margin-right: 5vw;
+`;
+
+const NameDiv = styled.div`
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
