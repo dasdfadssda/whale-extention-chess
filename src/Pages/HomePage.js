@@ -62,8 +62,8 @@ function HomePage() {
   // 사용자 정보에 따른 난이도 lock 관리
   useEffect(() => {
     if (user) {
-      setIsNormalAccess(user.gameInfo.normal.access);
-      setIsHardAccess(user.gameInfo.hard.access);
+      setIsNormalAccess(user.gameInfo.Normal.access);
+      setIsHardAccess(user.gameInfo.Hard.access);
     }
   }, [user]);
 
