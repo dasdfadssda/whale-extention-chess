@@ -3,16 +3,17 @@ import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import React, { useContext, useState, useEffect } from "react";
 import { DifficultyContext } from "../Context/DifficultyContext";
-import { useUser } from '../Context/UserContext'; 
+import { useUser } from "../Context/UserContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import ConfirmationDialog from "../Components/Dialog";
 import NaverLoginButton from "../Components/NaverLoginButton";
+import { UserModel } from "../Model/UserModel";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
   const { difficulty, setDifficulty } = useContext(DifficultyContext);
   // ContextAPI - 사용자 정보 변수
-  const { user } = useUser(); 
+  const { user } = useUser();
   // 사용자의 최단 기록 state
   const [shortestRecord, setShortestRecord] = useState("00:00");
   // 게임 진행 수 state
@@ -42,7 +43,7 @@ function HomePage() {
   // 페이지 이동 핸들러
   const navigate = useNavigate();
   const handleButtonClick = (route) => {
-    if (route === '/chess' && !difficulty) {
+    if (route === "/chess" && !difficulty) {
       setDialogOpen(true);
     } else {
       navigate(route);
@@ -57,7 +58,21 @@ function HomePage() {
       const time = Number(shortestTime);
       setShortestRecord(formatMinutesAndSeconds(time));
     }
+    console.log(UserModel);
   }, []);
+
+  useEffect(() => {
+    const userData = JSON.parse(window.sessionStorage.getItem("userData"));
+    if (userData) {
+      const { gameInfo } = userData;
+      // 현재 선택된 난이도의 time을 가져온다
+      if (gameInfo[difficulty].access) {
+        const time = gameInfo[difficulty].time;
+        setShortestRecord(formatMinutesAndSeconds(time));
+      }
+      console.log("asdf", gameInfo);
+    }
+  }, [difficulty]);
 
   // 사용자 정보에 따른 난이도 lock 관리
   useEffect(() => {
