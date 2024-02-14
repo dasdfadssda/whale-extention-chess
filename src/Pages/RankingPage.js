@@ -1,84 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import fetchScoreData from "../Service/Score/GetSocreData";
 
 const RankingPage = () => {
   // 선택된 버튼 state
   const [selectedButton, setSelectedButton] = useState("Easy");
 
-  // 선택 state 관리
-  const handleButtonClick = (buttonName) => {
-    setSelectedButton(buttonName);
+  // Firebase에서 가져온 점수 데이터를 저장할 state 추가
+  const [scores, setScores] = useState([]);
+
+  // Firebase에서 데이터를 가져와서 scores state 업데이트
+  const fetchScores = async (difficulty) => {
+    try {
+      const scoreData = await fetchScoreData(difficulty);
+      setScores(scoreData);
+    } catch (error) {
+      console.error("Error fetching score data:", error);
+    }
   };
 
-  // 더미데이터 값 선언
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  // 선택된 어려움 수준에 따라 버튼 클릭 핸들러
+  const handleButtonClick = (difficulty) => {
+    setSelectedButton(difficulty);
+    fetchScores(difficulty);
+  };
 
-  function getRandomTime() {
-    const minutes = getRandomInt(0, 59).toString().padStart(2, "0");
-    const seconds = getRandomInt(0, 59).toString().padStart(2, "0");
-    return `${minutes}:${seconds}`;
-  }
+  // 처음 Easy 난이도 읽기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const scoreData = await fetchScoreData(selectedButton);
+        setScores(scoreData);
+      } catch (error) {
+        console.error("Error fetching score data:", error);
+      }
+    };
 
-  const difficulties = ["easy", "normal", "hard"];
-
-  const dummyData = Array.from({ length: 30 }, (_, i) => ({
-    id: i + 1,
-    difficulty: difficulties[getRandomInt(0, difficulties.length - 1)],
-    user: `User${i + 1}`,
-    time: getRandomTime(),
-  }));
-
-  // 난이도 버튼 변수들
-  const buttonNames = ["Easy", "Normal", "Hard"];
+    fetchData();
+  }, []);
 
   return (
-    <Div>
-      <TitleText>Best Records</TitleText>
-      <RowDiv>
-        {buttonNames.map((buttonName) => (
-          <TextButton
+    <Container>
+      <Title>Best Records</Title>
+      <ButtonGroup>
+        {["Easy", "Normal", "Hard"].map((buttonName) => (
+          <Button
             key={buttonName}
             onClick={() => handleButtonClick(buttonName)}
             selected={selectedButton === buttonName}
           >
             {buttonName}
-          </TextButton>
+          </Button>
         ))}
-      </RowDiv>
+      </ButtonGroup>
       <RankList>
-        {dummyData
-          .filter((data) => data.difficulty === selectedButton.toLowerCase())
-          // 시간 순으로 오름차순 sorting
-          .sort((a, b) => {
-            const aTime = a.time
-              .split(":")
-              .reduce((acc, time) => 60 * acc + +time);
-            const bTime = b.time
-              .split(":")
-              .reduce((acc, time) => 60 * acc + +time);
-            return aTime - bTime;
-          })
-          .map((data, index) => (
-            <RankItem key={data.id} index={index}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <RankingNum>{index + 1}</RankingNum>
-                <div>{data.user}</div>
-              </div>
-              <div>{data.time}</div>
-            </RankItem>
-          ))}
+        {scores.map((data, index) => (
+          <RankItem key={index} index={index}>
+            <RankingNumber>{index + 1}</RankingNumber>
+            <div>{data.name}</div>
+            <div>{data.time}</div>
+          </RankItem>
+        ))}
       </RankList>
-    </Div>
+    </Container>
   );
 };
 
 export default RankingPage;
 
-const Div = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.1rem;
@@ -87,19 +77,18 @@ const Div = styled.div`
   width: 98%;
 `;
 
-const TitleText = styled.div`
+const Title = styled.div`
   font-size: 10vw;
   font-family: ${({ theme }) => theme.font};
-  color: #000;
+  color: white;
   line-height: 1;
   text-align: start;
   padding-top: 12vw;
   padding-left: 7vw;
-  color: white;
   width: 100%;
 `;
 
-const RowDiv = styled.div`
+const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -109,7 +98,7 @@ const RowDiv = styled.div`
   padding: 0 10px;
 `;
 
-const TextButton = styled.button`
+const Button = styled.button`
   font-family: ${({ theme }) => theme.font};
   font-size: 5vw;
   color: ${(props) => (props.selected ? "#ffffff" : "#AFAFAF")};
@@ -128,12 +117,14 @@ const RankList = styled.div`
 `;
 
 const RankItem = styled.div`
-  background-color: ${(props) => {
-    if (props.index === 0) return "#FFDC4D";
-    if (props.index === 1) return "#D9D9D9";
-    if (props.index === 2) return "#FFB546";
-    return "aliceblue";
-  }};
+  background-color: ${({ index }) =>
+    index === 0
+      ? "#FFDC4D"
+      : index === 1
+      ? "#D9D9D9"
+      : index === 2
+      ? "#FFB546"
+      : "aliceblue"};
   padding: 1.5vw 3vw;
   margin-top: 10px;
   display: flex;
@@ -144,7 +135,7 @@ const RankItem = styled.div`
   border-radius: 12px;
 `;
 
-const RankingNum = styled.div`
+const RankingNumber = styled.div`
   border-radius: 50%;
   background-color: black;
   font-size: 3.5897vw;
