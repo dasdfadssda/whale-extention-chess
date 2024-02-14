@@ -6,7 +6,7 @@ import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSecon
 import ConfirmationDialog from "./Dialog";
 import ROUTES from "../Static/Constants/route";
 
-function Timer() {
+function Timer({ onButtonClick }) {
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   // navigate hook 선언
@@ -43,6 +43,7 @@ function Timer() {
       <ConfirmationDialog
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
+        onButtonClick={onButtonClick}
         yesNavigate={() => navigate(ROUTES.HOME)}
         message="Do you want to leave?"
         yesText="Yes"

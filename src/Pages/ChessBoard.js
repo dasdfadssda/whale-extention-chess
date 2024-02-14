@@ -15,11 +15,11 @@ import { Chess } from "chess.js";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { UserContext } from "../Context/UserContext";
 import { saveScoreToFirestore } from "../Service/Score/SetOneScore";
-import { initialBoardState } from '../Model/InitialBoardStateModal';
+import { initialBoardState } from "../Model/InitialBoardStateModal";
 
 function ChessBoard() {
   // 체스 초기 상태 state
-  const [board, setBoard] = useState(initialBoardState); 
+  const [board, setBoard] = useState(initialBoardState);
   // 사용자가 선택한 체스말 state
   const [selectedPiece, setSelectedPiece] = useState(null);
   // 선택된 체스말이 움직일 수 있는 위치 state
@@ -35,7 +35,7 @@ function ChessBoard() {
   const [outMessage, setOutMessage] = useState("play again");
   // diaglogButton 핸들러
   const handleDialogButtonClick = () => {
-      setBoard(initialBoardState);
+    setBoard(initialBoardState);
   };
   // 죽은말 state
   const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
@@ -262,8 +262,7 @@ function ChessBoard() {
   return (
     <>
       <Div>
-        <Timer />
-        {/* <DeadPieces color="white" pieces={deadPieces.white} /> */}
+        <Timer onButtonClick={handleDialogButtonClick} />
         {board.map((row, i) => (
           <Row key={i}>
             {row.map((piece, j) => (
