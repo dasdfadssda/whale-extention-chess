@@ -14,7 +14,7 @@ import DeadPieces from "../Components/DeadPieces";
 import { Chess } from "chess.js";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { UserContext } from "../Context/UserContext";
-import { saveScoreToFirestore } from "../Service/Score/SetScore";
+import { saveScoreToFirestore } from "../Service/Score/SetOneScore";
 
 function ChessBoard() {
   // 체스 초기 상태 state
