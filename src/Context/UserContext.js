@@ -1,5 +1,4 @@
-// UserContext.js
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { UserModel } from "../Model/UserModel";
 import { fetchUserFromFirebase } from "../Service/Auth/GetUserData";
 
@@ -8,39 +7,36 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   // 전역 변수 API 선언
   const [user, setUser] = React.useState(
-    () => window.sessionStorage.getItem("userData") || UserModel
+    () => JSON.parse(window.sessionStorage.getItem("userData")) || UserModel
   );
-
-  React.useEffect(() => {
-    window.sessionStorage.setItem("userData", user);
-  }, [user]);
-
-  // 로컬 스토리지에 마지막으로 사용자 데이터가 업데이트된 시간을 저장
-  const [lastUpdatedTime, setLastUpdatedTime] = React.useState(
-    () => window.localStorage.getItem("lastUpdatedTime") || 0
-  );
-
-  // 사용자 데이터가 업데이트된 시간을 로컬 스토리지에 저장
-  React.useEffect(() => {
-    window.sessionStorage.setItem("userData", JSON.stringify(user));
-    setLastUpdatedTime(Date.now()); // 현재 시간을 밀리초로 저장
-  }, [user]);
-
   // 유저 관리
-  React.useEffect(() => {
-    const fetchUserData = async () => {
-      const userId = localStorage.getItem("id");
+  useEffect(() => {
+    const lastFetchTime = localStorage.getItem("lastFetchTime");
+    const currentTime = Date.now();
 
-      // 최근 30초 이내에 업데이트된 경우에만 사용자 데이터를 가져옴
-      if (Date.now() - lastUpdatedTime <= 30000) {
+    // 만약 마지막으로 데이터를 읽은 시간이 없거나 현재 시간과의 차이가 30초 이상인 경우에만 데이터를 읽어옴
+    if (!lastFetchTime || currentTime - parseInt(lastFetchTime) >= 30000) {
+      const fetchUserData = async () => {
+        const userId = localStorage.getItem("id");
+
         const userData = await fetchUserFromFirebase(userId);
         if (userData) {
           setUser(userData);
+
+          // 데이터를 읽은 시간을 현재 시간으로 업데이트
+          localStorage.setItem("lastFetchTime", currentTime.toString());
         }
-      }
-    };
-    fetchUserData();
-  }, [lastUpdatedTime]);
+      };
+      fetchUserData();
+    } else {
+      console.error("아직 못 읽어옴 ㅋ");
+    }
+  }, []);
+
+  // 유저 정보 변경 시 로컬 스토리지에 저장
+  useEffect(() => {
+    window.sessionStorage.setItem("userData", JSON.stringify(user));
+  }, [user]);
 
   console.log("user 정보 :", user);
 
