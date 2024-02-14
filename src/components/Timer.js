@@ -7,14 +7,12 @@ import ConfirmationDialog from "./Dialog";
 import ROUTES from "../Static/Constants/route";
 
 function Timer() {
-  // 시간초 state
-  const [seconds, setSeconds] = useState(0);
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   // navigate hook 선언
   const navigate = useNavigate();
   // ContextAPI 선언 - Timer 변수
-  const { setTimeState } = useContext(TimerContext);
+  const { timeState, setTimeState } = useContext(TimerContext);
 
   // 타이머 ID를 저장할 ref
   const timer = useRef(null);
@@ -22,7 +20,6 @@ function Timer() {
   // 시간 계산
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds((seconds) => seconds + 1);
       setTimeState((seconds) => seconds + 1);
     }, 1000);
     return () => clearInterval(interval);
@@ -38,7 +35,7 @@ function Timer() {
     <Div>
       <TimeChecker>
         <ClockIcon src={require("../Static/Assets/ClockIcon.png")} />
-        {formatMinutesAndSeconds(seconds)}
+        {formatMinutesAndSeconds(timeState)}
       </TimeChecker>
       <StopButton onClick={handleStopClick}>
         <PauseImage src={require("../Static/Assets/StopIcon.png")} />

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { TimerContext } from "../Context/TimerContext";
 
 function ConfirmationDialog({
   dialogOpen,
@@ -10,6 +11,8 @@ function ConfirmationDialog({
   yesText,
   noText,
 }) {
+  const { setTimeState } = useContext(TimerContext);
+
   // meeage만 입력 받는 경우 검사
   if (yesText && noText) {
     return (
@@ -25,6 +28,7 @@ function ConfirmationDialog({
                 onClick={() => {
                   setDialogOpen(false);
                   noNavigate && noNavigate();
+                  setTimeState(0);
                 }}
               >
                 {noText}
@@ -35,6 +39,7 @@ function ConfirmationDialog({
                 onClick={() => {
                   yesNavigate && yesNavigate();
                   setDialogOpen(false);
+                  setTimeState(0);
                 }}
               >
                 {yesText}

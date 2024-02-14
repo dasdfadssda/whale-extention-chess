@@ -16,7 +16,6 @@ import { DifficultyContext } from "../Context/DifficultyContext";
 import { UserContext } from "../Context/UserContext";
 import { saveScoreToFirestore } from "../Service/Score/SetScore";
 
-
 function ChessBoard() {
   // 체스 초기 상태 state
   const [board, setBoard] = useState([
