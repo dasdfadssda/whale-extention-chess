@@ -15,17 +15,18 @@ function HomePage() {
   const { difficulty, setDifficulty } = useContext(DifficultyContext);
   // ContextAPI - 사용자 정보 변수
   const { user } = useUser();
-    // ContextAPI - 시간 변수
-    const { setTimeState } = useContext(TimerContext);
+  // ContextAPI - 시간 변수
+  const { setTimeState } = useContext(TimerContext);
   // 사용자의 최단 기록 state
   const [shortestRecord, setShortestRecord] = useState("00:00");
   // 게임 진행 수 state
   const [currentGameCount, setCurrentGameCount] = useState(0);
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
-  // 난이도 관리 State
+  // 난이도 access State
   const [isHardAccess, setIsHardAccess] = useState(false);
   const [isNormalAccess, setIsNormalAccess] = useState(false);
+  const [localDifficulty, setLocalDifficulty] = useState("Easy");
 
   // 난이도 버튼 변수
   const difficulties = [
@@ -38,8 +39,10 @@ function HomePage() {
   const handleDifficultyClick = (newDifficulty) => {
     if (newDifficulty === difficulty) {
       setDifficulty("");
+      setLocalDifficulty("Easy")
     } else {
       setDifficulty(newDifficulty);
+      setLocalDifficulty(newDifficulty)
     }
   };
 
@@ -69,14 +72,18 @@ function HomePage() {
     const userData = JSON.parse(window.sessionStorage.getItem("userData"));
     if (userData) {
       const { gameInfo } = userData;
+      console.log("읽은 정보 :",gameInfo[localDifficulty]);
+
       // 현재 선택된 난이도의 time을 가져온다
-      if (gameInfo[difficulty].access) {
-        const time = gameInfo[difficulty].time;
+      if (gameInfo[localDifficulty].access) {
+        const time = gameInfo[localDifficulty].time;
         setShortestRecord(formatMinutesAndSeconds(time));
+      } else{
+        setShortestRecord(formatMinutesAndSeconds(0));
       }
       console.log("asdf", gameInfo);
     }
-  }, [difficulty]);
+  }, [localDifficulty]);
 
   // 사용자 정보에 따른 난이도 lock 관리
   useEffect(() => {
