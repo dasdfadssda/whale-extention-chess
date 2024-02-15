@@ -5,22 +5,24 @@ import { saveUserToFirebase } from "../Service/Auth/SetUserData";
 // 유저 토큰 발급
 export const getAccessToken = async (naverCode, savedState) => {
   try {
-    const response = await axios.get("http://localhost:8000/naver/token/", {
+    const response = await axios.get("http://52.79.144.3/naver/token/", {
       params: {
         code: naverCode,
         state: savedState,
       },
     });
+    alert("토큰 발급 성공");
     return response.data.access_token;
   } catch (error) {
     console.error("액세스 토큰을 가져오는 데 실패했습니다.", error);
+    alert("액세스 토큰을 가져오는 데 실패했습니다.");
   }
 };
 
 // 유저 정보 읽기
 export const getUserInfo = async (accessToken) => {
   try {
-    const response = await axios.get("http://localhost:8000/naver/userinfo/", {
+    const response = await axios.get("http://52.79.144.3/naver/userinfo/", {
       params: {
         access_token: accessToken,
       },
@@ -41,10 +43,10 @@ export const getUserInfo = async (accessToken) => {
     // saveUserToFirebase 함수 호출
     saveUserToFirebase(userToSave, userInfo.id);
     console.log("저장할 데이터 :",userToSave);
-
-
+    alert("사용자 정보 출력 성공");
     return userToSave;
   } catch (error) {
     console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
+    alert("사용자 정보를 가져오는 데 실패했습니다.");
   }
 };

@@ -36,7 +36,7 @@ function CallbackPage() {
     if (naverState === savedState) {
       getAccessTokenAndUserInfo();
     } else {
-      alert("로그인 과정에 오류가 발생했습니다.asdf");
+      alert("로그인 과정에 오류가 발생했습니다.");
     }
   }, [setUser, navigate]);
 
