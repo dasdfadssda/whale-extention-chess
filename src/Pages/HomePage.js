@@ -8,12 +8,15 @@ import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSecon
 import ConfirmationDialog from "../Components/Dialog";
 import NaverLoginButton from "../Components/NaverLoginButton";
 import { UserModel } from "../Model/UserModel";
+import { TimerContext } from "../Context/TimerContext";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
   const { difficulty, setDifficulty } = useContext(DifficultyContext);
   // ContextAPI - 사용자 정보 변수
   const { user } = useUser();
+    // ContextAPI - 시간 변수
+    const { setTimeState } = useContext(TimerContext);
   // 사용자의 최단 기록 state
   const [shortestRecord, setShortestRecord] = useState("00:00");
   // 게임 진행 수 state
@@ -59,6 +62,7 @@ function HomePage() {
       setShortestRecord(formatMinutesAndSeconds(time));
     }
     console.log(UserModel);
+    setTimeState(0);
   }, []);
 
   useEffect(() => {

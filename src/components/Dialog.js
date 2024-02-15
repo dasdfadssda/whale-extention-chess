@@ -29,7 +29,6 @@ function ConfirmationDialog({
                 onClick={() => {
                   setDialogOpen(false);
                   noNavigate && noNavigate();
-                  setTimeState(0);
                 }}
               >
                 {noText}
