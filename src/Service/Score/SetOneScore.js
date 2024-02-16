@@ -31,6 +31,7 @@ export const saveScoreToFirestore = async (difficulty, user, time) => {
           await setDoc(doc(dbService, `${difficulty}Score`, userId), {
             name: user.name,
             time: time,
+            id:userId
           });
           console.log(`Firestore ${difficulty}Score에 점수 정보 저장 성공`);
         }
