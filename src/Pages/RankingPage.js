@@ -41,6 +41,30 @@ const RankingPage = () => {
     fetchData();
   }, [selectedButton]);
 
+  // 사용자의 등수 가져오기
+  const getUserRank = () => {
+    if (!user.id || scores.length === 0) return null;
+
+    const sortedScores = scores
+      .map((score) => score.time)
+      .sort((a, b) => a - b);
+    const userScore = scores.find((score) => score.id === user.id);
+
+    if (!userScore || userScore.time === 0) {
+      return "You have to play the game";
+    }
+
+    const userIndex = sortedScores.indexOf(userScore.time);
+
+    if (userIndex >= 0 && userIndex <= 4) {
+      return userIndex + 1;
+    }
+
+    return userIndex + 1;
+  };
+
+  const userRank = getUserRank();
+
   return (
     <Container>
       <Title>Best Records</Title>
@@ -56,15 +80,49 @@ const RankingPage = () => {
         ))}
       </ButtonGroup>
       <RankList>
-        {scores.map((data, index) => (
+        {scores.slice(0, 5).map((data, index) => (
           <RankItem key={index} userId={user.id} DataId={data.id}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <RankingNumber index={index}>{index + 1}</RankingNumber>
-              <NameDiv>{data.name}</NameDiv>
+              <RankingNumber index={index} userId={user.id} DataId={data.id}>
+                {index + 1}
+              </RankingNumber>
+              <NameDiv userId={user.id} DataId={data.id}>
+                {data.name}
+              </NameDiv>
             </div>
-            <div>{formatMinutesAndSeconds(data.time)}</div>
+            <TimeDiv userId={user.id} DataId={data.id}>
+              {formatMinutesAndSeconds(data.time)}
+            </TimeDiv>
           </RankItem>
         ))}
+        {userRank !== null && userRank > 5 && (
+          <RankItem>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <RankingNumber>{userRank}</RankingNumber>
+              <NameDiv>User</NameDiv>
+            </div>
+            <TimeDiv>
+              {typeof userRank === "number"
+                ? formatMinutesAndSeconds(
+                    scores.find((score) => score.id === user.id).time
+                  )
+                : userRank}
+            </TimeDiv>
+          </RankItem>
+        )}
+        {userRank === null && (
+          <RankItem>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <NameDiv>You have to play the game</NameDiv>
+            </div>
+          </RankItem>
+        )}
       </RankList>
     </Container>
   );
@@ -135,16 +193,18 @@ const RankItem = styled.div`
 
 const RankingNumber = styled.div`
   border-radius: 50%;
-  background-color: ${({ index }) =>
+  background-color: ${({ index, userId, DataId }) =>
     index === 0
       ? "#FFDC4D"
       : index === 1
       ? "#D9D9D9"
       : index === 2
       ? "#FFB546"
+      : userId === DataId
+      ? "white"
       : "black"};
   font-size: 3.5897vw;
-  color: white;
+  color: ${({ userId, DataId }) => (userId === DataId ? "black" : "white")};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -154,8 +214,17 @@ const RankingNumber = styled.div`
 `;
 
 const NameDiv = styled.div`
-  max-width: 300px;
+  width: 51.2821vw;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: ${({ userId, DataId }) => (userId === DataId ? "white" : "black")};
+  margin-right: 4vw;
+`;
+
+const TimeDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 27vw;
+  color: ${({ userId, DataId }) => (userId === DataId ? "white" : "black")};
 `;
