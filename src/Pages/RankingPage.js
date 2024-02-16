@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import fetchScoreData from "../Service/Score/GetSocreData";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
+import { useUser } from "../Context/UserContext";
 
 const RankingPage = () => {
+  // ContextAPI - 사용자 정보 변수
+  const { user } = useUser();
   // 선택된 버튼 state
   const [selectedButton, setSelectedButton] = useState("Easy");
-
   // Firebase에서 가져온 점수 데이터를 저장할 state 추가
   const [scores, setScores] = useState([]);
-
   // Firebase에서 데이터를 가져와서 scores state 업데이트
   const fetchScores = async (difficulty) => {
     try {
@@ -38,7 +39,7 @@ const RankingPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [selectedButton]);
 
   return (
     <Container>
@@ -56,9 +57,9 @@ const RankingPage = () => {
       </ButtonGroup>
       <RankList>
         {scores.map((data, index) => (
-          <RankItem key={index} index={index}>
-            <div style={{ display: "flex" }}>
-              <RankingNumber>{index + 1}</RankingNumber>
+          <RankItem key={index} userId={user.id} DataId={data.id}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <RankingNumber index={index}>{index + 1}</RankingNumber>
               <NameDiv>{data.name}</NameDiv>
             </div>
             <div>{formatMinutesAndSeconds(data.time)}</div>
@@ -113,21 +114,15 @@ const Button = styled.button`
 `;
 
 const RankList = styled.div`
-  height: 90vw;
+  height: 100vw;
   width: 100%;
   overflow-y: scroll;
   margin-top: 10px;
 `;
 
 const RankItem = styled.div`
-  background-color: ${({ index }) =>
-    index === 0
-      ? "#FFDC4D"
-      : index === 1
-      ? "#D9D9D9"
-      : index === 2
-      ? "#FFB546"
-      : "aliceblue"};
+  background-color: ${({ userId, DataId }) =>
+    userId === DataId ? "#D66602" : "white"};
   padding: 1.5vw 3vw;
   margin-top: 10px;
   display: flex;
@@ -140,7 +135,14 @@ const RankItem = styled.div`
 
 const RankingNumber = styled.div`
   border-radius: 50%;
-  background-color: black;
+  background-color: ${({ index }) =>
+    index === 0
+      ? "#FFDC4D"
+      : index === 1
+      ? "#D9D9D9"
+      : index === 2
+      ? "#FFB546"
+      : "black"};
   font-size: 3.5897vw;
   color: white;
   display: flex;
