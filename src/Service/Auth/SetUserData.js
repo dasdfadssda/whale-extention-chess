@@ -12,6 +12,21 @@ export const saveUserToFirebase = async (userToSave, userId) => {
     if (!docSnap.exists()) { // 문서가 존재하지 않는 경우
       await setDoc(userRef, userToSave); // 사용자 정보 저장
       console.log("User collection에 사용자 정보 저장 성공");
+
+      // 각 difficulty에 대한 점수 정보 추가
+      ["Easy", "Normal", "Hard"].forEach(async (difficulty) => {
+        try {
+          await setDoc(doc(dbService, `${difficulty}Score`, userId), {
+            name: userToSave.name,
+            time: 0, // 시간 초기화
+            id: userId
+          });
+          console.log(`${difficulty}Score 컬렉션에 사용자 정보 저장 성공`);
+        } catch (error) {
+          console.error(`${difficulty}Score 컬렉션에 사용자 정보 저장 실패:`, error);
+        }
+      });
+
     } else {
       console.log("이미 해당 ID를 가진 사용자 정보가 존재합니다.");
     }
