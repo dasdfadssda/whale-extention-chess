@@ -64,7 +64,6 @@ function HomePage() {
       const time = Number(shortestTime);
       setShortestRecord(formatMinutesAndSeconds(time));
     }
-    console.log(UserModel);
     setTimeState(0);
   }, []);
 
@@ -72,7 +71,6 @@ function HomePage() {
     const userData = JSON.parse(window.sessionStorage.getItem("userData"));
     if (userData) {
       const { gameInfo } = userData;
-      console.log("읽은 정보 :",gameInfo[localDifficulty]);
 
       // 현재 선택된 난이도의 time을 가져온다
       if (gameInfo[localDifficulty].access) {
@@ -81,7 +79,6 @@ function HomePage() {
       } else{
         setShortestRecord(formatMinutesAndSeconds(0));
       }
-      console.log("asdf", gameInfo);
     }
   }, [localDifficulty]);
 
