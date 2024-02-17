@@ -16,6 +16,7 @@ import { DifficultyContext } from "../Context/DifficultyContext";
 import { UserContext } from "../Context/UserContext";
 import { saveScoreToFirestore } from "../Service/Score/SetOneScore";
 import { initialBoardState } from "../Model/InitialBoardStateModal";
+import { updateGameCountNum } from "../Service/GameCount/SetGameCount";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -106,18 +107,13 @@ function ChessBoard() {
       } else {
         setResult("You win");
         setOutMessage("Play again");
-      }
-      // 'shortestTime' key의 값 가져오기
-      const shortestTime = localStorage.getItem("shortestTime");
-      // Firebase-Score에 이겼을 경우
-      saveScoreToFirestore(difficulty, user, currentTime);
-      // 'shortestTime' key의 값이 없거나 현재 게임의 시간이 더 짧을 경우 현재 게임의 시간을 저장
-      if (!shortestTime || currentTime < shortestTime) {
-        localStorage.setItem("shortestTime", currentTime);
-        // TODO 순위 페이지로 이동 로직 추가
+        // Firebase-Score에 이겼을 경우
+        saveScoreToFirestore(difficulty, user, currentTime);
       }
       // 다이로그 출현
       setDialogOpen(true);
+      // 게임 수 추가
+      updateGameCountNum()
     }
   }, [board]);
 
