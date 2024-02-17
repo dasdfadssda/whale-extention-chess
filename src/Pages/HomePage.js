@@ -9,6 +9,7 @@ import ConfirmationDialog from "../Components/Dialog";
 import NaverLoginButton from "../Components/NaverLoginButton";
 import { UserModel } from "../Model/UserModel";
 import { TimerContext } from "../Context/TimerContext";
+import { getTodayCount } from "../Service/GameCount/GetGameCount";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -53,18 +54,23 @@ function HomePage() {
       setDialogOpen(true);
     } else {
       navigate(route);
-      setCurrentGameCount(1);
     }
   };
 
-  // 최단 기록 불러오기
+  // 초기 로딩 세팅
   useEffect(() => {
-    const shortestTime = localStorage.getItem("shortestTime");
-    if (shortestTime) {
-      const time = Number(shortestTime);
-      setShortestRecord(formatMinutesAndSeconds(time));
-    }
-    setTimeState(0);
+    const fetchData = async () => {
+      const shortestTime = localStorage.getItem("shortestTime");
+      if (shortestTime) {
+        const time = Number(shortestTime);
+        setShortestRecord(formatMinutesAndSeconds(time));
+      }
+      setTimeState(0);
+      const GameNum = await getTodayCount();
+      setCurrentGameCount(GameNum);
+    };
+  
+    fetchData();
   }, []);
 
   useEffect(() => {
