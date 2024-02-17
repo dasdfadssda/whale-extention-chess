@@ -40,8 +40,6 @@ export const UserProvider = ({ children }) => {
     window.sessionStorage.setItem("userData", JSON.stringify(user));
   }, [user]);
 
-  console.log("user 정보 :", user);
-
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

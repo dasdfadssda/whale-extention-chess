@@ -8,9 +8,8 @@ export const fetchUserFromFirebase = async (userId) => {
   const docSnap = await getDoc(docRef);
   
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
     return docSnap.data();
   } else {
-    console.log("No such document!");
+    console.error("No such document!");
   }
 }
