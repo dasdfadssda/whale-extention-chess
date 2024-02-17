@@ -5,7 +5,7 @@ import { saveUserToFirebase } from "../Service/Auth/SetUserData";
 // 유저 토큰 발급
 export const getAccessToken = async (naverCode, savedState) => {
   try {
-    const response = await axios.get("http://52.79.144.3/naver/token/", {
+    const response = await axios.get("http://127.0.0.1:8000/naver/token/", {
       params: {
         code: naverCode,
         state: savedState,
@@ -20,9 +20,9 @@ export const getAccessToken = async (naverCode, savedState) => {
 };
 
 // 유저 정보 읽기
-export const getUserInfo = async (accessToken) => {
+export const getUserInfo = async (accessToken, setUser) => {
   try {
-    const response = await axios.get("http://52.79.144.3/naver/userinfo/", {
+    const response = await axios.get("http://127.0.0.1:8000/naver/userinfo/", {
       params: {
         access_token: accessToken,
       },
@@ -41,8 +41,7 @@ export const getUserInfo = async (accessToken) => {
     };
 
     // saveUserToFirebase 함수 호출
-    saveUserToFirebase(userToSave, userInfo.id);
-    console.log("저장할 데이터 :",userToSave);
+    saveUserToFirebase(userToSave, userInfo.id, setUser);
     alert("사용자 정보 출력 성공");
     return userToSave;
   } catch (error) {
