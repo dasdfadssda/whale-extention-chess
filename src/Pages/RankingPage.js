@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import fetchScoreData from "../Service/Score/GetSocreData";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
+import { DifficultyContext } from "../Context/DifficultyContext";
 
 const RankingPage = () => {
   // ContextAPI - 사용자 정보 변수
   const { user } = useUser();
+  // ContextAPI - 난이도 변수
+  const { setDifficulty } = useContext(DifficultyContext);
   // 선택된 버튼 state
   const [selectedButton, setSelectedButton] = useState("Easy");
   // Firebase에서 가져온 점수 데이터를 저장할 state 추가
@@ -73,7 +76,12 @@ const RankingPage = () => {
   return (
     <Container>
       <TopDiv>
-        <BackIcon onClick={() => navigate(ROUTES.HOME)}>
+        <BackIcon
+          onClick={() => {
+            navigate(ROUTES.HOME);
+            setDifficulty("");
+          }}
+        >
           <img
             src={require("../Static/Assets/BackIcon.png")}
             alt="뒤로 가기 아이콘"
@@ -93,21 +101,24 @@ const RankingPage = () => {
         ))}
       </ButtonGroup>
       <RankList>
-        {scores.slice(0, 5).map((data, index) => (
-          <RankItem key={index} userId={user.id} DataId={data.id}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <RankingNumber index={index} userId={user.id} DataId={data.id}>
-                {index + 1}
-              </RankingNumber>
-              <NameDiv userId={user.id} DataId={data.id}>
-                {data.name}
-              </NameDiv>
-            </div>
-            <TimeDiv userId={user.id} DataId={data.id}>
-              {formatMinutesAndSeconds(data.time)}
-            </TimeDiv>
-          </RankItem>
-        ))}
+        {scores
+          .filter((data) => userRank !== null || data.id !== user.id)
+          .slice(0, 5)
+          .map((data, index) => (
+            <RankItem key={index} userId={user.id} DataId={data.id}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <RankingNumber index={index} userId={user.id} DataId={data.id}>
+                  {index + 1}
+                </RankingNumber>
+                <NameDiv userId={user.id} DataId={data.id}>
+                  {data.name}
+                </NameDiv>
+              </div>
+              <TimeDiv userId={user.id} DataId={data.id}>
+                {formatMinutesAndSeconds(data.time)}
+              </TimeDiv>
+            </RankItem>
+          ))}
         {userRank !== null && userRank > 5 && (
           <RankItem>
             <div style={{ display: "flex", alignItems: "center" }}>
