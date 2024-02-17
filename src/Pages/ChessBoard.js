@@ -27,8 +27,10 @@ function ChessBoard() {
   const [possibleMoves, setPossibleMoves] = useState([]);
   // 현재 차례인 팀을 나타내는 state
   const [currentTurn, setCurrentTurn] = useState("white");
-  // 클릭된 버튼 state
+  // 클릭한 버튼 state
   const [selectedButton, setSelectedButton] = useState(null);
+  // 클릭된 버튼 state
+  const [beforeMove, setBeforeMove] = useState(null);
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   // dialog Message
@@ -178,6 +180,9 @@ function ChessBoard() {
     const [fromX, fromY] = from;
     const [toX, toY] = to;
 
+    // 이전 위치 선언
+    setBeforeMove(from);
+
     // `from` 위치에 체스말이 있는지 확인
     if (!newBoard[fromX][fromY]) {
       console.error(`No piece at position: ${from}`);
@@ -272,6 +277,11 @@ function ChessBoard() {
                   selectedButton[0] === i &&
                   selectedButton[1] === j
                 }
+                BeforeMove={
+                  beforeMove &&
+                  beforeMove[0] === i &&
+                  beforeMove[1] === j
+                }                
                 isPossibleMove={possibleMoves.some(
                   ([x, y]) => x === i && y === j
                 )}
@@ -322,6 +332,9 @@ const Button = styled.button`
     }
     if (props.isPossibleMove) {
       return "yellow";
+    }
+    if (props.BeforeMove){
+      return "#FF4D00";
     }
     return props.row % 2 === props.column % 2 ? "#E38C56" : "#D66602";
   }};
