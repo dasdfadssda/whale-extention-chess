@@ -4,7 +4,6 @@ export const UserModel = {
     age:"",
     gender:"",
     id:"",
-    nickname:"",
     gameInfo: {
       Easy: {
         access: true, 

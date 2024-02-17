@@ -36,7 +36,6 @@ export const getUserInfo = async (accessToken, setUser) => {
       age: userInfo.age,
       gender: userInfo.gender,
       id: userInfo.id,
-      nickname: userInfo.nickname,
     };
 
     // saveUserToFirebase 함수 호출
