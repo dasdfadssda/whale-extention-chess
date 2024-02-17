@@ -67,7 +67,7 @@ function ConfirmationDialog({
               }}
             >
               <CloseButton onClick={() => setDialogOpen(false)}>
-                <img src={require("../Static/Assets/CancleIcon.png")} />
+                <img src={require("../Static/Assets/CancleIcon.png")} alt="뒤로가기버튼" />
               </CloseButton>
             </div>
             {message}
