@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
     const currentTime = Date.now();
 
     // 만약 마지막으로 데이터를 읽은 시간이 없거나 현재 시간과의 차이가 30초 이상인 경우에만 데이터를 읽어옴
-    if (!lastFetchTime || currentTime - parseInt(lastFetchTime) >= 30000) {
+    if (!lastFetchTime || currentTime - parseInt(lastFetchTime) >= 3) {
       const fetchUserData = async () => {
         const userId = localStorage.getItem("id");
 

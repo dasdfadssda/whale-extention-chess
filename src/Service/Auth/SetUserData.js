@@ -1,9 +1,13 @@
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import { dbService } from "../../fbase";
+import { fetchUserFromFirebase } from "./GetUserData";
+
+
 
 // Firestore에 사용자 정보 저장
-export const saveUserToFirebase = async (userToSave, userId) => {
-  const userRef = doc(dbService, "User", userId); // 사용자 문서 참조 생성
+export const saveUserToFirebase = async (userToSave, userId, setUser) => {
+  // 사용자 문서 참조 생성
+  const userRef = doc(dbService, "User", userId); 
   localStorage.setItem("id", userId);
 
   try {
@@ -30,6 +34,9 @@ export const saveUserToFirebase = async (userToSave, userId) => {
     } else {
       console.log("이미 해당 ID를 가진 사용자 정보가 존재합니다.");
     }
+    const userData = await fetchUserFromFirebase(userId);
+    setUser(userData);
+    console.log("로그인 하면 무조건 userData에 저장",userData);
   } catch (error) {
     console.error("Firestore에 사용자 정보 저장 실패:", error);
   }

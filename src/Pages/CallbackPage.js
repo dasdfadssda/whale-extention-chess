@@ -22,7 +22,7 @@ function CallbackPage() {
     const getAccessTokenAndUserInfo = async () => {
       try {
         const accessToken = await getAccessToken(naverCode, savedState);
-        const userInfo = await getUserInfo(accessToken);
+        const userInfo = await getUserInfo(accessToken, setUser);
         // setUser를 호출하여 ContextAPI-user data 업데이트
         setUser(userInfo);
         //유저 정보 사용 후 처리 후, navigation 처리
