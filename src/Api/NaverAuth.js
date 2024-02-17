@@ -11,7 +11,6 @@ export const getAccessToken = async (naverCode, savedState) => {
         state: savedState,
       },
     });
-    alert("토큰 발급 성공");
     return response.data.access_token;
   } catch (error) {
     console.error("액세스 토큰을 가져오는 데 실패했습니다.", error);
@@ -42,7 +41,7 @@ export const getUserInfo = async (accessToken, setUser) => {
 
     // saveUserToFirebase 함수 호출
     saveUserToFirebase(userToSave, userInfo.id, setUser);
-    alert("사용자 정보 출력 성공");
+    alert("로그인이 완료 되었습니다.");
     return userToSave;
   } catch (error) {
     console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
