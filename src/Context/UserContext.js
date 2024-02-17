@@ -19,12 +19,14 @@ export const UserProvider = ({ children }) => {
       const fetchUserData = async () => {
         const userId = localStorage.getItem("id");
 
-        const userData = await fetchUserFromFirebase(userId);
-        if (userData) {
-          setUser(userData);
+        if (userId) {
+          const userData = await fetchUserFromFirebase(userId);
+          if (userData) {
+            setUser(userData);
 
-          // 데이터를 읽은 시간을 현재 시간으로 업데이트
-          localStorage.setItem("lastFetchTime", currentTime.toString());
+            // 데이터를 읽은 시간을 현재 시간으로 업데이트
+            localStorage.setItem("lastFetchTime", currentTime.toString());
+          }
         }
       };
       fetchUserData();
