@@ -204,16 +204,6 @@ function HomePage() {
         }
       />
       <NaverLoginButton />
-      <button
-        onClick={() =>
-          localStorage.setItem(
-            "id",
-            "MiceSpB1JBshMmrwp00rRK_iCLUqgq8uJaup50Z2_4w"
-          )
-        }
-      >
-        <h3 style={{ color: "white" }}>임시 로그인 버튼</h3>
-      </button>
     </>
   );
 }
