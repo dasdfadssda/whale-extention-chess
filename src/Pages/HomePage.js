@@ -106,8 +106,8 @@ function HomePage() {
           color={"#D66602"}
           onClick={() => handleButtonClick(ROUTES.RANKING)}
         >
-          <Column color={"Tradn"} content="flex-end">
-            <SmallText color={"#FFFFFF"} style={{ marginTop: "2vw" }}>
+          <Column color={"Tradn"} content="center">
+            <SmallText color={"#FFFFFF"} style={{ marginTop: "2vw", marginLeft:"2vw" }}>
               Best Record
             </SmallText>
             <div
@@ -238,7 +238,7 @@ const TitleText = styled.div`
 `;
 
 const SmallText = styled.div`
-  font-size: 3.5897vw;
+  font-size: 4vw;
   margin-bottom: -10px;
   color: ${({ color }) => color || "#000000"};
 `;
