@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken, getUserInfo } from "../Api/NaverAuth";
 import { useUser } from "../Context/UserContext";
+import { PacmanLoader } from "react-spinners";
+import { override } from "../Styles/LoadingSpin";
 
 // 네이버 로그인 CallBack 페이지
 function CallbackPage() {
@@ -39,7 +41,20 @@ function CallbackPage() {
     }
   }, [setUser, navigate]);
 
-  return <div style={{ color: "white" }}>네이버 로그인 인증 중...</div>;
+  return (
+    <div
+      style={{
+        backgroundColor: "white",
+        width: "100%",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+      }}
+    >
+      <PacmanLoader color="#D66602" cssOverride={override} size={70} />
+    </div>
+  );
 }
 
 export default CallbackPage;
