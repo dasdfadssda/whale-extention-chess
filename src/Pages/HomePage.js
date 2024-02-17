@@ -7,7 +7,6 @@ import { useUser } from "../Context/UserContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import ConfirmationDialog from "../Components/Dialog";
 import NaverLoginButton from "../Components/NaverLoginButton";
-import { UserModel } from "../Model/UserModel";
 import { TimerContext } from "../Context/TimerContext";
 import { getTodayCount } from "../Service/GameCount/GetGameCount";
 
