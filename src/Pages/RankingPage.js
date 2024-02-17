@@ -3,6 +3,8 @@ import styled from "styled-components";
 import fetchScoreData from "../Service/Score/GetSocreData";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import { useUser } from "../Context/UserContext";
+import { useNavigate } from "react-router-dom";
+import ROUTES from "../Static/Constants/route";
 
 const RankingPage = () => {
   // ContextAPI - 사용자 정보 변수
@@ -20,6 +22,9 @@ const RankingPage = () => {
       console.error("Error fetching score data:", error);
     }
   };
+
+  // useNavigate 선언
+  const navigate = useNavigate();
 
   // 선택된 어려움 수준에 따라 버튼 클릭 핸들러
   const handleButtonClick = (difficulty) => {
@@ -51,7 +56,7 @@ const RankingPage = () => {
     const userScore = scores.find((score) => score.id === user.id);
 
     if (!userScore || userScore.time === 0) {
-      return "You have to play the game";
+      return null;
     }
 
     const userIndex = sortedScores.indexOf(userScore.time);
@@ -67,6 +72,14 @@ const RankingPage = () => {
 
   return (
     <Container>
+      <TopDiv>
+        <BackIcon onClick={() => navigate(ROUTES.HOME)}>
+          <img
+            src={require("../Static/Assets/BackIcon.png")}
+            alt="뒤로 가기 아이콘"
+          />
+        </BackIcon>
+      </TopDiv>
       <Title>Best Records</Title>
       <ButtonGroup>
         {["Easy", "Normal", "Hard"].map((buttonName) => (
@@ -99,7 +112,7 @@ const RankingPage = () => {
           <RankItem>
             <div style={{ display: "flex", alignItems: "center" }}>
               <RankingNumber>{userRank}</RankingNumber>
-              <NameDiv>User</NameDiv>
+              <NameDiv>{user.name}</NameDiv>
             </div>
             <TimeDiv>
               {typeof userRank === "number"
@@ -111,7 +124,7 @@ const RankingPage = () => {
           </RankItem>
         )}
         {userRank === null && (
-          <RankItem>
+          <RankItem content={"center"}>
             <div
               style={{
                 display: "flex",
@@ -119,7 +132,7 @@ const RankingPage = () => {
                 justifyContent: "center",
               }}
             >
-              <NameDiv>You have to play the game</NameDiv>
+              <NoRankText>You have to play the game</NoRankText>
             </div>
           </RankItem>
         )}
@@ -139,15 +152,34 @@ const Container = styled.div`
   width: 98%;
 `;
 
+const TopDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-left: -12px;
+`;
+
+const BackIcon = styled.button`
+  border: none;
+  background-color: transparent;
+  margin-bottom: 7vw;
+  margin-top: 2vw;
+  width: 10vw;
+  cursor: pointer;
+  img {
+    max-width: 85%;
+    max-height: 85%;
+  }
+`;
+
 const Title = styled.div`
-  font-size: 10vw;
+  font-size: 8vw;
   font-family: ${({ theme }) => theme.font};
   color: white;
   line-height: 1;
   text-align: start;
-  padding-top: 12vw;
   padding-left: 7vw;
-  width: 100%;
+  width: 95%;
 `;
 
 const ButtonGroup = styled.div`
@@ -173,9 +205,10 @@ const Button = styled.button`
 
 const RankList = styled.div`
   height: 100vw;
-  width: 100%;
+  width: 97%;
   overflow-y: scroll;
   margin-top: 10px;
+  margin-left: 3px;
 `;
 
 const RankItem = styled.div`
@@ -186,7 +219,8 @@ const RankItem = styled.div`
   display: flex;
   font-family: ${({ theme }) => theme.font};
   font-size: 5.1282vw;
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.content ? props.content : "space-between"};
   align-items: center;
   border-radius: 12px;
 `;
@@ -227,4 +261,8 @@ const TimeDiv = styled.div`
   justify-content: flex-start;
   width: 27vw;
   color: ${({ userId, DataId }) => (userId === DataId ? "white" : "black")};
+`;
+
+const NoRankText = styled.div`
+  color: white;
 `;
