@@ -40,10 +40,10 @@ function HomePage() {
   const handleDifficultyClick = (newDifficulty) => {
     if (newDifficulty === difficulty) {
       setDifficulty("");
-      setLocalDifficulty("Easy")
+      setLocalDifficulty("Easy");
     } else {
       setDifficulty(newDifficulty);
-      setLocalDifficulty(newDifficulty)
+      setLocalDifficulty(newDifficulty);
     }
   };
 
@@ -69,7 +69,7 @@ function HomePage() {
       const GameNum = await getTodayCount();
       setCurrentGameCount(GameNum);
     };
-  
+
     fetchData();
   }, []);
 
@@ -82,7 +82,7 @@ function HomePage() {
       if (gameInfo[localDifficulty].access) {
         const time = gameInfo[localDifficulty].time;
         setShortestRecord(formatMinutesAndSeconds(time));
-      } else{
+      } else {
         setShortestRecord(formatMinutesAndSeconds(0));
       }
     }
@@ -107,7 +107,10 @@ function HomePage() {
           onClick={() => handleButtonClick(ROUTES.RANKING)}
         >
           <Column color={"Tradn"} content="center">
-            <SmallText color={"#FFFFFF"} style={{ marginTop: "2vw", marginLeft:"2vw" }}>
+            <SmallText
+              color={"#FFFFFF"}
+              style={{ marginTop: "2vw", marginLeft: "2vw" }}
+            >
               Best Record
             </SmallText>
             <div
@@ -202,8 +205,15 @@ function HomePage() {
         }
       />
       <NaverLoginButton />
-      <button onClick={()=> localStorage.setItem("id","MiceSpB1JBshMmrwp00rRK_iCLUqgq8uJaup50Z2_4w")}>
-        <h3 style={{color:"white"}}>임시 로그인 버튼</h3>
+      <button
+        onClick={() =>
+          localStorage.setItem(
+            "id",
+            "MiceSpB1JBshMmrwp00rRK_iCLUqgq8uJaup50Z2_4w"
+          )
+        }
+      >
+        <h3 style={{ color: "white" }}>임시 로그인 버튼</h3>
       </button>
     </>
   );
