@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { TimerContext } from "../Context/TimerContext";
+import NaverLoginButton from "./NaverLoginButton";
 
 function ConfirmationDialog({
   dialogOpen,
@@ -11,6 +12,7 @@ function ConfirmationDialog({
   message,
   yesText,
   noText,
+  isNeedLogin
 }) {
   const { setTimeState } = useContext(TimerContext);
 
@@ -56,21 +58,14 @@ function ConfirmationDialog({
     return (
       dialogOpen && (
         <Dialog>
-          <MessageContent>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "-30px",
-                marginBottom: "15px",
-              }}
-            >
+          <MessageContent isNeedLogin={isNeedLogin}>
+            <CloseButtonContainer isNeedLogin={isNeedLogin}>
               <CloseButton onClick={() => setDialogOpen(false)}>
                 <img src={require("../Static/Assets/CancleIcon.png")} alt="뒤로가기버튼" />
               </CloseButton>
-            </div>
+            </CloseButtonContainer>
             {message}
+            {isNeedLogin && < NaverLoginButton/>}
           </MessageContent>
         </Dialog>
       )
@@ -108,6 +103,14 @@ const DialogContent = styled.div`
   margin-bottom: 30px;
 `;
 
+const CloseButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: ${({ isNeedLogin }) => (isNeedLogin ? "-20px" : "-30px")};
+  margin-bottom: 15px;
+`;
+
 const RowDiv = styled.div`
   display: flex;
   width: 100%;
@@ -130,7 +133,7 @@ const DialogButton = styled.div`
 `;
 
 const MessageContent = styled(DialogContent)`
-  min-height: 30vw;
+  min-height: ${({ isNeedLogin }) => (isNeedLogin ? "35vw" : "30vw")};
   background-color: rgba(0, 0, 0, 0.8);
   text-align: center;
   font-size: 4.6154vw;

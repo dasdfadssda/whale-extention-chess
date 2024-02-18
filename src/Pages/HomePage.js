@@ -27,6 +27,15 @@ function HomePage() {
   const [isHardAccess, setIsHardAccess] = useState(false);
   const [isNormalAccess, setIsNormalAccess] = useState(false);
   const [localDifficulty, setLocalDifficulty] = useState("Easy");
+  // diaglog message 
+  const [message, setMessage] = useState(
+    <>
+      Please select
+      <br />a difficulty to play
+    </>
+  );
+  // 로그인 버튼 bool 
+  const [isNeedLogin, setIsNeedLogin] = useState(false);
 
   // 난이도 버튼 변수
   const difficulties = [
@@ -70,7 +79,7 @@ function HomePage() {
     };
 
     fetchData();
-  }, []);
+  }, [setTimeState]);
 
   useEffect(() => {
     const userData = JSON.parse(window.sessionStorage.getItem("userData"));
@@ -94,6 +103,31 @@ function HomePage() {
       setIsHardAccess(user.gameInfo.Hard.access);
     }
   }, [user]);
+
+  const handleImageClick = (name) => {
+    console.log(`이미지 ${name}이(가) 클릭되었습니다.`);
+  
+    const id = localStorage.getItem("id");
+  
+    if (!id) {
+      setMessage("Please login to unlock");
+      setDialogOpen(true);
+      setIsNeedLogin(true);
+    } else {
+      if (name === "Normal") {
+        // Normal 난이도에 대한 처리
+        setIsNeedLogin(false)
+        setMessage(`Win easy mode for ${3-user.gameInfo.Easy.gameNum} times to unlock`);
+        setDialogOpen(true);
+      } else if (name === "Hard") {
+        // Hard 난이도에 대한 처리
+        setIsNeedLogin(false);
+        setMessage(`Win normal mode for ${5-user.gameInfo.Normal.gameNum} times to unlock`);
+        setDialogOpen(true);
+      }
+    }
+  };
+
 
   return (
     <>
@@ -179,6 +213,7 @@ function HomePage() {
                 src={require(`../Static/Assets/Lock${name}Icon.png`)}
                 alt="lock icon"
                 style={{ margin: "0 5px", flexGrow: "1" }}
+                onClick={() => handleImageClick(name)} 
               />
             );
           }
@@ -196,12 +231,8 @@ function HomePage() {
       <ConfirmationDialog
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
-        message={
-          <>
-            Please select
-            <br />a difficulty to play
-          </>
-        }
+        message={message}
+        isNeedLogin={isNeedLogin} 
       />
       <NaverLoginButton />
     </>
