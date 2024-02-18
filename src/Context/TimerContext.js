@@ -4,7 +4,7 @@ export const TimerContext = React.createContext();
 
 export function TimerProvider({ children }) {
   const [timeState, setTimeState] = React.useState(0);
-  console.log("timeState :",timeState)
+  // console.log("timeState :",timeState)
 
   return (
     <TimerContext.Provider value={{ timeState, setTimeState }}>
