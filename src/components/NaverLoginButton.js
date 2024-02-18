@@ -10,7 +10,6 @@ function generateState() {
 function NaverLoginButton() {
   const NAVER_CLIENT_ID = "vVUaQENvhs3KoONKOHpY";
   const NAVER_CALLBACK_URL = "https://chessextension.web.app/#/callback";
-  // const NAVER_CALLBACK_URL = "https://chessextension.web.app/#/callback";
   // const NAVER_CALLBACK_URL = "http://localhost:3000/#/callback";
 
   const handleNaverLogin = () => {
