@@ -31,15 +31,8 @@ function ChessBoard() {
   const [selectedButton, setSelectedButton] = useState(null);
   // 클릭된 버튼 state
   const [beforeMove, setBeforeMove] = useState(null);
-  // dialog state
-  const [dialogOpen, setDialogOpen] = useState(false);
-  // dialog Message
-  const [result, setResult] = useState("you win!");
-  const [outMessage, setOutMessage] = useState("play again");
-  // diaglogButton 핸들러
-  const handleDialogButtonClick = () => {
-    setBoard(initialBoardState);
-  };
+  // 앙 팡상 타겟 상태
+  const [enPassantTarget, setEnPassantTarget] = useState(null);
   // 죽은말 state
   const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
   // 캐슬링 권한 상태
@@ -49,12 +42,36 @@ function ChessBoard() {
     blackKingSide: true,
     blackQueenSide: true,
   });
-  // 앙 팡상 타겟 상태
-  const [enPassantTarget, setEnPassantTarget] = useState(null);
   // 이동 가능한 반 수
   const [halfmoveClock, setHalfmoveClock] = useState(0);
   // 게임이 시작된 후의 반 수
   const [fullmoveNumber, setFullmoveNumber] = useState(1);
+  // dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  // dialog Message
+  const [result, setResult] = useState("you win!");
+  const [outMessage, setOutMessage] = useState("play again");
+  // diaglogButton 핸들러
+  const handleDialogButtonClick = () => {
+    setBoard(initialBoardState);
+    setFullmoveNumber(1);
+    setHalfmoveClock(0);
+    setCastlingRights({
+      whiteKingSide: true,
+      whiteQueenSide: true,
+      blackKingSide: true,
+      blackQueenSide: true,
+    });
+    setCurrentTurn("white");
+    setEnPassantTarget(null);
+    setBeforeMove(null);
+    setDeadPieces({ white: [], black: [] });
+  
+    setTimeout(() => {
+      setDialogOpen(false);
+    }, 1000);
+  };
+  
 
   // useNavigate 선언
   const navigate = useNavigate();
@@ -64,19 +81,22 @@ function ChessBoard() {
   const { difficulty } = useContext(DifficultyContext);
   const { user } = useContext(UserContext);
   // AI 변수 선언
-  const bestMoveResponse = useBestMove(board, currentTurn);
+  const bestMoveResponse = useBestMove(board, currentTurn, halfmoveClock,fullmoveNumber);
 
   // AI 검정말 포맷
   useEffect(() => {
     if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
       const bestMove = bestMoveResponse.data;
+      console.log("ai가 움직이라는 곳 : ", bestMove);
+      // 정규 표현식을 사용하여 "bestmove" 다음에 오는 좌표를 추출합니다.
+      const match = bestMove.match(/bestmove\s+(\w+)/);
+      if (match) {
+        const moveInfo = match[1];
+        const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
+        const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
 
-      // return 값 커스텀
-      const moveInfo = bestMove.split(" ")[1];
-      const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
-      const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
-
-      movePiece(from, to);
+        movePiece(from, to);
+      }
     }
   }, [currentTurn, bestMoveResponse]);
 
@@ -85,38 +105,41 @@ function ChessBoard() {
 
   // 체크메이트 검사
   useEffect(() => {
-    const chessBoard = boardToFen(
-      board,
-      currentTurn,
-      castlingRights,
-      enPassantTarget,
-      halfmoveClock,
-      fullmoveNumber
-    ); // React 보드 상태를 Chess.js 보드 상태로 변환
-    chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
-    const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
-    console.log("체크 계산 :", chess.isCheck());
-    console.log("체크메이트 계산 :", chess.isCheckmate());
-    if (isCheckmate) {
-      // 승자 선언
-      const winner = currentTurn === "white" ? "Black" : "White";
-      // 게임 종료시 시간 저장
-      const currentTime = timeState;
-      // dialog를 위한 result와 outMessage 설정
-      if (winner === "Black") {
-        setResult("You lose");
-        setOutMessage("Try again");
-      } else {
-        setResult("You win");
-        setOutMessage("Play again");
-        // Firebase-Score에 이겼을 경우
-        saveScoreToFirestore(difficulty, user, currentTime);
+    const loadChessFromBoard = async () => {
+      const chessBoard = await boardToFen(
+        board,
+        currentTurn,
+        halfmoveClock,
+        fullmoveNumber
+      );
+      chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
+      const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
+      console.log(currentTurn, "일 때 새로운 판 데이터 :", chessBoard);
+      console.log("체크 계산 :", chess.isCheck());
+      console.log("체크메이트 계산 :", isCheckmate);
+      if (isCheckmate) {
+        // 승자 선언
+        const winner = currentTurn === "white" ? "Black" : "White";
+        // 게임 종료시 시간 저장
+        const currentTime = timeState;
+        // dialog를 위한 result와 outMessage 설정
+        if (winner === "Black") {
+          setResult("You lose");
+          setOutMessage("Try again");
+        } else {
+          setResult("You win");
+          setOutMessage("Play again");
+          // Firebase-Score에 이겼을 경우
+          saveScoreToFirestore(difficulty, user, currentTime);
+        }
+        // 다이얼로그 출현
+        setDialogOpen(true);
+        // 게임 수 추가
+        updateGameCountNum();
       }
-      // 다이로그 출현
-      setDialogOpen(true);
-      // 게임 수 추가
-      updateGameCountNum()
-    }
+    };
+
+    loadChessFromBoard();
   }, [board]);
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
@@ -206,9 +229,6 @@ function ChessBoard() {
       }));
     }
 
-    console.log("White dead pieces:", deadPieces.white);
-    console.log("Black dead pieces:", deadPieces.black);
-
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
@@ -278,10 +298,8 @@ function ChessBoard() {
                   selectedButton[1] === j
                 }
                 BeforeMove={
-                  beforeMove &&
-                  beforeMove[0] === i &&
-                  beforeMove[1] === j
-                }                
+                  beforeMove && beforeMove[0] === i && beforeMove[1] === j
+                }
                 isPossibleMove={possibleMoves.some(
                   ([x, y]) => x === i && y === j
                 )}
@@ -326,6 +344,7 @@ const Button = styled.button`
   font-size: 12px;
   border: none;
   border-radius: 6px;
+  cursor: pointer;
   background-color: ${(props) => {
     if (props.isSelected) {
       return "yellow";
@@ -333,7 +352,7 @@ const Button = styled.button`
     if (props.isPossibleMove) {
       return "yellow";
     }
-    if (props.BeforeMove){
+    if (props.BeforeMove) {
       return "#FF4D00";
     }
     return props.row % 2 === props.column % 2 ? "#E38C56" : "#D66602";

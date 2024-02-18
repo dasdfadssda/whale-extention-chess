@@ -92,6 +92,8 @@ const StopButton = styled.button`
   align-items: center;
   background-color: transparent;
   margin-left: 16vw;
+  cursor: pointer;
+  
   &:active {
     filter: brightness(70%);
   }
