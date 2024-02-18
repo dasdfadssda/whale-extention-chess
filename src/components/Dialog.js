@@ -40,7 +40,6 @@ function ConfirmationDialog({
                 borderColor="white"
                 onClick={() => {
                   yesNavigate && yesNavigate();
-                  setDialogOpen(false);
                   setTimeState(0);
                   onButtonClick();
                 }}
@@ -130,6 +129,7 @@ const DialogButton = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2vw 10px;
+  cursor: pointer;
 `;
 
 const MessageContent = styled(DialogContent)`
