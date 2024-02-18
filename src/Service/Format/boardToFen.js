@@ -1,71 +1,53 @@
 export const boardToFen = (
   board,
   currentTurn,
-  castlingRights,
-  enPassantTarget,
   halfmoveClock,
   fullmoveNumber
 ) => {
-  let fen = "";
-  for (let i = 0; i < 8; i++) {
-    let emptyCount = 0;
-    for (let j = 0; j < 8; j++) {
-      const piece = board[i][j];
-      if (piece) {
-        if (emptyCount !== 0) {
-          fen += emptyCount;
-          emptyCount = 0;
+  const pieceToFenMap = {
+    pawn: "p",
+    knight: "n",
+    bishop: "b",
+    rook: "r",
+    queen: "q",
+    king: "k",
+    null: "1",
+  };
+
+  const computer = currentTurn === "white" ? "w" : "b"; // 현재 턴에 따라 computer 설정
+
+  let fenString = "";
+
+  for (let row of board) {
+    let fenRow = "";
+    let emptySquareCount = 0;
+
+    for (let square of row) {
+      if (square !== null) {
+        if (emptySquareCount > 0) {
+          fenRow += emptySquareCount;
+          emptySquareCount = 0;
         }
-        const pieceTypeMap = {
-          king: "k",
-          queen: "q",
-          bishop: "b",
-          knight: "n",
-          rook: "r",
-          pawn: "p",
-        };
-        const letter = pieceTypeMap[piece.type];
-        fen += piece.color === "white" ? letter.toUpperCase() : letter;
+        const fenPiece = pieceToFenMap[square.type];
+        fenRow += square.color === "black" ? fenPiece : fenPiece.toUpperCase();
       } else {
-        emptyCount++;
+        emptySquareCount++;
+        if (emptySquareCount === 8) {
+          fenRow += "8";
+          emptySquareCount = 0;
+        }
       }
     }
-    if (emptyCount !== 0) fen += emptyCount;
-    if (i !== 7) fen += "/";
+    if (fenRow.length !== 8 && fenRow !== "8") {
+      if (emptySquareCount !== 0) fenRow += emptySquareCount;
+    }
+    fenString += fenRow + "/";
   }
 
-  // 공백 추가
-  fen += " ";
+  fenString = fenString.slice(0, -1);
 
-  fen += currentTurn === "white" ? "w" : "b";
-
-  // 공백 추가
-  fen += " ";
-
-  fen += castlingRights.whiteKingSide ? "K" : "";
-  fen += castlingRights.whiteQueenSide ? "Q" : "";
-  fen += castlingRights.blackKingSide ? "k" : "";
-  fen += castlingRights.blackQueenSide ? "q" : "";
-
-  // 캐슬링이 없는 경우
-  if (fen.slice(-1) === " ") {
-    fen += "-";
-  }
-
-  // 공백 추가
-  fen += " ";
-
-  fen += enPassantTarget || "-";
-
-  // 공백 추가
-  fen += " ";
-
-  fen += halfmoveClock;
-
-  // 공백 추가
-  fen += " ";
-
-  fen += fullmoveNumber;
-
+  const fen =
+    fenString + " " + computer + " - - " + halfmoveClock + " " + fullmoveNumber;
+  console.log("ai fen :", fen);
   return fen;
 };
