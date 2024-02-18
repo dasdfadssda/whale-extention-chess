@@ -6,7 +6,6 @@ import { DifficultyContext } from "../Context/DifficultyContext";
 import { useUser } from "../Context/UserContext";
 import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSeconds";
 import ConfirmationDialog from "../Components/Dialog";
-import NaverLoginButton from "../Components/NaverLoginButton";
 import { TimerContext } from "../Context/TimerContext";
 import { getTodayCount } from "../Service/GameCount/GetGameCount";
 
@@ -234,7 +233,6 @@ function HomePage() {
         message={message}
         isNeedLogin={isNeedLogin} 
       />
-      <NaverLoginButton />
     </>
   );
 }
