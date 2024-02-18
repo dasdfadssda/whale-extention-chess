@@ -71,6 +71,7 @@ const RankingPage = () => {
     return userIndex + 1;
   };
 
+  // 등수 선언
   const userRank = getUserRank();
 
   return (
@@ -102,7 +103,10 @@ const RankingPage = () => {
       </ButtonGroup>
       <RankList>
         {scores
-          .filter((data) => userRank !== null || data.id !== user.id)
+          .filter(
+            (data) =>
+              (userRank !== null || data.id !== user.id) && data.time >= 1
+          )
           .slice(0, 5)
           .map((data, index) => (
             <RankItem key={index} userId={user.id} DataId={data.id}>
