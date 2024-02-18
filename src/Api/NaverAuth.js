@@ -5,7 +5,7 @@ import { saveUserToFirebase } from "../Service/Auth/SetUserData";
 // 유저 토큰 발급
 export const getAccessToken = async (naverCode, savedState) => {
   try {
-    const response = await axios.get("http://52.79.144.3/naver/token/", {
+    const response = await axios.get(`${process.env.REACT_APP_URL}/naver/token/`, {
       params: {
         code: naverCode,
         state: savedState,
@@ -21,7 +21,7 @@ export const getAccessToken = async (naverCode, savedState) => {
 // 유저 정보 읽기
 export const getUserInfo = async (accessToken, setUser) => {
   try {
-    const response = await axios.get("http://52.79.144.3/naver/userinfo/", {
+    const response = await axios.get(`${process.env.REACT_APP_URL}/naver/userinfo/`, {
       params: {
         access_token: accessToken,
       },
