@@ -14,7 +14,7 @@ export const boardToFen = (
     null: "1",
   };
 
-  const computer = currentTurn === "white" ? "w" : "b"; // 현재 턴에 따라 computer 설정
+  const computer = currentTurn === "white" ? "w" : "b";
 
   let fenString = "";
 
@@ -48,6 +48,5 @@ export const boardToFen = (
 
   const fen =
     fenString + " " + computer + " - - " + halfmoveClock + " " + fullmoveNumber;
-  console.log("ai fen :", fen);
   return fen;
 };
