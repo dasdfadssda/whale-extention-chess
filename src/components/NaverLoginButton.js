@@ -46,4 +46,5 @@ const NaverButton = styled.button`
     max-width: 85%;
     max-height: 85%;
   }
+  cursor: pointer;
 `;
