@@ -13,16 +13,14 @@ function DeadPieces({ color, pieces }) {
               {pieces
                 .slice(rowIndex * 5, (rowIndex + 1) * 5)
                 .map((piece, index) => (
-                    <img
-                    style={{
-                      width: "5vw", margin :"1vw", minWidth:"5vw"
-                    }}
-                    key={index}
-                    src={require(`../Static${
-                      PIECES_IMAGE[piece.type.toLowerCase()][color]
-                    }`)}
-                    alt={piece.type}
-                  />
+                  <PieceImage
+                  key={index}
+                  src={require(`../Static${
+                    PIECES_IMAGE[piece.type.toLowerCase()][color]
+                  }`)}
+                  alt={piece.type}
+                  pieceType={piece.type.toLowerCase()}
+                />
                 ))}
             </PiecesRow>
           ))}
@@ -57,4 +55,11 @@ const DeadPiecesContainer = styled.div`
 const PiecesRow = styled.div`
   display: flex;
   justify-content: flex-start;
+`;
+
+const PieceImage = styled.img`
+  width: ${({ pieceType }) => (pieceType === "pawn" ? "5vw" : "6vw")}; 
+  margin: 1vw;
+  min-width: 3vw;
+  height: auto;
 `;
