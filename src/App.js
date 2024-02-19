@@ -11,24 +11,8 @@ import RankingPage from "./Pages/RankingPage";
 import { TimerProvider } from "./Context/TimerContext";
 import CallbackPage from "./Pages/CallbackPage";
 import { UserProvider } from "./Context/UserContext";
-import { useEffect } from "react";
 
 function App() {
-  
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-
-    // beforeunload 이벤트 리스너 등록
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
 
   return (
     <Router>
