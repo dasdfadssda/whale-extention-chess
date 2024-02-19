@@ -31,6 +31,8 @@ function ChessBoard() {
   const [selectedButton, setSelectedButton] = useState(null);
   // 클릭된 버튼 state
   const [beforeMove, setBeforeMove] = useState(null);
+  // 게임 진행사항 세팅
+  const [isOngoing, setIsOngoing] = useState(0);
   // 앙 팡상 타겟 상태
   const [enPassantTarget, setEnPassantTarget] = useState(null);
   // 죽은말 state
@@ -85,18 +87,22 @@ function ChessBoard() {
 
   // AI 검정말 포맷
   useEffect(() => {
-    if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
-      const bestMove = bestMoveResponse.data;
-      console.log("ai가 움직이라는 곳 : ", bestMove);
-      // 정규 표현식을 사용하여 "bestmove" 다음에 오는 좌표를 추출합니다.
-      const match = bestMove.match(/bestmove\s+(\w+)/);
-      if (match) {
-        const moveInfo = match[1];
-        const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
-        const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
-
-        movePiece(from, to);
+    if(isOngoing < 3) {
+      if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
+        const bestMove = bestMoveResponse.data;
+        console.log("ai가 움직이라는 곳 : ", bestMove);
+        // 정규 표현식을 사용하여 "bestmove" 다음에 오는 좌표를 추출합니다.
+        const match = bestMove.match(/bestmove\s+(\w+)/);
+        if (match) {
+          const moveInfo = match[1];
+          const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
+          const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
+  
+          movePiece(from, to);
+        }
       }
+    } else {
+      console.error("Game over");
     }
   }, [currentTurn, bestMoveResponse]);
 
@@ -118,6 +124,8 @@ function ChessBoard() {
       console.log("체크 계산 :", chess.isCheck());
       console.log("체크메이트 계산 :", isCheckmate);
       if (isCheckmate) {
+        // 게임 종료 선언
+        setIsOngoing(3);
         // 승자 선언
         const winner = currentTurn === "white" ? "Black" : "White";
         // 게임 종료시 시간 저장
