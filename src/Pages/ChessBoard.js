@@ -76,9 +76,7 @@ function ChessBoard() {
     setBeforeMove(null);
     setDeadPieces({ white: [], black: [] });
 
-    setTimeout(() => {
-      setDialogOpen(false);
-    }, 1000);
+    window.location.reload();
   };
 
   // useNavigate 선언
@@ -98,7 +96,7 @@ function ChessBoard() {
 
   // AI 검정말 포맷
   useEffect(() => {
-    if (isOngoing < 1) {
+    if (isOngoing < 2) {
       setTimeout(() => {
         if (
           currentTurn === "black" &&
@@ -146,6 +144,8 @@ function ChessBoard() {
       console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
+      // 승자 선언
+      let winner = currentTurn;
 
       // TODO : isLegal를 통해 체크 메이트 로직
       let isLegal = true; // 변수 선언 및 초기화
@@ -155,34 +155,42 @@ function ChessBoard() {
           // 검정말 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setBlackCanMove(convertedMoves);
-          console.log("흰색의 가능했던 움직임 :", whiteCanMove);
+          // console.log("흰색의 가능했던 움직임 :", whiteCanMove);
           isLegal =
             whiteCanMove.includes(movedPiece) || whiteCanMove.length === 0;
-          console.error("흰색의 자살 :", !isLegal);
+          // console.error("흰색의 자살 :", !isLegal);
+          if (!isLegal) {
+            winner = "black";
+          }
         } else {
           // 흰 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setWhiteCanMove(convertedMoves);
-          console.log("검정색의 가능했던 움직임 :", blackCanMove);
+          // console.log("검정색의 가능했던 움직임 :", blackCanMove);
           isLegal =
             blackCanMove.includes(movedPiece) || blackCanMove.length === 0;
           console.error("검정색의 자살 :", !isLegal);
+          if (!isLegal) {
+            winner = "white";
+          }
         }
         if (!isLegal) {
-          alert("자살!");
+          console.log("승자는 ? :", currentTurn);
         }
       }
 
       console.log("체크메이트 계산 :", isCheckmate);
-      if (isCheckmate) {
+      if (isCheckmate || !isLegal) {
         // 게임 종료 선언
         setIsOngoing(2);
         // 승자 선언
-        const winner = currentTurn === "white" ? "Black" : "White";
+        if (isCheckmate) {
+          winner = currentTurn === "white" ? "black" : "white";
+        }
         // 게임 종료시 시간 저장
         const currentTime = timeState;
         // dialog를 위한 result와 outMessage 설정
-        if (winner === "Black") {
+        if (winner === "black") {
           setResult("You lose");
           setOutMessage("Try again");
         } else {
