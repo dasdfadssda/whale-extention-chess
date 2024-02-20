@@ -355,10 +355,10 @@ const Button = styled.button`
   cursor: pointer;
   background-color: ${(props) => {
     if (props.isSelected) {
-      return "yellow";
+      return "#F3BE00";
     }
     if (props.isPossibleMove) {
-      return "yellow";
+      return "#F3BE00";
     }
     if (props.BeforeMove) {
       return "#FF4D00";
