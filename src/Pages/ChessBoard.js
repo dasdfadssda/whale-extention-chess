@@ -120,8 +120,16 @@ function ChessBoard() {
       );
       chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
       const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
-      console.log(currentTurn, "일 때 새로운 판 데이터 :", chessBoard);
       console.log("체크 계산 :", chess.isCheck());
+      if (chess.isCheck()) {
+        // 체크 상태인 경우
+        const legalMoves = chess.moves(); // 현재 플레이어의 모든 합법적인 수
+        console.log("체크일 때 가능한 움직임 :", legalMoves);
+        const isLegal = legalMoves.includes("Kb3");
+        console.log("에러 읽기 : ");
+        // TODO : isLegal를 통해 체크 메이트 로직 
+      }
+
       console.log("체크메이트 계산 :", isCheckmate);
       if (isCheckmate) {
         // 게임 종료 선언
