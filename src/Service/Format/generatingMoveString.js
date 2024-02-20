@@ -1,5 +1,6 @@
-export const generateMoveString = (fromX, fromY, toX, toY, pieceType) => {
+export const generateMoveString = (to, pieceType) => {
     let moveString = '';
+    const [toX, toY] = to;
   
     // 체스 말의 종류에 따라 문자열에 표현
     switch (pieceType) {
