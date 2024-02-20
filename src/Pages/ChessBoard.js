@@ -17,6 +17,8 @@ import { UserContext } from "../Context/UserContext";
 import { saveScoreToFirestore } from "../Service/Score/SetOneScore";
 import { initialBoardState } from "../Model/InitialBoardStateModal";
 import { updateGameCountNum } from "../Service/GameCount/SetGameCount";
+import { generateMoveString } from "../Service/Format/generatingMoveString";
+import { convertMoves } from "../Service/Format/convertMovesCode";
 
 function ChessBoard() {
   // 체스 초기 상태 state
@@ -27,6 +29,11 @@ function ChessBoard() {
   const [possibleMoves, setPossibleMoves] = useState([]);
   // 현재 차례인 팀을 나타내는 state
   const [currentTurn, setCurrentTurn] = useState("white");
+  // 흰말이 움직인 위치
+  const [movedPiece, setMovedPiece] = useState("");
+  // 각 팀이 움직일 수 있는 위치
+  const [whiteCanMove, setWhiteCanMove] = useState([]);
+  const [blackCanMove, setBlackCanMove] = useState([]);
   // 클릭한 버튼 state
   const [selectedButton, setSelectedButton] = useState(null);
   // 클릭된 버튼 state
@@ -68,12 +75,11 @@ function ChessBoard() {
     setEnPassantTarget(null);
     setBeforeMove(null);
     setDeadPieces({ white: [], black: [] });
-  
+
     setTimeout(() => {
       setDialogOpen(false);
     }, 1000);
   };
-  
 
   // useNavigate 선언
   const navigate = useNavigate();
@@ -83,24 +89,38 @@ function ChessBoard() {
   const { difficulty } = useContext(DifficultyContext);
   const { user } = useContext(UserContext);
   // AI 변수 선언
-  const bestMoveResponse = useBestMove(board, currentTurn, halfmoveClock,fullmoveNumber);
+  const bestMoveResponse = useBestMove(
+    board,
+    currentTurn,
+    halfmoveClock,
+    fullmoveNumber
+  );
 
   // AI 검정말 포맷
   useEffect(() => {
-    if(isOngoing < 3) {
-      if (currentTurn === "black" && bestMoveResponse && bestMoveResponse.data) {
-        const bestMove = bestMoveResponse.data;
-        console.log("ai가 움직이라는 곳 : ", bestMove);
-        // 정규 표현식을 사용하여 "bestmove" 다음에 오는 좌표를 추출합니다.
-        const match = bestMove.match(/bestmove\s+(\w+)/);
-        if (match) {
-          const moveInfo = match[1];
-          const from = [8 - parseInt(moveInfo[1]), moveInfo.charCodeAt(0) - 97];
-          const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
-  
-          movePiece(from, to);
+    if (isOngoing < 1) {
+      setTimeout(() => {
+        if (
+          currentTurn === "black" &&
+          bestMoveResponse &&
+          bestMoveResponse.data
+        ) {
+          const bestMove = bestMoveResponse.data;
+          console.log("ai가 움직이라는 곳 : ", bestMove);
+          // 정규 표현식을 사용하여 "bestmove" 다음에 오는 좌표를 추출합니다.
+          const match = bestMove.match(/bestmove\s+(\w+)/);
+          if (match) {
+            const moveInfo = match[1];
+            const from = [
+              8 - parseInt(moveInfo[1]),
+              moveInfo.charCodeAt(0) - 97,
+            ];
+            const to = [8 - parseInt(moveInfo[3]), moveInfo.charCodeAt(2) - 97];
+
+            movePiece(from, to);
+          }
         }
-      }
+      }, 500);
     } else {
       console.error("Game over");
     }
@@ -118,22 +138,45 @@ function ChessBoard() {
         halfmoveClock,
         fullmoveNumber
       );
-      chess.load(chessBoard); // 변환된 보드 상태를 Chess.js로 로드
-      const isCheckmate = chess.isCheckmate(); // 체크메이트 상황인지 확인
+      // 변환된 보드 상태를 Chess.js로 로드
+      chess.load(chessBoard);
+      // 체크메이트 상황인지 확인
+      const isCheckmate = chess.isCheckmate();
       console.log("체크 계산 :", chess.isCheck());
-      if (chess.isCheck()) {
-        // 체크 상태인 경우
-        const legalMoves = chess.moves(); // 현재 플레이어의 모든 합법적인 수
-        console.log("체크일 때 가능한 움직임 :", legalMoves);
-        const isLegal = legalMoves.includes("Kb3");
-        console.log("에러 읽기 : ");
-        // TODO : isLegal를 통해 체크 메이트 로직 
+      console.log("게임 끝난 경우 :", chess.isGameOver());
+      // 현재 플레이어의 모든 합법적인 수
+      const legalMoves = chess.moves();
+
+      // TODO : isLegal를 통해 체크 메이트 로직
+      let isLegal = true; // 변수 선언 및 초기화
+
+      if (isOngoing > 0) {
+        if (currentTurn === "black") {
+          // 검정말 위치 선언
+          const convertedMoves = convertMoves(legalMoves);
+          setBlackCanMove(convertedMoves);
+          console.log("흰색의 가능했던 움직임 :", whiteCanMove);
+          isLegal =
+            whiteCanMove.includes(movedPiece) || whiteCanMove.length === 0;
+          console.error("흰색의 자살 :", !isLegal);
+        } else {
+          // 흰 위치 선언
+          const convertedMoves = convertMoves(legalMoves);
+          setWhiteCanMove(convertedMoves);
+          console.log("검정색의 가능했던 움직임 :", blackCanMove);
+          isLegal =
+            blackCanMove.includes(movedPiece) || blackCanMove.length === 0;
+          console.error("검정색의 자살 :", !isLegal);
+        }
+        if (!isLegal) {
+          alert("자살!");
+        }
       }
 
       console.log("체크메이트 계산 :", isCheckmate);
       if (isCheckmate) {
         // 게임 종료 선언
-        setIsOngoing(3);
+        setIsOngoing(2);
         // 승자 선언
         const winner = currentTurn === "white" ? "Black" : "White";
         // 게임 종료시 시간 저장
@@ -219,6 +262,18 @@ function ChessBoard() {
     const [fromX, fromY] = from;
     const [toX, toY] = to;
 
+    // 움직인 위치 선언
+    const movedPiece = newBoard[fromX][fromY]
+      ? generateMoveString(to, newBoard[fromX][fromY].type)
+      : null;
+    if (movedPiece) {
+      setMovedPiece(movedPiece);
+      console.log(currentTurn, "말의 움직인 위치 :", movedPiece);
+      console.log(currentTurn, "움직인 타입 :", newBoard[fromX][fromY].type);
+    } else {
+      console.error(`No piece at position: ${from}`);
+    }
+
     // 이전 위치 선언
     setBeforeMove(from);
 
@@ -254,9 +309,9 @@ function ChessBoard() {
       handlePawnPromotion(newBoard, toX, toY);
     }
 
+    // 체스판 업데이트
     setBoard(newBoard);
-    // 순서 교체
-    setCurrentTurn(currentTurn === "white" ? "black" : "white");
+
     // 캐슬링 권한 업데이트
     if (board[fromX][fromY].type === "king") {
       // 킹이 움직였을 때 모든 캐슬링 권한 해제
@@ -291,8 +346,12 @@ function ChessBoard() {
       setEnPassantTarget(null);
     }
 
+    // 게임 시작 선언
+    setIsOngoing(1);
     // 선택된 좌표 해제
     setSelectedButton(null);
+    // 순서 교체
+    setCurrentTurn(currentTurn === "white" ? "black" : "white");
   };
 
   // 체스 보드판을 렌더링
@@ -307,7 +366,7 @@ function ChessBoard() {
                 key={j}
                 row={i}
                 column={j}
-                piece={piece}
+                piecetype={piece}
                 isSelected={
                   selectedButton &&
                   selectedButton[0] === i &&
