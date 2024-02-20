@@ -211,6 +211,9 @@ function ChessBoard() {
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
+    // 현재 턴이 흰색이 아니라면 함수를 종료합니다.
+    if (currentTurn !== "white") return;
+    
     // 현재 턴과 선택한 말 색 구분
     if (board[i][j] && board[i][j].color !== currentTurn) {
       if (possibleMoves.some(([x, y]) => x === i && y === j)) {
@@ -221,6 +224,7 @@ function ChessBoard() {
       }
       return;
     }
+
     // 선택된 좌표 선언
     setSelectedButton([i, j]);
 
@@ -232,20 +236,25 @@ function ChessBoard() {
         movePiece(selectedPiece, [i, j]);
         setSelectedPiece(null);
         setPossibleMoves([]);
-      } else if (board[i][j] && board[i][j].color === currentTurn) {
-        const selectedPieceColor = board[i][j].color;
-        const selectedPieceType = board[i][j].type;
-        setSelectedPiece([i, j]);
-        setPossibleMoves(
-          getPossibleMoves(
-            selectedPieceType,
-            selectedPieceColor,
-            [i, j],
-            board,
-            enPassantTarget,
-            castlingRights
-          )
-        );
+      } else {
+        // getPossibleMoves()에서 반환된 좌표 외의 다른 좌표를 누르면
+        // 이동 가능한 위치를 초기화합니다.
+        setPossibleMoves([]);
+        if (board[i][j] && board[i][j].color === currentTurn) {
+          const selectedPieceColor = board[i][j].color;
+          const selectedPieceType = board[i][j].type;
+          setSelectedPiece([i, j]);
+          setPossibleMoves(
+            getPossibleMoves(
+              selectedPieceType,
+              selectedPieceColor,
+              [i, j],
+              board,
+              enPassantTarget,
+              castlingRights
+            )
+          );
+        }
       }
     } else if (board[i][j] && board[i][j].color === currentTurn) {
       const selectedPieceColor = board[i][j].color;
@@ -429,8 +438,10 @@ const Button = styled.button`
   border-radius: 6px;
   cursor: pointer;
   background-color: ${(props) => {
-    if (props.isSelected) {
-      return "#F3BE00";
+    if (props.piecetype) {
+      if (props.isSelected) {
+        return "#F3BE00";
+      }
     }
     if (props.isPossibleMove) {
       return "#F3BE00";
