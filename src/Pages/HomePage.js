@@ -26,14 +26,14 @@ function HomePage() {
   const [isHardAccess, setIsHardAccess] = useState(false);
   const [isNormalAccess, setIsNormalAccess] = useState(false);
   const [localDifficulty, setLocalDifficulty] = useState("Easy");
-  // diaglog message 
+  // diaglog message
   const [message, setMessage] = useState(
     <>
       Please select
       <br />a difficulty to play
     </>
   );
-  // 로그인 버튼 bool 
+  // 로그인 버튼 bool
   const [isNeedLogin, setIsNeedLogin] = useState(false);
 
   // 난이도 버튼 변수
@@ -103,11 +103,11 @@ function HomePage() {
     }
   }, [user]);
 
+  const id = localStorage.getItem("id");
+
   const handleImageClick = (name) => {
     console.log(`이미지 ${name}이(가) 클릭되었습니다.`);
-  
-    const id = localStorage.getItem("id");
-  
+
     if (!id) {
       setMessage("Please login to unlock");
       setDialogOpen(true);
@@ -115,18 +115,23 @@ function HomePage() {
     } else {
       if (name === "Normal") {
         // Normal 난이도에 대한 처리
-        setIsNeedLogin(false)
-        setMessage(`Win easy mode for ${3-user.gameInfo.Easy.gameNum} times to unlock`);
+        setIsNeedLogin(false);
+        setMessage(
+          `Win easy mode for ${3 - user.gameInfo.Easy.gameNum} times to unlock`
+        );
         setDialogOpen(true);
       } else if (name === "Hard") {
         // Hard 난이도에 대한 처리
         setIsNeedLogin(false);
-        setMessage(`Win normal mode for ${5-user.gameInfo.Normal.gameNum} times to unlock`);
+        setMessage(
+          `Win normal mode for ${
+            5 - user.gameInfo.Normal.gameNum
+          } times to unlock`
+        );
         setDialogOpen(true);
       }
     }
   };
-
 
   return (
     <>
@@ -134,29 +139,35 @@ function HomePage() {
         <TitleText>PLAY CHESS</TitleText>
       </Column>
       <Row height={31.2821}>
-        <Button
-          color={"#D66602"}
-          onClick={() => handleButtonClick(ROUTES.RANKING)}
-        >
-          <Column color={"Tradn"} content="center">
-            <SmallText
-              color={"#FFFFFF"}
-              style={{ marginTop: "2vw", marginLeft: "2vw" }}
+        {id ? (
+          <>
+            <Button
+              color={"#D66602"}
+              onClick={() => handleButtonClick(ROUTES.RANKING)}
             >
-              Best Record
-            </SmallText>
-            <div
-              style={{
-                fontSize: "10.5vw",
-                color: "white",
-                minWidth: "35vw",
-                marginTop: "2vw",
-              }}
-            >
-              {shortestRecord}
-            </div>
-          </Column>
-        </Button>
+              <Column color={"Tradn"} content="center">
+                <SmallText
+                  color={"#FFFFFF"}
+                  style={{ marginTop: "2vw", marginLeft: "2vw" }}
+                >
+                  Best Record
+                </SmallText>
+                <div
+                  style={{
+                    fontSize: "10.5vw",
+                    color: "white",
+                    minWidth: "35vw",
+                    marginTop: "2vw",
+                  }}
+                >
+                  {shortestRecord}
+                </div>
+              </Column>
+            </Button>
+          </>
+        ) : (
+          <></>
+        )}
         <Button>
           <Column content="center">
             <SmallText color={"black"} style={{ marginTop: "2vw" }}>
@@ -212,7 +223,7 @@ function HomePage() {
                 src={require(`../Static/Assets/Lock${name}Icon.png`)}
                 alt="lock icon"
                 style={{ margin: "0 5px", flexGrow: "1" }}
-                onClick={() => handleImageClick(name)} 
+                onClick={() => handleImageClick(name)}
               />
             );
           }
@@ -231,7 +242,7 @@ function HomePage() {
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
         message={message}
-        isNeedLogin={isNeedLogin} 
+        isNeedLogin={isNeedLogin}
       />
     </>
   );
