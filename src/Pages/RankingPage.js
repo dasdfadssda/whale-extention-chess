@@ -6,6 +6,7 @@ import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import { DifficultyContext } from "../Context/DifficultyContext";
+import { convertToRomanized } from "../Service/Format/convertToRomanized";
 
 const RankingPage = () => {
   // ContextAPI - 사용자 정보 변수
@@ -115,7 +116,7 @@ const RankingPage = () => {
                   {index + 1}
                 </RankingNumber>
                 <NameDiv userId={user.id} DataId={data.id}>
-                  {data.name}
+                  {convertToRomanized(data.name)}
                 </NameDiv>
               </div>
               <TimeDiv userId={user.id} DataId={data.id}>
