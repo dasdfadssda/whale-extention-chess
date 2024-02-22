@@ -144,6 +144,8 @@ function ChessBoard() {
       console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
+      legalMoves.push("Kg1");
+      legalMoves.push("Kc1");
       // 승자 선언
       let winner = currentTurn;
 
@@ -155,7 +157,7 @@ function ChessBoard() {
           // 검정말 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setBlackCanMove(convertedMoves);
-          // console.log("흰색의 가능했던 움직임 :", whiteCanMove);
+          console.log("흰색의 가능했던 움직임 :", whiteCanMove);
           isLegal =
             whiteCanMove.includes(movedPiece) || whiteCanMove.length === 0;
           // console.error("흰색의 자살 :", !isLegal);
