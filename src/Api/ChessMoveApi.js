@@ -18,8 +18,8 @@ export default function useBestMove(board, currentTurn,halfmoveClock,fullmoveNum
           const fen = boardToFen(board, "b", halfmoveClock, fullmoveNumber);
           console.log("ai 잘 가나? : ",fen);
           let depth = 5;
-          if (difficulty === "Normal") { depth = 8; }
-          else if (difficulty === "Hard") { depth = 11; }
+          if (difficulty === "Normal") { depth = 9; }
+          else if (difficulty === "Hard") { depth = 13; }
           const response = await axios.get(apiUrl, {
             params: {
               fen: fen,

@@ -321,6 +321,8 @@ function ChessBoard() {
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
 
+
+
     // 폰이 끝에 도달한 경우
     if (newBoard[toX][toY].type === "pawn" && (toX === 0 || toX === 7)) {
       handlePawnPromotion(newBoard, toX, toY);
@@ -329,25 +331,35 @@ function ChessBoard() {
     // 체스판 업데이트
     setBoard(newBoard);
 
-    // 캐슬링 권한 업데이트
-    if (board[fromX][fromY].type === "king") {
-      // 킹이 움직였을 때 모든 캐슬링 권한 해제
+    if (newBoard[toX][toY].type === "king" || newBoard[toX][toY].type === "rook") {
       setCastlingRights({
         whiteKingSide: false,
         whiteQueenSide: false,
         blackKingSide: false,
         blackQueenSide: false,
       });
-    } else if (board[fromX][fromY].type === "rook") {
-      // 룩이 움직였을 때 해당 캐슬링 권한 해제
-      // 예: 흰색 킹 사이드 룩이 움직였을 경우
-      setCastlingRights((prev) => ({
-        ...prev,
-        whiteKingSide: fromX !== 7 || fromY !== 7,
-        whiteQueenSide: fromX !== 7 || fromY !== 0,
-        // 이하 블랙 쪽도 업데이트
-      }));
+      const isWhiteKing = newBoard[toX][toY].color === "white";
+      // 킹 사이드 캐슬링
+      if (
+        (isWhiteKing && fromX === 7 && fromY === 4 && toX === 7 && toY === 6) || // 흰색 킹 사이드
+        (!isWhiteKing && fromX === 0 && fromY === 4 && toX === 0 && toY === 6) // 검은색 킹 사이드
+      ) {
+
+        // 킹이 이동했으므로 룩도 이동시킵니다.
+        newBoard[toX][toY - 1] = newBoard[toX][7]; // 킹 사이드 룩을 킹 옆으로 이동
+        newBoard[toX][7] = null; // 원래 룩의 위치를 비움
+      }
+      // 퀸 사이드 캐슬링
+      else if (
+        (isWhiteKing && fromX === 7 && fromY === 4 && toX === 7 && toY === 2) || // 흰색 퀸 사이드
+        (!isWhiteKing && fromX === 0 && fromY === 4 && toX === 0 && toY === 2) // 검은색 퀸 사이드
+      ) {
+        // 킹이 이동했으므로 룩도 이동시킵니다.
+        newBoard[toX][toY + 1] = newBoard[toX][0]; // 퀸 사이드 룩을 킹 옆으로 이동
+        newBoard[toX][0] = null; // 원래 룩의 위치를 비움
+      }
     }
+
 
     // 앙 팡상 타겟 업데이트
     if (
