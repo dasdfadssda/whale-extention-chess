@@ -209,6 +209,7 @@ function HomePage() {
                 <div
                   style={{
                     fontSize: "4.1026vw",
+                    marginTop: "7vw",
                     color: difficulty === name ? "#FFFFFF" : "black",
                   }}
                 >
@@ -218,8 +219,8 @@ function HomePage() {
                   style={{
                     fontSize: "17.9487vw",
                     color: difficulty === name ? "#FFFFFF" : "black",
-                    marginTop: "-30px",
-                    marginBottom: "-30px",
+                    marginTop: "-7.5vw",
+                    marginBottom: "-3vw",
                   }}
                 >
                   {key}
