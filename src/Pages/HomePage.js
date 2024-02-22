@@ -8,6 +8,7 @@ import { formatMinutesAndSeconds } from "../Service/Format/formatMinutesAndSecon
 import ConfirmationDialog from "../Components/Dialog";
 import { TimerContext } from "../Context/TimerContext";
 import { getTodayCount } from "../Service/GameCount/GetGameCount";
+import { handleNaverLogin } from "../Service/Auth/NaverLogin";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -139,7 +140,7 @@ function HomePage() {
         <TitleText>PLAY CHESS</TitleText>
       </Column>
       <Row height={31.2821}>
-        {id ? (
+        {!id ? (
           <>
             <Button
               color={"#D66602"}
@@ -166,7 +167,15 @@ function HomePage() {
             </Button>
           </>
         ) : (
-          <></>
+          <>
+            <Button onClick={handleNaverLogin}>
+              <img
+                style={{ width: "100%", height: "100%" }}
+                src={require("../Static/Assets/NaverLoginImg.png")}
+                alt="네이버 로그인 버튼"
+              />
+            </Button>
+          </>
         )}
         <Button>
           <Column content="center">
@@ -288,10 +297,10 @@ const SmallText = styled.div`
 const Button = styled.button`
   flex-grow: 1;
   margin: 0 5px;
-  padding: 10px;
+  padding: 0px;
   font-family: ${({ theme }) => theme.font};
   background-color: ${({ color }) => color || "#F2F2F2"};
-  border-radius: 8px;
+  border-radius: 2.0513vw;
   border: none;
   display: flex;
   flex-direction: column;
