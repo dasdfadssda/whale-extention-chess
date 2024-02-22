@@ -263,7 +263,7 @@ export default HomePage;
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 2.5641vw;
   height: ${({ height }) => height || "auto"}vw;
 `;
 
@@ -275,7 +275,7 @@ const Column = styled.div`
   margin: 0 5px;
   margin-bottom: 2.5641vw;
   background-color: ${({ color }) => color || "#F2F2F2"};
-  border-radius: 8px;
+  border-radius: 2.0513vw;
 `;
 
 const TitleText = styled.div`
@@ -286,12 +286,12 @@ const TitleText = styled.div`
   line-height: 1;
   text-align: center;
   padding: 8vw 0vw;
-  border-radius: 8px;
+  border-radius: 2.0513vw;
 `;
 
 const SmallText = styled.div`
   font-size: 4vw;
-  margin-bottom: -10px;
+  margin-bottom: -2.5641vw;
   color: ${({ color }) => color || "#000000"};
 `;
 
@@ -316,10 +316,10 @@ const Button = styled.button`
 const PlayButton = styled.button`
   flex-grow: 1;
   margin: 0 5px;
-  padding: 10px;
+  padding: 2.5641vw;
   font-family: ${({ theme }) => theme.font};
   background-color: ${({ color }) => color || "#F2F2F2"};
-  border-radius: 8px;
+  border-radius: 2.0513vw;
   border: none;
   display: flex;
   flex-direction: column;
