@@ -27,6 +27,16 @@ export const convertMoves = (legalMoves) => {
       move = move[0] + move.slice(2);
     }
 
+    // // 앞글자가 R이고, 4글자인 경우 두 번째 글자를 제거
+    if (move[0] === "R" && move.length === 4) {
+      move = move[0] + move.slice(2);
+    }
+
+    // // 앞글자가 B이고, 4글자인 경우 두 번째 글자를 제거
+    if (move[0] === "B" && move.length === 4) {
+      move = move[0] + move.slice(2);
+    }
+
     return move;
   });
 };
