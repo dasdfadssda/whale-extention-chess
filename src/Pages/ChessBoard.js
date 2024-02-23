@@ -80,7 +80,8 @@ function ChessBoard() {
 
     window.location.reload();
   };
-
+  // Home useNavigate 선언 
+  const [homeRoute, setHomeRoute] = useState(ROUTES.HOME);
   // useNavigate 선언
   const navigate = useNavigate();
   // Context api 선언 - Timer 변수
@@ -205,6 +206,7 @@ function ChessBoard() {
         // 게임 종료시 시간 저장
         const currentTime = timeState;
         // dialog를 위한 result와 outMessage 설정
+        console.log("currentTime : ",currentTime, "rankingTime :",rankingTime)
         if (winner === "black") {
           setResult("You lose");
           setOutMessage("Try again");
@@ -214,7 +216,7 @@ function ChessBoard() {
           // Firebase-Score에 이겼을 경우
           saveScoreToFirestore(difficulty, user, currentTime);
           if(currentTime<rankingTime){
-            navigate(ROUTES.RANKING)
+            setHomeRoute(ROUTES.RANKING);
           }
         }
         // 다이얼로그 출현
@@ -447,7 +449,7 @@ function ChessBoard() {
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
           onButtonClick={handleDialogButtonClick}
-          noNavigate={() => navigate(ROUTES.HOME)}
+          noNavigate={() => navigate(homeRoute)}
           yesNavigate={() => navigate(ROUTES.CHESS)}
           message={result}
           yesText={outMessage}
