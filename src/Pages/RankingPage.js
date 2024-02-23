@@ -128,7 +128,7 @@ const RankingPage = () => {
           <RankItem>
             <div style={{ display: "flex", alignItems: "center" }}>
               <RankingNumber>{userRank}</RankingNumber>
-              <NameDiv>{user.name}</NameDiv>
+              <NameDiv>{convertToRomanized(user.name)}</NameDiv>
             </div>
             <TimeDiv>
               {typeof userRank === "number"
