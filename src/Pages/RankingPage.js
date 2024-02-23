@@ -124,7 +124,7 @@ const RankingPage = () => {
               </TimeDiv>
             </RankItem>
           ))}
-        {/* {userRank !== null && userRank < 5 && (
+        {userRank !== null && userRank > 5 && (
           <RankItem>
             <div style={{ display: "flex", alignItems: "center" }}>
               <RankingNumber>{userRank}</RankingNumber>
@@ -138,7 +138,7 @@ const RankingPage = () => {
                 : userRank}
             </TimeDiv>
           </RankItem>
-        )} */}
+        )}
         {userRank === null && (
           <RankItem content={"center"}>
             <div
