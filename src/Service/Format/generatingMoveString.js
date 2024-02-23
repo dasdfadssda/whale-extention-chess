@@ -1,3 +1,4 @@
+// 나의 말 움직임을 알제브레익으로 변환하는 함수
 export const generateMoveString = (to, pieceType) => {
   let moveString = '';
   const [toX, toY] = to;

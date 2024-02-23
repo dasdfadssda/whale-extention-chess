@@ -1,3 +1,4 @@
+// 보드배열을 Fen 변환하는 함수
 export const boardToFen = (
   board,
   currentTurn,

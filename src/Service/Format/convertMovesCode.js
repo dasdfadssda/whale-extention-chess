@@ -1,3 +1,4 @@
+// 움직임 가능한 말의 알제브레익로 변환하는 함수
 export const convertMoves = (legalMoves) => {
   return legalMoves.map((move) => {
     // "x"를 포함하는 경우 "x"를 제거합니다.
