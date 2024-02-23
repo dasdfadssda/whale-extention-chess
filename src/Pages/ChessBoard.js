@@ -151,7 +151,14 @@ function ChessBoard() {
       legalMoves.push("Kc1");
       legalMoves.push("Kg8");
       legalMoves.push("Kc8");
+      // for (let i = 0; i < 8; i++) {
+      //   legalMoves.push(String.fromCharCode(97 + i) + "4");
+      // }
+      // for (let i = 0; i < 8; i++) {
+      //   legalMoves.push(String.fromCharCode(97 + i) + "5");
+      // }
       
+ 
       // 승자 선언
       let winner = currentTurn;
 
