@@ -46,7 +46,7 @@ function HomePage() {
       const times = scoreData.map(score => score.time).filter(time => time !== 0);
       setTimes(times);
       if(times[4]===undefined){
-        localStorage.setItem("rankingTime",9999);
+        localStorage.setItem("rankingTime",99999);
       }
       else{
         localStorage.setItem("rankingTime",times[4]);
