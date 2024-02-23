@@ -22,6 +22,11 @@ export const convertMoves = (legalMoves) => {
       move = move.slice(1);
     }
 
+    // // 앞글자가 N이고, 4글자인 경우 두 번째 글자를 제거
+    if (move[0] === "N" && move.length === 4) {
+      move = move[0] + move.slice(2);
+    }
+
     return move;
   });
 };

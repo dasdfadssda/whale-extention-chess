@@ -144,8 +144,12 @@ function ChessBoard() {
       console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
+      // 캐슬링 부여
       legalMoves.push("Kg1");
       legalMoves.push("Kc1");
+      legalMoves.push("Kg8");
+      legalMoves.push("Kc8");
+      
       // 승자 선언
       let winner = currentTurn;
 
@@ -157,7 +161,7 @@ function ChessBoard() {
           // 검정말 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setBlackCanMove(convertedMoves);
-          console.log("흰색의 가능했던 움직임 :", whiteCanMove);
+          console.log("흰색의 가능했던 움직임 :", whiteCanMove,"movedPiece : ",movedPiece );
           isLegal =
             whiteCanMove.includes(movedPiece) || whiteCanMove.length === 0;
           // console.error("흰색의 자살 :", !isLegal);
@@ -168,7 +172,7 @@ function ChessBoard() {
           // 흰 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setWhiteCanMove(convertedMoves);
-          // console.log("검정색의 가능했던 움직임 :", blackCanMove);
+          console.log("검정색의 가능했던 움직임 :", blackCanMove, "movedPiece : ",movedPiece );
           isLegal =
             blackCanMove.includes(movedPiece) || blackCanMove.length === 0;
           console.error("검정색의 자살 :", !isLegal);
@@ -213,7 +217,7 @@ function ChessBoard() {
 
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
-    // 현재 턴이 흰색이 아니라면 함수를 종료합니다.
+    // 현재 턴이 흰색이 아니라면 함수 종료
     if (currentTurn !== "white") return;
     
     // 현재 턴과 선택한 말 색 구분
