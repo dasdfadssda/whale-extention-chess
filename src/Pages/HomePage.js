@@ -9,6 +9,7 @@ import ConfirmationDialog from "../Components/Dialog";
 import { TimerContext } from "../Context/TimerContext";
 import { getTodayCount } from "../Service/GameCount/GetGameCount";
 import { handleNaverLogin } from "../Service/Auth/NaverLogin";
+import fetchScoreData from "../Service/Score/GetSocreData";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -37,6 +38,25 @@ function HomePage() {
   // 로그인 버튼 bool
   const [isNeedLogin, setIsNeedLogin] = useState(false);
 
+  const[times , setTimes] = useState([]);
+
+  const fetchScores = async (difficulty) => {
+    try {
+      const scoreData = await fetchScoreData(difficulty);
+      const times = scoreData.map(score => score.time).filter(time => time !== 0);
+      setTimes(times);
+      if(times[4]===undefined){
+        localStorage.setItem("rankingTime",9999);
+      }
+      else{
+        localStorage.setItem("rankingTime",times[4]);
+
+      }
+
+    } catch (error) {
+      console.error("Error fetching score data:", error);
+    }
+  };
   // 난이도 버튼 변수
   const difficulties = [
     { name: "Easy", access: true, key: "E" },
@@ -94,7 +114,9 @@ function HomePage() {
         setShortestRecord(formatMinutesAndSeconds(0));
       }
     }
+    fetchScores(localDifficulty);
   }, [localDifficulty]);
+  console.log(times[8]);
 
   // 사용자 정보에 따른 난이도 lock 관리
   useEffect(() => {
