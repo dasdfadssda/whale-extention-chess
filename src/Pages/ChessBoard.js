@@ -342,7 +342,7 @@ function ChessBoard() {
     // 체스판 업데이트
     setBoard(newBoard);
 
-    if (newBoard[toX][toY].type === "king" || newBoard[toX][toY].type === "rook") {
+    if (currentTurn === "white" && (newBoard[toX][toY].type === "king" || newBoard[toX][toY].type === "rook")) {
       setCastlingRights({
         whiteKingSide: false,
         whiteQueenSide: false,
