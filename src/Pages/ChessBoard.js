@@ -21,6 +21,8 @@ import { generateMoveString } from "../Service/Format/generatingMoveString";
 import { convertMoves } from "../Service/Format/convertMovesCode";
 
 function ChessBoard() {
+  //랭킹 시간
+  const rankingTime = localStorage.getItem("rankingTime")
   // 체스 초기 상태 state
   const [board, setBoard] = useState(initialBoardState);
   // 사용자가 선택한 체스말 state
@@ -204,6 +206,9 @@ function ChessBoard() {
           setOutMessage("Play again");
           // Firebase-Score에 이겼을 경우
           saveScoreToFirestore(difficulty, user, currentTime);
+          if(currentTime<rankingTime){
+            navigate(ROUTES.RANKING)
+          }
         }
         // 다이얼로그 출현
         setDialogOpen(true);
