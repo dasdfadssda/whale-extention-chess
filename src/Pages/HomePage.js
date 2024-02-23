@@ -38,25 +38,27 @@ function HomePage() {
   // 로그인 버튼 bool
   const [isNeedLogin, setIsNeedLogin] = useState(false);
 
-  const[times , setTimes] = useState([]);
-
+  // 순위를 위한 값 설정
   const fetchScores = async (difficulty) => {
+    console.log("difficulty : ", difficulty);
     try {
       const scoreData = await fetchScoreData(difficulty);
-      const times = scoreData.map(score => score.time).filter(time => time !== 0);
-      setTimes(times);
-      if(times[4]===undefined){
-        localStorage.setItem("rankingTime",99999);
-      }
-      else{
-        localStorage.setItem("rankingTime",times[4]);
+      const filteredTimes = scoreData
+        .map((score) => score.time)
+        .filter((time) => time !== 0);
 
+      if (filteredTimes.length < 5) {
+        localStorage.setItem("rankingTime", 99999);
+      } else {
+        localStorage.setItem("rankingTime", filteredTimes[4]);
       }
 
+      console.log("asdf", localStorage.getItem("rankingTime"));
     } catch (error) {
       console.error("Error fetching score data:", error);
     }
   };
+
   // 난이도 버튼 변수
   const difficulties = [
     { name: "Easy", access: true, key: "E" },
@@ -116,7 +118,6 @@ function HomePage() {
     }
     fetchScores(localDifficulty);
   }, [localDifficulty]);
-  console.log(times[8]);
 
   // 사용자 정보에 따른 난이도 lock 관리
   useEffect(() => {
