@@ -10,11 +10,10 @@ export const getKingMoves = (x, y, board, color, castlingRights) => {
     [x + 1, y + 1],
   ];
 
-  console.log(castlingRights.whiteKingSide);
-  if(castlingRights.whiteKingSide){
+  if(!board[x][y+1]&&castlingRights.whiteKingSide){
     moves.push([x, y + 2]);
   }
-  if(castlingRights.whiteQueenSide){
+  if(!board[x][y-1]||castlingRights.whiteQueenSide){
     moves.push([x, y - 2]);
   }
 
