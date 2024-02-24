@@ -148,17 +148,19 @@ function ChessBoard() {
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
       // 캐슬링 부여
-      legalMoves.push("Kg1");
-      legalMoves.push("Kc1");
-      legalMoves.push("Kg8");
-      legalMoves.push("Kc8");
-      // for (let i = 0; i < 8; i++) {
-      //   legalMoves.push(String.fromCharCode(97 + i) + "4");
-      // }
-      // for (let i = 0; i < 8; i++) {
-      //   legalMoves.push(String.fromCharCode(97 + i) + "5");
-      // }
-      
+      if(castlingRights.whiteKingSide==true){
+        legalMoves.push("Kg1");
+      }
+      if(castlingRights.whiteQueenSide==true){
+        legalMoves.push("Kg1");
+      }
+
+      for (let i = 0; i < 8; i++) {
+        const move = String.fromCharCode(97 + i) + "4";
+        if (!legalMoves.includes(move)) {
+          legalMoves.push(move);
+        }
+      }
  
       // 승자 선언
       let winner = currentTurn;
