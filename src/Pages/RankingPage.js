@@ -7,14 +7,16 @@ import { useNavigate } from "react-router-dom";
 import ROUTES from "../Static/Constants/route";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { convertToRomanized } from "../Service/Format/convertToRomanized";
+import { PacmanLoader } from "react-spinners";
+import { Ranking } from "../Styles/LoadingSpin";
 
 const RankingPage = () => {
   // ContextAPI - 사용자 정보 변수
   const { user } = useUser();
   // ContextAPI - 난이도 변수
-  const { setDifficulty } = useContext(DifficultyContext);
+  const { difficulty, setDifficulty } = useContext(DifficultyContext);
   // 선택된 버튼 state
-  const [selectedButton, setSelectedButton] = useState("Easy");
+  const [selectedButton, setSelectedButton] = useState(difficulty || "Easy");
   // Firebase에서 가져온 점수 데이터를 저장할 state 추가
   const [scores, setScores] = useState([]);
   // user ranking 선언
@@ -38,43 +40,22 @@ const RankingPage = () => {
     fetchScores(difficulty);
   };
 
-  // 처음 Easy 난이도 읽기
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const scoreData = await fetchScoreData(selectedButton);
-        setScores(scoreData);
-        console.log("scores : ", scores);
-  
-        // 등수 선언
-        const userRank = getUserRank();
-        setUserRank(userRank); // 이 부분을 fetchData 함수 안으로 이동
-        console.log("userRank : ", userRank);
-      } catch (error) {
-        console.error("Error fetching score data:", error);
-      }
-    };
-  
-    fetchData();
-  }, []);
-  
-
   // 사용자의 등수 가져오기
-  const getUserRank = () => {
-    if (!user.id || scores.length === 0) return null;
-  
-    const validScores = scores.filter((score) => score.time !== 0);
+  const getUserRank = (scoreData) => {
+    if (!user.id || scoreData.length === 0) return null;
+
+    const validScores = scoreData.filter((score) => score.time !== 0);
     const sortedScores = [...validScores].sort((a, b) => a.time - b.time);
-    console.log('sortedScores :',sortedScores);
+    console.log("sortedScores :", sortedScores);
     const userScore = validScores.find((score) => score.id === user.id);
-  
+
     if (!userScore || userScore.time === 0) {
       return null;
     }
-  
+
     let rank = 1;
     for (let score of sortedScores) {
-      if (score.time > userScore.time) {
+      if (score.time < userScore.time) {
         rank++;
       } else if (score.time === userScore.time && score.id !== user.id) {
         rank++;
@@ -82,10 +63,28 @@ const RankingPage = () => {
         break;
       }
     }
-  
     return rank;
   };
-  
+
+  // 처음 Easy 난이도 읽기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const scoreData = await fetchScoreData(selectedButton);
+        console.log("difficulty :", selectedButton, "scores : ", scoreData);
+
+        const userRank = getUserRank(scoreData);
+        console.log("userRank : ", userRank);
+
+        setScores(scoreData);
+        setUserRank(userRank);
+      } catch (error) {
+        console.error("Error fetching score data:", error);
+      }
+    };
+
+    fetchData();
+  }, [selectedButton]);
 
   return (
     <Container>
@@ -115,54 +114,66 @@ const RankingPage = () => {
         ))}
       </ButtonGroup>
       <RankList>
-        {scores
-          .filter(
-            (data) =>
-              (userRank !== null || data.id !== user.id) && data.time >= 1
-          )
-          .slice(0, 5)
-          .map((data, index) => (
-            <RankItem key={index} userId={user.id} DataId={data.id}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <RankingNumber index={index} userId={user.id} DataId={data.id}>
-                  {index + 1}
-                </RankingNumber>
-                <NameDiv userId={user.id} DataId={data.id}>
-                  {convertToRomanized(data.name)}
-                </NameDiv>
-              </div>
-              <TimeDiv userId={user.id} DataId={data.id}>
-                {formatMinutesAndSeconds(data.time)}
-              </TimeDiv>
-            </RankItem>
-          ))}
-        {userRank !== null && userRank > 5 && (
-          <RankItem>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <RankingNumber>{userRank}</RankingNumber>
-              <NameDiv>{convertToRomanized(user.name)}</NameDiv>
-            </div>
-            <TimeDiv>
-              {typeof userRank === "number"
-                ? formatMinutesAndSeconds(
-                    scores.find((score) => score.id === user.id).time
-                  )
-                : userRank}
-            </TimeDiv>
-          </RankItem>
-        )}
-        {userRank === null && (
-          <RankItem content={"center"}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <NoRankText>You have to play the game</NoRankText>
-            </div>
-          </RankItem>
+        {!scores ? (
+          <>
+            {scores
+              .filter(
+                (data) =>
+                  (userRank !== null || data.id !== user.id) && data.time >= 1
+              )
+              .slice(0, 5)
+              .map((data, index) => (
+                <RankItem key={index} userId={user.id} DataId={data.id}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <RankingNumber
+                      index={index}
+                      userId={user.id}
+                      DataId={data.id}
+                    >
+                      {index + 1}
+                    </RankingNumber>
+                    <NameDiv userId={user.id} DataId={data.id}>
+                      {convertToRomanized(data.name)}
+                    </NameDiv>
+                  </div>
+                  <TimeDiv userId={user.id} DataId={data.id}>
+                    {formatMinutesAndSeconds(data.time)}
+                  </TimeDiv>
+                </RankItem>
+              ))}
+            {userRank !== null && userRank > 5 && (
+              <RankItem>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <RankingNumber>{userRank}</RankingNumber>
+                  <NameDiv>{convertToRomanized(user.name)}</NameDiv>
+                </div>
+                <TimeDiv>
+                  {typeof userRank === "number"
+                    ? formatMinutesAndSeconds(
+                        scores.find((score) => score.id === user.id).time
+                      )
+                    : userRank}
+                </TimeDiv>
+              </RankItem>
+            )}
+            {userRank === null && (
+              <RankItem content={"center"}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <NoRankText>You have to play the game</NoRankText>
+                </div>
+              </RankItem>
+            )}
+          </>
+        ) : (
+          <>
+            <PacmanLoader color="#D66602" cssOverride={Ranking} size={50} />
+          </>
         )}
       </RankList>
     </Container>
