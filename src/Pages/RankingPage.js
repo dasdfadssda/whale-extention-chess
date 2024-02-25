@@ -114,7 +114,7 @@ const RankingPage = () => {
         ))}
       </ButtonGroup>
       <RankList>
-        {!scores ? (
+        {scores ? (
           <>
             {scores
               .filter(

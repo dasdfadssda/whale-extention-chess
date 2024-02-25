@@ -147,6 +147,7 @@ function ChessBoard() {
       console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
+      console.log("여과 없는 legalMoves: ",legalMoves);
       // 캐슬링 부여
       if(castlingRights.whiteKingSide===true){
         legalMoves.push("Kg1");
