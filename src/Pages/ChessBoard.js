@@ -152,7 +152,7 @@ function ChessBoard() {
         legalMoves.push("Kg1");
       }
       if(castlingRights.whiteQueenSide===true){
-        legalMoves.push("Kg1");
+        legalMoves.push("Kc1");
       }
 
       for (let i = 0; i < 8; i++) {
