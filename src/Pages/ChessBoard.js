@@ -22,7 +22,7 @@ import { convertMoves } from "../Service/Format/convertMovesCode";
 
 function ChessBoard() {
   //랭킹 시간
-  const rankingTime = localStorage.getItem("rankingTime")
+  const rankingTime = localStorage.getItem("rankingTime");
   // 체스 초기 상태 state
   const [board, setBoard] = useState(initialBoardState);
   // 사용자가 선택한 체스말 state
@@ -80,7 +80,7 @@ function ChessBoard() {
 
     window.location.reload();
   };
-  // Home useNavigate 선언 
+  // Home useNavigate 선언
   const [homeRoute, setHomeRoute] = useState(ROUTES.HOME);
   // useNavigate 선언
   const navigate = useNavigate();
@@ -133,12 +133,13 @@ function ChessBoard() {
   // 체크메이트 검사
   useEffect(() => {
     const loadChessFromBoard = async () => {
-      const chessBoard = await boardToFen(
+      const chessBoard = boardToFen(
         board,
         currentTurn,
         halfmoveClock,
         fullmoveNumber
       );
+
       // 변환된 보드 상태를 Chess.js로 로드
       chess.load(chessBoard);
       // 체크메이트 상황인지 확인
@@ -147,12 +148,20 @@ function ChessBoard() {
       console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
-      console.log("여과 없는 legalMoves: ",legalMoves);
+      console.log(
+        "여과 없는 legalMoves: ",
+        legalMoves,
+        "여과한 데이터",
+        convertMoves(legalMoves),
+        "movedPiece :",
+        movedPiece
+      );
+
       // 캐슬링 부여
-      if(castlingRights.whiteKingSide===true){
+      if (castlingRights.whiteKingSide === true) {
         legalMoves.push("Kg1");
       }
-      if(castlingRights.whiteQueenSide===true){
+      if (castlingRights.whiteQueenSide === true) {
         legalMoves.push("Kc1");
       }
 
@@ -162,7 +171,7 @@ function ChessBoard() {
           legalMoves.push(move);
         }
       }
- 
+
       // 승자 선언
       let winner = currentTurn;
 
@@ -174,7 +183,12 @@ function ChessBoard() {
           // 검정말 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setBlackCanMove(convertedMoves);
-          console.log("흰색의 가능했던 움직임 :", whiteCanMove,"movedPiece : ",movedPiece );
+          console.log(
+            "흰색의 가능했던 움직임 :",
+            whiteCanMove,
+            "movedPiece : ",
+            movedPiece
+          );
           isLegal =
             whiteCanMove.includes(movedPiece) || whiteCanMove.length === 0;
           // console.error("흰색의 자살 :", !isLegal);
@@ -185,7 +199,6 @@ function ChessBoard() {
           // 흰 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setWhiteCanMove(convertedMoves);
-          console.log("검정색의 가능했던 움직임 :", blackCanMove, "movedPiece : ",movedPiece );
           isLegal =
             blackCanMove.includes(movedPiece) || blackCanMove.length === 0;
           console.error("검정색의 자살 :", !isLegal);
@@ -209,7 +222,6 @@ function ChessBoard() {
         // 게임 종료시 시간 저장
         const currentTime = timeState;
         // dialog를 위한 result와 outMessage 설정
-        console.log("currentTime : ",currentTime, "rankingTime :",rankingTime)
         if (winner === "black") {
           setResult("You lose");
           setOutMessage("Try again");
@@ -218,8 +230,12 @@ function ChessBoard() {
           setOutMessage("Play again");
           // Firebase-Score에 이겼을 경우
           saveScoreToFirestore(difficulty, user, currentTime);
-          if(currentTime<rankingTime){
-            setHomeRoute(ROUTES.RANKING);
+          if (user.gameInfo[difficulty].time > currentTime) {
+            if (currentTime < rankingTime) {
+              setHomeRoute(ROUTES.RANKING);
+            }
+          } else {
+            console.log("잘했으나 최고 기록은 아님");
           }
         }
         // 다이얼로그 출현
@@ -236,7 +252,7 @@ function ChessBoard() {
   const handleButtonClick = (i, j) => {
     // 현재 턴이 흰색이 아니라면 함수 종료
     if (currentTurn !== "white") return;
-    
+
     // 현재 턴과 선택한 말 색 구분
     if (board[i][j] && board[i][j].color !== currentTurn) {
       if (possibleMoves.some(([x, y]) => x === i && y === j)) {
@@ -310,8 +326,16 @@ function ChessBoard() {
       setMovedPiece(movedPiece);
       console.log(currentTurn, "말의 움직인 위치 :", movedPiece);
       console.log(currentTurn, "움직인 타입 :", newBoard[fromX][fromY].type);
+      console.log(currentTurn, "움직인 색 :", newBoard[fromX][fromY].color);
     } else {
       console.error(`No piece at position: ${from}`);
+    }
+    console.log("움직인 : ", movedPiece);
+
+    // 현재 색과 다른 말을 움직이려고 시도한 경우 처리
+    if (movedPiece && newBoard[fromX][fromY].color !== currentTurn) {
+      console.error(`Cannot move opponent's piece.`);
+      return;
     }
 
     // 이전 위치 선언
@@ -322,6 +346,7 @@ function ChessBoard() {
       console.error(`No piece at position: ${from}`);
       return;
     }
+
     // 이동 가능한 반 수 증가
     setHalfmoveClock((prev) => prev + 1);
     // 흑색 턴이 완료될 때마다 게임이 시작된 후의 반 수 증가
@@ -344,8 +369,6 @@ function ChessBoard() {
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
 
-
-
     // 폰이 끝에 도달한 경우
     if (newBoard[toX][toY].type === "pawn" && (toX === 0 || toX === 7)) {
       handlePawnPromotion(newBoard, toX, toY);
@@ -354,7 +377,10 @@ function ChessBoard() {
     // 체스판 업데이트
     setBoard(newBoard);
 
-    if (currentTurn === "white" && (newBoard[toX][toY].type === "king" || newBoard[toX][toY].type === "rook")) {
+    if (
+      currentTurn === "white" &&
+      (newBoard[toX][toY].type === "king" || newBoard[toX][toY].type === "rook")
+    ) {
       setCastlingRights({
         whiteKingSide: false,
         whiteQueenSide: false,
@@ -367,7 +393,6 @@ function ChessBoard() {
         (isWhiteKing && fromX === 7 && fromY === 4 && toX === 7 && toY === 6) || // 흰색 킹 사이드
         (!isWhiteKing && fromX === 0 && fromY === 4 && toX === 0 && toY === 6) // 검은색 킹 사이드
       ) {
-
         // 킹이 이동했으므로 룩도 이동시킵니다.
         newBoard[toX][toY - 1] = newBoard[toX][7]; // 킹 사이드 룩을 킹 옆으로 이동
         newBoard[toX][7] = null; // 원래 룩의 위치를 비움
@@ -382,7 +407,6 @@ function ChessBoard() {
         newBoard[toX][0] = null; // 원래 룩의 위치를 비움
       }
     }
-
 
     // 앙 팡상 타겟 업데이트
     if (
