@@ -17,6 +17,8 @@ const RankingPage = () => {
   const [selectedButton, setSelectedButton] = useState("Easy");
   // Firebase에서 가져온 점수 데이터를 저장할 state 추가
   const [scores, setScores] = useState([]);
+  // user ranking 선언
+  const [userRank, setUserRank] = useState(null);
   // Firebase에서 데이터를 가져와서 scores state 업데이트
   const fetchScores = async (difficulty) => {
     try {
@@ -42,38 +44,48 @@ const RankingPage = () => {
       try {
         const scoreData = await fetchScoreData(selectedButton);
         setScores(scoreData);
+        console.log("scores : ", scores);
+  
+        // 등수 선언
+        const userRank = getUserRank();
+        setUserRank(userRank); // 이 부분을 fetchData 함수 안으로 이동
+        console.log("userRank : ", userRank);
       } catch (error) {
         console.error("Error fetching score data:", error);
       }
     };
-
+  
     fetchData();
-  }, [selectedButton]);
+  }, []);
+  
 
   // 사용자의 등수 가져오기
   const getUserRank = () => {
     if (!user.id || scores.length === 0) return null;
-
-    const sortedScores = scores
-      .map((score) => score.time)
-      .sort((a, b) => a - b);
-    const userScore = scores.find((score) => score.id === user.id);
-
+  
+    const validScores = scores.filter((score) => score.time !== 0);
+    const sortedScores = [...validScores].sort((a, b) => a.time - b.time);
+    console.log('sortedScores :',sortedScores);
+    const userScore = validScores.find((score) => score.id === user.id);
+  
     if (!userScore || userScore.time === 0) {
       return null;
     }
-
-    const userIndex = sortedScores.indexOf(userScore.time);
-
-    if (userIndex >= 0 && userIndex <= 4) {
-      return userIndex + 1;
+  
+    let rank = 1;
+    for (let score of sortedScores) {
+      if (score.time > userScore.time) {
+        rank++;
+      } else if (score.time === userScore.time && score.id !== user.id) {
+        rank++;
+      } else {
+        break;
+      }
     }
-
-    return userIndex + 1;
+  
+    return rank;
   };
-
-  // 등수 선언
-  const userRank = getUserRank();
+  
 
   return (
     <Container>
