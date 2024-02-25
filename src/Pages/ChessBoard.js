@@ -148,10 +148,10 @@ function ChessBoard() {
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
       // 캐슬링 부여
-      if(castlingRights.whiteKingSide==true){
+      if(castlingRights.whiteKingSide===true){
         legalMoves.push("Kg1");
       }
-      if(castlingRights.whiteQueenSide==true){
+      if(castlingRights.whiteQueenSide===true){
         legalMoves.push("Kg1");
       }
 
