@@ -44,7 +44,7 @@ function ChessBoard() {
   const [isOngoing, setIsOngoing] = useState(0);
   // 앙 팡상 타겟 상태
   const [enPassantTarget, setEnPassantTarget] = useState([]);
-  // 앙 팡상에 따른 가능해진 움직임 
+  // 앙 팡상에 따른 가능해진 움직임
   const [enPassanPlace, setEnPassanPlace] = useState(null);
   // 죽은말 state
   const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
@@ -160,7 +160,7 @@ function ChessBoard() {
       if (enPassantTarget != null) {
         const x = enPassantTarget[0] - 1;
         const y = enPassantTarget[1];
-        console.log("xx, yy : ",x,y);
+        console.log("xx, yy : ", x, y);
         legalMoves.push(generateMoveString([x, y], "pawn"));
         console.error(
           "generateMoveString(enPassantTarget, :",
@@ -170,12 +170,11 @@ function ChessBoard() {
       } else {
         setEnPassanPlace(null);
       }
-      // 앙팡상 움직임 부여 
-      if(enPassanPlace != null){
+      // 앙팡상 움직임 부여
+      if (enPassanPlace != null) {
         legalMoves.push(enPassanPlace);
-        console.error("enPassanPlace :",enPassanPlace);
+        console.error("enPassanPlace :", enPassanPlace);
       }
-
 
       for (let i = 0; i < 8; i++) {
         const move = String.fromCharCode(97 + i) + "4";
@@ -378,6 +377,18 @@ function ChessBoard() {
       }));
     }
 
+    // 앙파상의 결과 적용
+    if (movedPiece === enPassanPlace) {
+      const deadPiece = newBoard[toX + 1][toY];
+      const opponentColor = deadPiece.color === "white" ? "black" : "white";
+
+      setDeadPieces((prev) => ({
+        ...prev,
+        [opponentColor]: [...prev[opponentColor], deadPiece],
+      }));
+      newBoard[toX + 1][toY] = null;
+    }
+
     // 체스말 이동
     newBoard[toX][toY] = newBoard[fromX][fromY];
     newBoard[fromX][fromY] = null;
@@ -423,7 +434,7 @@ function ChessBoard() {
     // 앙팡상 타겟 업데이트
     if (newBoard[toX][toY]) {
       if (
-        newBoard[toX][toY].type === 'pawn' &&
+        newBoard[toX][toY].type === "pawn" &&
         Math.abs(fromX - toX) === 2 // 앞으로 두 칸 이동한 경우만 확인
       ) {
         // 앙 팡상 타겟 설정
