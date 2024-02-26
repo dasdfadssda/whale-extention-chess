@@ -99,7 +99,7 @@ function ChessBoard() {
 
   // AI 검정말 포맷
   useEffect(() => {
-    if (isOngoing < 2) {
+    if (isOngoing < 1) {
       setTimeout(() => {
         if (
           currentTurn === "black" &&
@@ -148,14 +148,6 @@ function ChessBoard() {
       console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
-      console.log(
-        "여과 없는 legalMoves: ",
-        legalMoves,
-        "여과한 데이터",
-        convertMoves(legalMoves),
-        "movedPiece :",
-        movedPiece
-      );
 
       // 캐슬링 부여
       if (castlingRights.whiteKingSide === true) {
@@ -251,7 +243,7 @@ function ChessBoard() {
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
     // 현재 턴이 흰색이 아니라면 함수 종료
-    if (currentTurn !== "white") return;
+    // if (currentTurn !== "white") return;
 
     // 현재 턴과 선택한 말 색 구분
     if (board[i][j] && board[i][j].color !== currentTurn) {
@@ -408,7 +400,7 @@ function ChessBoard() {
       }
     }
 
-    // 앙 팡상 타겟 업데이트
+    // 앙팡상 타겟 업데이트
     if (
       newBoard[fromX][fromY] &&
       newBoard[fromX][fromY].type === "pawn" &&
@@ -416,7 +408,8 @@ function ChessBoard() {
     ) {
       // 폰이 두 칸 이동한 경우 앙 팡상 타겟 설정
       const enPassantX = (fromX + toX) / 2; // 중간 위치
-      setEnPassantTarget([enPassantX, fromY]); // 중간 위치와 원래 Y 위치
+      const enPassantY = fromY; // 폰이 대각선으로 움직이므로 Y 좌표는 그대로 유지
+      setEnPassantTarget([enPassantX, enPassantY]); // 중간 위치와 원래 Y 위치
     } else {
       // 그 외의 경우 앙 팡상 타겟 해제
       setEnPassantTarget(null);

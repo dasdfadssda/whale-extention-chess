@@ -16,7 +16,7 @@ export const getPawnMoves = (x, y, board, color, enPassantTarget) => {
     }
   }
 
-  // 폰이 대각선으로 상대 말을 잡거나 앙팡상을 하는 경우
+  // 폰이 대각선으로 상대 말을 잡는 경우
   if (board[x + direction] && y > 0 && board[x + direction][y - 1] && board[x + direction][y - 1].color !== color) {
     moves.push([x + direction, y - 1]);
   }
@@ -25,7 +25,11 @@ export const getPawnMoves = (x, y, board, color, enPassantTarget) => {
   }
 
   // 앙팡상을 하는 경우
-  if (enPassantTarget && enPassantTarget[0] === x + direction && (enPassantTarget[1] === y - 1 || enPassantTarget[1] === y + 1)) {
+  if (
+    enPassantTarget &&
+    enPassantTarget[0] === x + direction &&
+    (enPassantTarget[1] === y - 1 || enPassantTarget[1] === y + 1)
+  ) {
     moves.push(enPassantTarget);
   }
 
