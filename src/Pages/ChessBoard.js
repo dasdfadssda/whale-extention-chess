@@ -378,7 +378,7 @@ function ChessBoard() {
     }
 
     // 앙파상의 결과 적용
-    if (movedPiece === enPassanPlace) {
+    if (movedPiece === enPassanPlace && currentTurn === 'white') {
       const deadPiece = newBoard[toX + 1][toY];
       const opponentColor = deadPiece.color === "white" ? "black" : "white";
 
