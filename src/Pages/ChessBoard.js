@@ -43,7 +43,9 @@ function ChessBoard() {
   // 게임 진행사항 세팅
   const [isOngoing, setIsOngoing] = useState(0);
   // 앙 팡상 타겟 상태
-  const [enPassantTarget, setEnPassantTarget] = useState(null);
+  const [enPassantTarget, setEnPassantTarget] = useState([]);
+  // 앙 팡상에 따른 가능해진 움직임 
+  const [enPassanPlace, setEnPassanPlace] = useState(null);
   // 죽은말 state
   const [deadPieces, setDeadPieces] = useState({ white: [], black: [] });
   // 캐슬링 권한 상태
@@ -144,8 +146,6 @@ function ChessBoard() {
       chess.load(chessBoard);
       // 체크메이트 상황인지 확인
       const isCheckmate = chess.isCheckmate();
-      console.log("체크 계산 :", chess.isCheck());
-      console.log("게임 끝난 경우 :", chess.isGameOver());
       // 현재 플레이어의 모든 합법적인 수
       const legalMoves = chess.moves();
 
@@ -156,6 +156,26 @@ function ChessBoard() {
       if (castlingRights.whiteQueenSide === true) {
         legalMoves.push("Kc1");
       }
+      // 앙팡상 로직
+      if (enPassantTarget != null) {
+        const x = enPassantTarget[0] - 1;
+        const y = enPassantTarget[1];
+        console.log("xx, yy : ",x,y);
+        legalMoves.push(generateMoveString([x, y], "pawn"));
+        console.error(
+          "generateMoveString(enPassantTarget, :",
+          generateMoveString([x, y], "pawn")
+        );
+        setEnPassanPlace(generateMoveString([x, y], "pawn"));
+      } else {
+        setEnPassanPlace(null);
+      }
+      // 앙팡상 움직임 부여 
+      if(enPassanPlace != null){
+        legalMoves.push(enPassanPlace);
+        console.error("enPassanPlace :",enPassanPlace);
+      }
+
 
       for (let i = 0; i < 8; i++) {
         const move = String.fromCharCode(97 + i) + "4";
@@ -175,12 +195,12 @@ function ChessBoard() {
           // 검정말 위치 선언
           const convertedMoves = convertMoves(legalMoves);
           setBlackCanMove(convertedMoves);
-          console.log(
-            "흰색의 가능했던 움직임 :",
-            whiteCanMove,
-            "movedPiece : ",
-            movedPiece
-          );
+          // console.log(
+          //   "흰색의 가능했던 움직임 :",
+          //   whiteCanMove,
+          //   "movedPiece : ",
+          //   movedPiece
+          // );
           isLegal =
             whiteCanMove.includes(movedPiece) || whiteCanMove.length === 0;
           // console.error("흰색의 자살 :", !isLegal);
@@ -255,6 +275,7 @@ function ChessBoard() {
       }
       return;
     }
+    console.error("앙팡상 : ", enPassantTarget);
 
     // 선택된 좌표 선언
     setSelectedButton([i, j]);
@@ -399,20 +420,22 @@ function ChessBoard() {
         newBoard[toX][0] = null; // 원래 룩의 위치를 비움
       }
     }
-
     // 앙팡상 타겟 업데이트
-    if (
-      newBoard[fromX][fromY] &&
-      newBoard[fromX][fromY].type === "pawn" &&
-      Math.abs(fromX - toX) === 2
-    ) {
-      // 폰이 두 칸 이동한 경우 앙 팡상 타겟 설정
-      const enPassantX = (fromX + toX) / 2; // 중간 위치
-      const enPassantY = fromY; // 폰이 대각선으로 움직이므로 Y 좌표는 그대로 유지
-      setEnPassantTarget([enPassantX, enPassantY]); // 중간 위치와 원래 Y 위치
-    } else {
-      // 그 외의 경우 앙 팡상 타겟 해제
-      setEnPassantTarget(null);
+    if (newBoard[toX][toY]) {
+      if (
+        newBoard[toX][toY].type === 'pawn' &&
+        Math.abs(fromX - toX) === 2 // 앞으로 두 칸 이동한 경우만 확인
+      ) {
+        // 앙 팡상 타겟 설정
+        const enPassantX = toX; // 폰이 앞으로 움직이므로 X 좌표는 그대로 유지
+        const enPassantY = toY; // 폰이 앞으로 움직이므로 Y 좌표는 목적지로 변경
+        if (enPassantY && enPassantX) {
+          setEnPassantTarget([enPassantX, enPassantY]); // 앙팡상 타겟 설정
+        }
+      } else {
+        // 그 외의 경우 앙팡상 타겟 해제
+        setEnPassantTarget(null);
+      }
     }
 
     // 게임 시작 선언
