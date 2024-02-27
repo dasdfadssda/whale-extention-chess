@@ -253,9 +253,9 @@ function ChessBoard() {
               user.gameInfo[difficulty].time > currentTime ||
               user.gameInfo[difficulty].time == 0
             ) {
-              updatedGameNum(difficulty, user, currentTime);
-            } else {
               saveScoreToFirestore(difficulty, user, currentTime);
+            } else {
+              updatedGameNum(difficulty, user, currentTime);
               console.log("잘했으나 최고 기록은 아님");
             }
           }
