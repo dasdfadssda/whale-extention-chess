@@ -195,7 +195,7 @@ const TopDiv = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  margin-left: -12px;
+  margin-left: -3.0769vw;
 `;
 
 const BackIcon = styled.button`
@@ -212,7 +212,7 @@ const BackIcon = styled.button`
 `;
 
 const Title = styled.div`
-  font-size: 8vw;
+  font-size: 10.5vw;
   font-family: ${({ theme }) => theme.font};
   color: white;
   line-height: 1;
@@ -228,7 +228,7 @@ const ButtonGroup = styled.div`
   width: 90%;
   height: 8vw;
   margin-top: 4vw;
-  padding: 0 10px;
+  padding: 0 2.5641vw;
 `;
 
 const Button = styled.button`
@@ -246,22 +246,22 @@ const RankList = styled.div`
   height: 100vw;
   width: 97%;
   overflow-y: scroll;
-  margin-top: 10px;
-  margin-left: 3px;
+  margin-top: 2.5641vw;
+  margin-left: 0.7692vw;
 `;
 
 const RankItem = styled.div`
   background-color: ${({ userId, DataId }) =>
     userId === DataId ? "#D66602" : "white"};
   padding: 1.5vw 3vw;
-  margin-top: 10px;
+  margin-top: 2.5641vw;
   display: flex;
   font-family: ${({ theme }) => theme.font};
   font-size: 5.1282vw;
   justify-content: ${(props) =>
     props.content ? props.content : "space-between"};
   align-items: center;
-  border-radius: 12px;
+  border-radius: 3.0769vw;
 `;
 
 const RankingNumber = styled.div`
