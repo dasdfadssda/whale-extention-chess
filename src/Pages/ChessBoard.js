@@ -240,13 +240,18 @@ function ChessBoard() {
           setResult("You win");
           setOutMessage("Play again");
           // Firebase-Score에 이겼을 경우
-          saveScoreToFirestore(difficulty, user, currentTime);
-          if (user.gameInfo[difficulty].time > currentTime) {
-            if (currentTime < rankingTime) {
-              setHomeRoute(ROUTES.RANKING);
+          if (localStorage.getItem("id") != null) {
+            if (
+              user.gameInfo[difficulty].time > currentTime ||
+              user.gameInfo[difficulty].time == 0
+            ) {
+              if (currentTime < rankingTime) {
+                setHomeRoute(ROUTES.RANKING);
+                saveScoreToFirestore(difficulty, user, currentTime);
+              }
+            } else {
+              console.log("잘했으나 최고 기록은 아님");
             }
-          } else {
-            console.log("잘했으나 최고 기록은 아님");
           }
         }
         // 다이얼로그 출현
@@ -378,7 +383,7 @@ function ChessBoard() {
     }
 
     // 앙파상의 결과 적용
-    if (movedPiece === enPassanPlace && currentTurn === 'white') {
+    if (movedPiece === enPassanPlace && currentTurn === "white") {
       const deadPiece = newBoard[toX + 1][toY];
       const opponentColor = deadPiece.color === "white" ? "black" : "white";
 
