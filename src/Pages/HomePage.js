@@ -90,11 +90,6 @@ function HomePage() {
   // 초기 로딩 세팅
   useEffect(() => {
     const fetchData = async () => {
-      const shortestTime = localStorage.getItem("shortestTime");
-      if (shortestTime) {
-        const time = Number(shortestTime);
-        setShortestRecord(formatMinutesAndSeconds(time));
-      }
       setTimeState(0);
       const GameNum = await getTodayCount();
       setCurrentGameCount(GameNum);
