@@ -81,7 +81,9 @@ function ChessBoard() {
     setBeforeMove(null);
     setDeadPieces({ white: [], black: [] });
 
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   };
   // Home useNavigate 선언
   const [homeRoute, setHomeRoute] = useState(ROUTES.HOME);
@@ -102,7 +104,7 @@ function ChessBoard() {
 
   // AI 검정말 포맷
   useEffect(() => {
-    if (isOngoing < 2) {
+    if (isOngoing < 1) {
       setTimeout(() => {
         if (
           currentTurn === "black" &&
@@ -244,20 +246,22 @@ function ChessBoard() {
           if (localStorage.getItem("id") != null) {
             if (
               currentTime < rankingTime &&
-              user.gameInfo[difficulty].time == 0 &&
-              user.gameInfo[difficulty].time > currentTime
+              (user.gameInfo[difficulty].time > currentTime ||
+                user.gameInfo[difficulty].time === 0)
             ) {
               setHomeRoute(ROUTES.RANKING);
             }
+           if(currentTime != 0){
             if (
               user.gameInfo[difficulty].time > currentTime ||
-              user.gameInfo[difficulty].time == 0
+              user.gameInfo[difficulty].time === 0
             ) {
               saveScoreToFirestore(difficulty, user, currentTime);
             } else {
               updatedGameNum(difficulty, user, currentTime);
               console.log("잘했으나 최고 기록은 아님");
             }
+           }
           }
         }
         // 다이얼로그 출현
@@ -273,7 +277,7 @@ function ChessBoard() {
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
     // 현재 턴이 흰색이 아니라면 함수 종료
-    if (currentTurn !== "white") return;
+    // if (currentTurn !== "white") return;
 
     // 현재 턴과 선택한 말 색 구분
     if (board[i][j] && board[i][j].color !== currentTurn) {
