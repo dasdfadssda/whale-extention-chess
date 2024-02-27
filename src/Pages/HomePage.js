@@ -19,7 +19,7 @@ function HomePage() {
   // ContextAPI - 시간 변수
   const { setTimeState } = useContext(TimerContext);
   // 사용자의 최단 기록 state
-  const [shortestRecord, setShortestRecord] = useState("00:00");
+  const [shortestRecord, setShortestRecord] = useState("-");
   // 게임 진행 수 state
   const [currentGameCount, setCurrentGameCount] = useState(0);
   // dialog state
