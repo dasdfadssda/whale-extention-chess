@@ -87,6 +87,9 @@ function HomePage() {
     }
   };
 
+  // 초기 유저 정보
+  const userData = JSON.parse(window.sessionStorage.getItem("userData"));
+
   // 초기 로딩 세팅
   useEffect(() => {
     const fetchData = async () => {
@@ -94,12 +97,16 @@ function HomePage() {
       const GameNum = await getTodayCount();
       setCurrentGameCount(GameNum);
     };
-
+    if (userData) {
+      const { gameInfo } = userData;
+      const time = gameInfo['Easy'].time;
+      console.log("formatMinutesAndSeconds(time) : ",formatMinutesAndSeconds(time));
+      setShortestRecord(formatMinutesAndSeconds(time));
+    }
     fetchData();
-  }, [setTimeState]);
+  }, []);
 
   useEffect(() => {
-    const userData = JSON.parse(window.sessionStorage.getItem("userData"));
     if (userData) {
       const { gameInfo } = userData;
 
