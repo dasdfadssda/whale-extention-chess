@@ -92,17 +92,17 @@ function HomePage() {
 
   // 초기 로딩 세팅
   useEffect(() => {
-    const fetchData = async () => {
-      setTimeState(0);
-      const GameNum = await getTodayCount();
-      setCurrentGameCount(GameNum);
-    };
     if (userData) {
       const { gameInfo } = userData;
       const time = gameInfo['Easy'].time;
       console.log("formatMinutesAndSeconds(time) : ",formatMinutesAndSeconds(time));
       setShortestRecord(formatMinutesAndSeconds(time));
     }
+    const fetchData = async () => {
+      setTimeState(0);
+      const GameNum = await getTodayCount();
+      setCurrentGameCount(GameNum);
+    };
     fetchData();
   }, []);
 
