@@ -20,11 +20,11 @@ export const saveScoreToFirestore = async (difficulty, user, time) => {
     updatedGameInfo[difficulty].gameNum += 1; // gameNum을 +1 증가시킴
 
     // 난이도에 따라서 Normal과 Hard의 access를 업데이트
-    if (difficulty === "Easy" && updatedGameInfo[difficulty].gameNum >= 5) {
+    if (difficulty === "Easy" && updatedGameInfo[difficulty].gameNum >= 3) {
       updatedGameInfo["Normal"].access = true;
     } else if (
       difficulty === "Normal" &&
-      updatedGameInfo[difficulty].gameNum >= 3
+      updatedGameInfo[difficulty].gameNum >= 5
     ) {
       updatedGameInfo["Hard"].access = true;
     }
