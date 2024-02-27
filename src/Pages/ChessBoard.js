@@ -14,7 +14,7 @@ import DeadPieces from "../Components/DeadPieces";
 import { Chess } from "chess.js";
 import { DifficultyContext } from "../Context/DifficultyContext";
 import { UserContext } from "../Context/UserContext";
-import { saveScoreToFirestore } from "../Service/Score/SetOneScore";
+import { saveScoreToFirestore, updateUserGameInfo } from "../Service/Score/SetOneScore";
 import { initialBoardState } from "../Model/InitialBoardStateModal";
 import { updateGameCountNum } from "../Service/GameCount/SetGameCount";
 import { generateMoveString } from "../Service/Format/generatingMoveString";
@@ -67,23 +67,9 @@ function ChessBoard() {
   const [outMessage, setOutMessage] = useState("play again");
   // diaglogButton 핸들러
   const handleDialogButtonClick = () => {
-    setBoard(initialBoardState);
-    setFullmoveNumber(1);
-    setHalfmoveClock(0);
-    setCastlingRights({
-      whiteKingSide: true,
-      whiteQueenSide: true,
-      blackKingSide: true,
-      blackQueenSide: true,
-    });
-    setCurrentTurn("white");
-    setEnPassantTarget(null);
-    setBeforeMove(null);
-    setDeadPieces({ white: [], black: [] });
-
     setTimeout(() => {
       window.location.reload();
-    }, 500);
+    }, 700);
   };
   // Home useNavigate 선언
   const [homeRoute, setHomeRoute] = useState(ROUTES.HOME);
@@ -243,6 +229,7 @@ function ChessBoard() {
           setResult("You win");
           setOutMessage("Play again");
           // Firebase-Score에 이겼을 경우
+          console.error("user.gameInfo[difficulty].time : ",user.gameInfo[difficulty].time,"currentTime : ",currentTime);
           if (localStorage.getItem("id") != null) {
             if (
               currentTime < rankingTime &&
@@ -257,6 +244,7 @@ function ChessBoard() {
               user.gameInfo[difficulty].time === 0
             ) {
               saveScoreToFirestore(difficulty, user, currentTime);
+              updateUserGameInfo(difficulty, user, currentTime);
             } else {
               updatedGameNum(difficulty, user, currentTime);
               console.log("잘했으나 최고 기록은 아님");
