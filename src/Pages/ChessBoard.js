@@ -19,6 +19,7 @@ import { initialBoardState } from "../Model/InitialBoardStateModal";
 import { updateGameCountNum } from "../Service/GameCount/SetGameCount";
 import { generateMoveString } from "../Service/Format/generatingMoveString";
 import { convertMoves } from "../Service/Format/convertMovesCode";
+import { updatedGameNum } from "../Service/Score/UpdateGameNum";
 
 function ChessBoard() {
   //랭킹 시간
@@ -242,14 +243,19 @@ function ChessBoard() {
           // Firebase-Score에 이겼을 경우
           if (localStorage.getItem("id") != null) {
             if (
+              currentTime < rankingTime &&
+              user.gameInfo[difficulty].time == 0 &&
+              user.gameInfo[difficulty].time > currentTime
+            ) {
+              setHomeRoute(ROUTES.RANKING);
+            }
+            if (
               user.gameInfo[difficulty].time > currentTime ||
               user.gameInfo[difficulty].time == 0
             ) {
-              if (currentTime < rankingTime) {
-                setHomeRoute(ROUTES.RANKING);
-                saveScoreToFirestore(difficulty, user, currentTime);
-              }
+              updatedGameNum(difficulty, user, currentTime);
             } else {
+              saveScoreToFirestore(difficulty, user, currentTime);
               console.log("잘했으나 최고 기록은 아님");
             }
           }
