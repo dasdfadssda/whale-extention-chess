@@ -1,8 +1,10 @@
 // 네이버 로그인
 export function handleNaverLogin() {
   const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_KEY;
-  const NAVER_CALLBACK_URL = process.env.REACT_APP_NAVER_CALLBACK_URL+'/#/callback';
+  // const NAVER_CALLBACK_URL = process.env.REACT_APP_NAVER_CALLBACK_URL+'/#/callback';
   // const NAVER_CALLBACK_URL = "http://localhost:3000/#/callback";
+  const currentOrigin = window.location.origin;
+  const NAVER_CALLBACK_URL = `${currentOrigin}/#/callback`;
 
   const generateState = () => {
     return [...Array(10)].map(() => Math.random().toString(36)[2]).join("");
