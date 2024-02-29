@@ -90,7 +90,7 @@ function ChessBoard() {
 
   // AI 검정말 포맷
   useEffect(() => {
-    if (isOngoing < 1) {
+    if (isOngoing < 2) {
       setTimeout(() => {
         if (
           currentTurn === "black" &&
@@ -265,7 +265,7 @@ function ChessBoard() {
   // 체스말 버튼을 클릭했을 때의 이벤트 핸들러
   const handleButtonClick = (i, j) => {
     // 현재 턴이 흰색이 아니라면 함수 종료
-    // if (currentTurn !== "white") return;
+    if (currentTurn !== "white") return;
 
     // 현재 턴과 선택한 말 색 구분
     if (board[i][j] && board[i][j].color !== currentTurn) {
