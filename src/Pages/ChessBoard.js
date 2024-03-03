@@ -20,6 +20,7 @@ import { updateGameCountNum } from "../Service/GameCount/SetGameCount";
 import { generateMoveString } from "../Service/Format/generatingMoveString";
 import { convertMoves } from "../Service/Format/convertMovesCode";
 import { updatedGameNum } from "../Service/Score/UpdateGameNum";
+import AdSense from "../Components/AdSense";
 
 function ChessBoard() {
   //랭킹 시간
@@ -512,6 +513,7 @@ function ChessBoard() {
           yesText={outMessage}
           noText="HOME"
         />
+        <AdSense/>
       </Div>
     </>
   );
