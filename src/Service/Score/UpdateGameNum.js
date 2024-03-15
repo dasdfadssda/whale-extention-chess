@@ -31,7 +31,6 @@ export const updatedGameNum = async (difficulty, user, time) => {
 
     await updateDoc(userDocRef, { gameInfo: updatedGameInfo });
     console.log("사용자의 게임 숫자와 접근 권한만 성공");
-
   } catch (error) {
     console.error(
       "Firestore에 점수 정보 저장 및 사용자의 게임 정보 업데이트 실패:",
