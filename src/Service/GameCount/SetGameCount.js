@@ -10,7 +10,8 @@ export const updateGameCountNum = async () => {
   try {
     const docSnap = await getDoc(countNumRef); // 문서 스냅샷 가져오기
 
-    if (docSnap.exists()) { // 문서가 존재하는 경우
+    if (docSnap.exists()) {
+      // 문서가 존재하는 경우
       await updateDoc(countNumRef, { count: docSnap.data().count + 1 }); // count 필드의 값을 1 증가시켜 업데이트
       console.log("GameCountNum 컬렉션 업데이트 성공");
     } else {
