@@ -10,7 +10,8 @@ export const getTodayCount = async () => {
   try {
     const docSnap = await getDoc(countNumRef); // 문서 스냅샷 가져오기
 
-    if (docSnap.exists()) { // 문서가 존재하는 경우
+    if (docSnap.exists()) {
+      // 문서가 존재하는 경우
       const count = docSnap.data().count; // count 필드의 값을 가져옴
       console.log("오늘 날짜의 count 값 가져오기 성공");
       return count;
