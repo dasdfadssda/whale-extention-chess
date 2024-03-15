@@ -30,10 +30,7 @@ export const updateUserGameInfo = async (difficulty, user, time) => {
     await updateDoc(userDocRef, { gameInfo: updatedGameInfo });
     console.log("사용자의 게임 정보 업데이트 성공");
   } catch (error) {
-    console.error(
-      "사용자의 게임 정보 업데이트 실패:",
-      error
-    );
+    console.error("사용자의 게임 정보 업데이트 실패:", error);
   }
 };
 
@@ -56,9 +53,6 @@ export const saveScoreToFirestore = async (difficulty, user, time) => {
     });
     console.log(`Firestore ${difficulty}Score에 점수 정보 저장 성공`);
   } catch (error) {
-    console.error(
-      "Firestore에 점수 정보 저장 실패:",
-      error
-    );
+    console.error("Firestore에 점수 정보 저장 실패:", error);
   }
 };
