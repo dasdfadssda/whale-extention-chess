@@ -1,5 +1,5 @@
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { dbService } from "../../fbase"; 
+import { dbService } from "../../fbase";
 
 // {difficulty}Score 컬렉션의 모든 문서를 시간에 대해 정렬하여 가져오는 함수
 const fetchScoreData = async (difficulty) => {
