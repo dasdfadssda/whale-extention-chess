@@ -1,0 +1,25 @@
+[debug] [2024-03-21T05:37:51.896Z] ----------------------------------------------------------------------
+[debug] [2024-03-21T05:37:51.898Z] Command:       /usr/local/bin/firebase /Users/parkjeoungkyu/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase deploy
+[debug] [2024-03-21T05:37:51.899Z] CLI Version:   12.5.2
+[debug] [2024-03-21T05:37:51.899Z] Platform:      darwin
+[debug] [2024-03-21T05:37:51.899Z] Node Version:  v16.16.0
+[debug] [2024-03-21T05:37:51.901Z] Time:          Thu Mar 21 2024 14:37:51 GMT+0900 (GMT+09:00)
+[debug] [2024-03-21T05:37:51.901Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-03-21T05:37:51.981Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-03-21T05:37:51.981Z] > authorizing via signed-in user (quddkflty@gmail.com)
+[debug] [2024-03-21T05:37:51.982Z] [iam] checking project chessextension for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-03-21T05:37:51.984Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/chessextension:testIamPermissions [none]
+[debug] [2024-03-21T05:37:51.984Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/chessextension:testIamPermissions x-goog-quota-user=projects/chessextension
+[debug] [2024-03-21T05:37:51.985Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/chessextension:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-03-21T05:37:53.789Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/chessextension:testIamPermissions 200
+[debug] [2024-03-21T05:37:53.789Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/chessextension:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-03-21T05:37:53.790Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/chessextension [none]
+[debug] [2024-03-21T05:37:54.301Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/chessextension 200
+[debug] [2024-03-21T05:37:54.302Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/chessextension {"projectId":"chessextension","projectNumber":"842577013199","displayName":"ChessExtension","name":"projects/chessextension","resources":{"hostingSite":"chessextension"},"state":"ACTIVE","etag":"1_991b5865-9ea4-43ab-886a-8f6f59ba03c3"}
+[info] 
+[info] === Deploying to 'chessextension'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2024-03-21T05:37:54.308Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/chessextension/versions [none]
+[debug] [2024-03-21T05:37:54.308Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/chessextension/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
