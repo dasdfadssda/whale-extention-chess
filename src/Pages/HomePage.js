@@ -165,7 +165,7 @@ function HomePage() {
         <TitleText>PLAY CHESS</TitleText>
       </Column>
       <Row height={31.2821}>
-        {/* {id ? (
+        {id ? (
           <>
             <Button
               color={"#D66602"}
@@ -201,7 +201,7 @@ function HomePage() {
               />
             </Button>
           </>
-        )} */}
+        )}
         <Button>
           <Column content="center">
             <SmallText color={"black"} style={{ marginTop: "2vw" }}>
