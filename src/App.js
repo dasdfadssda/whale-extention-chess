@@ -13,8 +13,7 @@ import CallbackPage from "./Pages/CallbackPage";
 import { UserProvider } from "./Context/UserContext";
 
 function App() {
-
-  if (1+1 === 2) {
+  if (1 + 1 === 2) {
     window.console = {
       log: function () {},
       warn: function () {},
