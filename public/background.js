@@ -12,3 +12,7 @@ whale.sidebarAction.onClicked.addListener(() => {
     console.log('New tab opened: ' + tab.id);
   });
   
+  chrome.runtime.onInstalled.addListener(() => {
+    console.log("Extension installed");
+  });
+  

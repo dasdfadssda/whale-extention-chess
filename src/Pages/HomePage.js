@@ -25,8 +25,8 @@ function HomePage() {
   // dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   // 난이도 access State
-  const [isHardAccess, setIsHardAccess] = useState(false);
-  const [isNormalAccess, setIsNormalAccess] = useState(false);
+  const [isHardAccess, setIsHardAccess] = useState(true);
+  const [isNormalAccess, setIsNormalAccess] = useState(true);
   const [localDifficulty, setLocalDifficulty] = useState("Easy");
   // diaglog message
   const [message, setMessage] = useState(
@@ -62,8 +62,8 @@ function HomePage() {
   // 난이도 버튼 변수
   const difficulties = [
     { name: "Easy", access: true, key: "E" },
-    { name: "Normal", access: isNormalAccess, key: "N" },
-    { name: "Hard", access: isHardAccess, key: "H" },
+    { name: "Normal", access: true, key: "N" },
+    { name: "Hard", access: true, key: "H" },
   ];
 
   // 난이도 버튼 핸들러
@@ -165,7 +165,7 @@ function HomePage() {
         <TitleText>PLAY CHESS</TitleText>
       </Column>
       <Row height={31.2821}>
-        {!id ? (
+        {/* {id ? (
           <>
             <Button
               color={"#D66602"}
@@ -201,7 +201,7 @@ function HomePage() {
               />
             </Button>
           </>
-        )}
+        )} */}
         <Button>
           <Column content="center">
             <SmallText color={"black"} style={{ marginTop: "2vw" }}>
