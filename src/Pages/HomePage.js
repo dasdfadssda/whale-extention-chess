@@ -10,6 +10,7 @@ import { TimerContext } from "../Context/TimerContext";
 import { getTodayCount } from "../Service/GameCount/GetGameCount";
 import { handleNaverLogin } from "../Service/Auth/NaverLogin";
 import fetchScoreData from "../Service/Score/GetSocreData";
+// import { handleGoogleLogin } from "../Service/Auth/GoogleLogin";
 
 function HomePage() {
   // ContextAPI - 난이도 변수
@@ -94,8 +95,11 @@ function HomePage() {
   useEffect(() => {
     if (userData) {
       const { gameInfo } = userData;
-      const time = gameInfo['Easy'].time;
-      console.log("formatMinutesAndSeconds(time) : ",formatMinutesAndSeconds(time));
+      const time = gameInfo["Easy"].time;
+      console.log(
+        "formatMinutesAndSeconds(time) : ",
+        formatMinutesAndSeconds(time)
+      );
       setShortestRecord(formatMinutesAndSeconds(time));
     }
     const fetchData = async () => {
@@ -165,7 +169,7 @@ function HomePage() {
         <TitleText>PLAY CHESS</TitleText>
       </Column>
       <Row height={31.2821}>
-        {/* {id ? (
+        {!id ? (
           <>
             <Button
               color={"#D66602"}
@@ -193,15 +197,20 @@ function HomePage() {
           </>
         ) : (
           <>
-            <Button onClick={handleNaverLogin}>
-              <img
-                style={{ width: "100%", height: "100%" }}
-                src={require("../Static/Assets/NaverLoginImg.png")}
-                alt="네이버 로그인 버튼"
-              />
+            <Button onClick={handleNaverLogin}  color={"#D66602"}>
+              <div
+                style={{
+                  fontSize: "10.5vw",
+                  color: "white",
+                  minWidth: "35vw",
+                  marginTop: "2vw",
+                }}
+              >
+                Login
+              </div>
             </Button>
           </>
-        )} */}
+        )}
         <Button>
           <Column content="center">
             <SmallText color={"black"} style={{ marginTop: "2vw" }}>
