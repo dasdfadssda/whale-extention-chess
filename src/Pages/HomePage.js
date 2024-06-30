@@ -169,7 +169,7 @@ function HomePage() {
         <TitleText>PLAY CHESS</TitleText>
       </Column>
       <Row height={31.2821}>
-        {!id ? (
+        {id ? (
           <>
             <Button
               color={"#D66602"}
